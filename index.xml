@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Science Portfolio on Ala Eddine GRINE</title>
+    <link>https://alagrine.github.io/</link>
+    <description>Recent content in Data Science Portfolio on Ala Eddine GRINE</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 07 Sep 2023 12:00:00 -0500</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Churn prediction and machine learning at scale with Pyspark and Spark MLlib.</title>
+      <link>https://alagrine.github.io/post/p4-sparkify-churn-prediction/</link>
+      <pubDate>Mon, 14 Aug 2023 11:14:48 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p4-sparkify-churn-prediction/</guid>
+      <description>Project Overview:
+This project is part of Udacity&amp;rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
+Problem statement:
+This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs.</description>
+    </item>
+    
+    <item>
+      <title>Recommendations with IBM</title>
+      <link>https://alagrine.github.io/post/p3-recommendations-with-ibm/</link>
+      <pubDate>Wed, 05 Jul 2023 11:13:32 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p3-recommendations-with-ibm/</guid>
+      <description>This project is part of Udacity&amp;rsquo;s Data Science Nanodegree Program in collaboration with IBM. The aim of this project is to build a recommendation system for users of the IBM Watson community.
+A dataset of 5149 users, 714 articles and about 46K interactions is used to develop this RecSys.
+The project is divided into the following sections:
+Build an ETL pipeline to extract, clean and load the data to a SQLite database.</description>
+    </item>
+    
+    <item>
+      <title>Disaster Response Project</title>
+      <link>https://alagrine.github.io/post/p2-disaster-response-project/</link>
+      <pubDate>Thu, 08 Jun 2023 11:00:59 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p2-disaster-response-project/</guid>
+      <description>This project is part of Udacity&amp;rsquo;s Data Science Nanodegree Program in collaboration with Appen (formally Figure 8). The goal of this project is to build a model for an API that classifies messages received in real time during a disaster event, so that messages can be sent to the correct disaster response agency.
+A dataset of thousands of real-world messages during disaster events is used to build this model.
+The Project is divided in the following sections:</description>
+    </item>
+    
+    <item>
+      <title>Boston AirBnB Data Analysis</title>
+      <link>https://alagrine.github.io/post/p1-boston-airbnb-dataanalysis/</link>
+      <pubDate>Thu, 11 May 2023 10:58:08 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p1-boston-airbnb-dataanalysis/</guid>
+      <description>Throughout this project, I was interested in using Boston Airbnb Open dataset, available here, to answer the following questions:
+How does seasonality affect AirBnB prices in Boston? How does location affect AirBnB prices? What are the most important features to predict AirBnB prices? What is the relationship between reviews and price? Link to GitHub repository</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://alagrine.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://alagrine.github.io/about/</guid>
+      <description>Hi, I&amp;rsquo;m Ala Eddine GRINE.
+I&amp;rsquo;m a certified data scientist with expertise in programming languages such as Python and Java, SQL databases, and data visualisation tools such as Tableau.
+I am skilled for most data-science steps: data pre-processing, application of statistical methods, data visualization and results communication.
+I like building machine learning apps and training deep neural networks.
+I am currently leading network analytics at Ooredoo TN.
+alaeddine.grine@gmail.com</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://alagrine.github.io/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://alagrine.github.io/contact/</guid>
+      <description>Follow me on these social media platforms.
+Platform URL Linkedin: www.linkedin.com/in/ala-eddine-grine Github: https://github.com/AlaGrine Medium: https://medium.com/@alaeddine.grine </description>
+    </item>
+    
+  </channel>
+</rss>
