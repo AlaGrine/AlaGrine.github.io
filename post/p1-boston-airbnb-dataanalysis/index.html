@@ -40,7 +40,7 @@
 <meta itemprop="name" content="Boston AirBnB Data Analysis">
 <meta itemprop="description" content="A data analysis using the AirBnB open data."><meta itemprop="datePublished" content="2023-05-11T10:58:08-04:00" />
 <meta itemprop="dateModified" content="2023-05-11T10:58:08-04:00" />
-<meta itemprop="wordCount" content="55">
+<meta itemprop="wordCount" content="1186">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Boston AirBnB Data Analysis"/>
 <meta name="twitter:description" content="A data analysis using the AirBnB open data."/>
@@ -185,16 +185,100 @@
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>Throughout this project, I was interested in using Boston Airbnb Open dataset, available <a href="https://www.kaggle.com/airbnb/boston">here</a>, to answer the following questions:</p>
-<ul>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100"><h2 id="project-overview">Project overview:</h2>
+<p>In this project, I leveraged the Cross Industry Process for DataMining (<strong>CRISP-DM</strong>), a process used for many data science problems.<br>
+I explored the Boston Airbnb open dataset, available <a href="https://www.kaggle.com/airbnb/boston">here</a>, to get insights into the following questions:</p>
+<ol>
 <li>How does seasonality affect AirBnB prices in Boston?</li>
 <li>How does location affect AirBnB prices?</li>
 <li>What are the most important features to predict AirBnB prices?</li>
 <li>What is the relationship between reviews and price?</li>
-</ul>
-<figure><img src="https://alagrine.github.io/images/P1-AirBnB.png"/>
+</ol>
+<p>The dataset describes AirBnB activity, including full descriptions of 3585 listings, 68275 reviews, and daily prices and availability from September 2016 to September 2017.</p>
+<h2 id="approach">Approach:</h2>
+<p>For each question, I have applied the CRISP-DM process, which consists of 6 steps:</p>
+<ol>
+<li>Business Understanding</li>
+<li>Data Understanding</li>
+<li>Prepare Data</li>
+<li><strong>Data Modeling</strong> (optioanal)</li>
+<li>Evaluate the Results</li>
+<li>Deploy</li>
+</ol>
+<p>Only the third question requires data modeling (ML) to predict AirBnb prices. For the other questions I only used descriptive statistics to retrieve the results.<br>
+I used <code>Python</code>, <code>Sklearn</code> for modeling and <code>Plotly</code> for data visualisation.
+The <code>Jupyter</code> notebook can be found <a href="https://github.com/AlaGrine/Boston_AirBnB_DataAnalysis">here</a>.</p>
+<h2 id="question-1-how-does-seasonality-affect-airbnb-prices-in-boston">Question 1: How does seasonality affect AirBnB prices in Boston?</h2>
+<p>The chart below displays the trend of AirBnB prices in Boston, which ranged from <strong>$10</strong> to <strong>$4000</strong> from September 2016 to September 2017. The median price is listed at <strong>$150</strong> per day.</p>
+<p>The lowest prices occur in the first quarter at around <strong>$182</strong> per day, and the highest in the third quarter, reaching <strong>$243</strong> in September.</p>
+<p>Apart from event peaks, such as the Mid-Autumn Festival Celebration and the Boston Marathon in mid-April, there are also periodic price increases on weekends compared to weekdays.</p>
+<p>You can expect to pay an extra <strong>$3.3</strong> per day for a weekend stay and more than $7 for weekends in September and October.</p>
+<figure><img src="https://alagrine.github.io/images/P1/Availability_daily.png"/>
 </figure>
 
+<p>The next chart explorers the relationship between the availability ratio and the price of AirBnB properties over time.</p>
+<p>As the availability ratio increases, the price decreases proportionally, which makes economic sense.</p>
+<p>We can see an increasing trend in availability from September to November. The lowest values are in September with only <strong>34%</strong>.</p>
+<p>We can also see that availability reaches its maximum from November to February with an average of <strong>70%</strong>, then drops by <strong>10%</strong> to remain stable at around <strong>60%</strong> from March to August.</p>
+<figure><img src="https://alagrine.github.io/images/P1/Availability_Price_daily.png"/>
+</figure>
+
+<p>The first quarter is the low season. This is when you will find the most accommodations available at the lowest prices.</p>
+<h2 id="question-2-how-does-location-affect-airbnb-prices">Question 2: How does location affect AirBnB prices?</h2>
+<p>As can be seen from the graph below, average prices and distance to downtown are highly correlated; prices tend to decrease as the distance from the city centre increases.</p>
+<p>For instance, locations such as Hyde Park or Roslindale, which are more than 10 kilometers from downtown, are the cheapest at around $98 per day.</p>
+<p>At less than 2 kilometers from downtown and costing more than $200 per day, the most expensive areas are: Leather District, South Boston Waterfront, Chinatown, Downtown, Back Bay, West End and Bay Village.</p>
+<figure><img src="https://alagrine.github.io/images/P1/Price_neighbourhood.png"/>
+</figure>
+
+<p>Let’s explore prices per room type and neighbourhood.</p>
+<p>If you prefer to rent an entire home or apartment, as <strong>59%</strong> of visitors do, you can expect to pay more than <strong>$210</strong> in two-thirds of the neighbourhoods. Top prices exceed <strong>$240</strong> in the areas closest to downtown.</p>
+<figure><img src="https://alagrine.github.io/images/P1/room_type.png"/>
+</figure>
+
+<p>Now let’s take a closer look at private rooms, which are preferred by <strong>39%</strong> of visitors.</p>
+<p>Excluding Hide Park, the cheapest at $60, prices range from <strong>$70</strong> to <strong>$80</strong> if the distance to the city centre is greater than 4.5 kilometers. For areas closer to downtown, there is a wide range of prices from <strong>$85</strong> to <strong>$160</strong>, giving you plenty of choice. The highest prices are in downtown and the Leather District, at around <strong>$205</strong>.</p>
+<h2 id="question-3-what-are-the-most-important-features-to-predict-airbnb-prices">Question 3: What are the most important features to predict AirBnB prices?</h2>
+<p>In the previous sections, we have seen that seasonality and location play a significant role in AirBnB pricing.</p>
+<p>But what about other features, such as amenities and the number of bedrooms?</p>
+<p>To answer this question, I created a linear regression model that can predict prices with a mean absolute error of <strong>$47</strong> (representing <strong>30%</strong> of the median price) and can explain <strong>64%</strong> of the variation in listing prices.</p>
+<p>Although not perfect, this model is very simple and can clearly identify the most important features that affect pricing.</p>
+<figure><img src="https://alagrine.github.io/images/P1/features.png"/>
+</figure>
+
+<p><strong>How can we use this graph to predict prices?</strong></p>
+<p>First, we start with an initial price of $41, which is the intercept of our linear model. We then add and subtract all the coefficients we need.</p>
+<p>For example, to predict the price of a two-bedroom, one-bathroom apartment in Back Bay that we would like to rent in January, we would calculate:</p>
+<p>41$: for the intercept..</p>
+<p>2*41$: for the two bedrooms.</p>
+<p>18$: for the bathroom</p>
+<p>-21$: because January is the off-season.</p>
+<p>136$: for the Back Bay neighbourhood.</p>
+<p><strong>The most important features:</strong></p>
+<p>In addition to the number of bedrooms and bathrooms, neighbourhood, property type, room type and months stand out as key factors in determining price.</p>
+<p>Interestingly, paid parking off premises is the second most important feature according to our model, increasing the price by nearly <strong>$70</strong>.</p>
+<p>Amenities are an interesting case. On the one hand, facilities such as elevators in buildings or air conditioning increase the price. On the other hand, amenities, such as kitchen or hangers reduce the price. The latter can be considered as necessities.</p>
+<h2 id="question-4-what-is-the-relationship-between-reviews-and-price">Question 4: What is the relationship between reviews and price?</h2>
+<p>Now that we have analyzed AirBnB prices, we can focus on review analysis.</p>
+<p>As can be seen in the graph below, the communication score is the highest, with an average value of <strong>9.7</strong>. We can say that visitors are satisfied with the communication, regardless of the price.</p>
+<p>We can also see that cleanliness score, ranging from <strong>8.6</strong> to <strong>9.5</strong>, is sensitive to price, especially at prices below the median.</p>
+<p>Location ratings are also sensitive to price and distance from the city centre, with an average of <strong>9.7</strong> for the closest to downtown and <strong>9.1</strong> for the farthest.</p>
+<figure><img src="https://alagrine.github.io/images/P1/scores.png"/>
+</figure>
+
+<p>Now let’s look at written reviews and, more specifically, the most common words used to describe a property.</p>
+<p>The following graph shows two word clouds: one for the highest prices, the other for the lowest.</p>
+<p>Clearly, there is a lot of overlap between the two clouds. Words like Boston, great, nice or clean are very common in both clouds. Friendly and helpful are also words used by reviewers to describe their hosts.</p>
+<p>The main difference between the two word clouds is that for higher-priced listings, words such as perfect, great location, and highly recommend are more frequent, whereas for lower-priced properties, reviewers tend to emphasize transport with terms like station and subway.</p>
+<figure><img src="https://alagrine.github.io/images/P1/wordclouds.png"/>
+</figure>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this article, we explored AirBnB pricing and listing reviews.</p>
+<p>We found that seasonality and location stand out as key factors in determining price.</p>
+<p>The most expensive locations are the ones closest to the city centre.</p>
+<p>Autumn, with the highest prices and the lowest availability, is the high season for the AirBnB market.</p>
+<p>Depending on the listing price, some reviewers tend to point out the great location, while others emphasize the transport accessibility. In any case, hosts are frequently described as helpful and friendly.</p>
 <p><a href="https://github.com/AlaGrine/Boston_AirBnB_DataAnalysis">Link to GitHub repository</a></p>
 <ul class="pa0">
   
