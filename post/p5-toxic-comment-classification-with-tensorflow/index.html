@@ -198,7 +198,7 @@
 <p>The data for the problem is a dataset of 159,571 comments from Wikipedia’s talk page edits. These comments have been flagged for toxic behaviour by human reviewers.</p>
 <h2 id="exploratory-data-analysis">Exploratory data analysis</h2>
 <p>To understand the data, I first look at the distribution of labels.</p>
-<figure><img src="https://alagrine.github.io/images/P5/_Toxicity_Distribution.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/fig1.png"/>
 </figure>
 
 <p>The graph above shows that there is an <strong>imbalance</strong> between the 6 categories. At just 3%, comments with the <em><code>threat</code></em> label are the least common.</p>
@@ -207,14 +207,14 @@
 <p>Our process for dealing with data imbalance is discussed in the next section.</p>
 </blockquote>
 <p>I then looked at the length of the comments to see if there was a correlation with any of the toxicity labels.</p>
-<figure><img src="https://alagrine.github.io/images/P5/comment_lengths.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/fig2.png"/>
 </figure>
 
 <p>The plots above show that the comment length is very similar for all labels.<br>
 95% of the comments have less than 180 words for all labels except for <em>sever_toxic</em> (473 words).</p>
 <h3 id="correlation-matrix">Correlation matrix</h3>
 <p>The Pearson correlation analysis presented below also confirms that there is no correlation between text length and labels.</p>
-<figure><img src="https://alagrine.github.io/images/P5/_labels_Correlation.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/fig3.png"/>
 </figure>
 
 <p>The heatmap shows that there is a strong correlation between the terms <em><code>toxic</code></em>, <em><code>insulting</code></em> and <em><code>obscene</code></em>. Therefore, if a comment has one of these three labels, it is likely to have the others as well.</p>
@@ -297,12 +297,12 @@ I reused the <code>TextVectorisation</code> layer as it is not updated during tr
 
 <p>As we can see, the <em>GRU</em> model performed best with an AUC of <strong>97.7%</strong>, <strong>0.3%</strong> ahead of the <em>LSTM</em> model.</p>
 <p>Now let&rsquo;s take a look at precision and recall.</p>
-<figure><img src="https://alagrine.github.io/images/P5/_recall_.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/fig5.png"/>
 </figure>
 
 <p>When data augmentation and custom loss (<em>BinaryCrossentropy with class weights</em>) were used, recall jumped to over 95% for all labels. With the default loss function (<em>BinaryCrossentropy</em>), it was around 0.01% for <em>threat</em> and <em>identity_hate</em>.<br>
 The increase in recall came at the cost of precision, as shown in the next table. In fact, while we tried not to miss any of the toxic comments (positive class), many negative samples were allowed, leading to a decrease in precision.</p>
-<figure><img src="https://alagrine.github.io/images/P5/_precision_.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/fig4.png"/>
 </figure>
 
 <h2 id="possible-improvements">Possible improvements:</h2>
