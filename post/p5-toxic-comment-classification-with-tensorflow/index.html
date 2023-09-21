@@ -40,7 +40,7 @@
 <meta itemprop="name" content="Toxic Comment Classification">
 <meta itemprop="description" content="NLP multi-label classification using Tensorflow"><meta itemprop="datePublished" content="2023-09-15T11:14:48-04:00" />
 <meta itemprop="dateModified" content="2023-09-15T11:14:48-04:00" />
-<meta itemprop="wordCount" content="989">
+<meta itemprop="wordCount" content="1143">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Toxic Comment Classification"/>
 <meta name="twitter:description" content="NLP multi-label classification using Tensorflow"/>
@@ -196,23 +196,37 @@
 <p>Negative online behaviors, like toxic comments, are likely to make people stop expressing themselves and leave a conversation. Platforms struggle to identify and flag potentially harmful or offensive online comments, leading many communities to restrict or shut down user comments altogether.</p>
 <p><a href="https://www.kaggle.com/competitions/jigsaw-toxic-comment-classification-challenge/data">Kaggle</a> issued a challenge to build a multi-label classification model that&rsquo;s able to detect different types of toxicity like threats, obscenity and insults, and thus help make online discussion more productive and respectful.</p>
 <p>The data for the problem is a dataset of 159,571 comments from Wikipedia’s talk page edits. These comments have been flagged for toxic behaviour by human reviewers.</p>
-<h2 id="exploratory-data-analysis">Exploratory data analysis:</h2>
+<h2 id="exploratory-data-analysis">Exploratory data analysis</h2>
 <p>To understand the data, I first look at the distribution of labels.</p>
-<figure><img src="https://alagrine.github.io/images/P5/Toxicity_Distribution_.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/_Toxicity_Distribution.png"/>
 </figure>
 
 <p>The graph above shows that there is an <strong>imbalance</strong> between the 6 categories. At just 3%, comments with the <em><code>threat</code></em> label are the least common.</p>
 <p>There is also an imbalance within each label as the proportion of the positive class is less than <strong>10%</strong> for all categories, and less than <strong>1%</strong> for three categories: <em><code>sever_toxic</code></em>, <em><code>identity_hate</code></em> and <em><code>threat</code></em>.</p>
-<p>I then looked at the correlation between these labels.</p>
-<figure><img src="https://alagrine.github.io/images/P5/labels_Correlation_.png"/>
+<blockquote>
+<p>Our process for dealing with data imbalance is discussed in the next section.</p>
+</blockquote>
+<p>I then looked at the length of the comments to see if there was a correlation with any of the toxicity labels.</p>
+<figure><img src="https://alagrine.github.io/images/P5/comment_lengths.png"/>
+</figure>
+
+<p>The plots above show that the comment length is very similar for all labels.<br>
+95% of the comments have less than 180 words for all labels except for <em>sever_toxic</em> (473 words).</p>
+<h3 id="correlation-matrix">Correlation matrix</h3>
+<p>The Pearson correlation analysis presented below also confirms that there is no correlation between text length and labels.</p>
+<figure><img src="https://alagrine.github.io/images/P5/_labels_Correlation.png"/>
 </figure>
 
 <p>The heatmap shows that there is a strong correlation between the terms <em><code>toxic</code></em>, <em><code>insulting</code></em> and <em><code>obscene</code></em>. Therefore, if a comment has one of these three labels, it is likely to have the others as well.</p>
-<figure><img src="https://alagrine.github.io/images/P5/wordcloud_.png"/>
+<h3 id="wordcloud">Wordcloud</h3>
+<figure><img src="https://alagrine.github.io/images/P5/toxic_wordcloud.png"/>
 </figure>
 
-<p>The <em>wordcloud</em> above displays the most common words used in comments. It makes no significant distinction. However, if we filter out only toxic comments, the cloud may be considered profane, vulgar, or offensive, so I prefer not to show it here.</p>
-<h2 id="handling-unbalanced-dataset">Handling unbalanced dataset:</h2>
+<p>The <em>wordcloud</em> above displays the most common words used in comments. At first glance, it looks like a list of profane, vulgar or offensive words. But there is a significant difference in the top 10 toxic words between the different labels, as shown in the next graph.</p>
+<figure><img src="https://alagrine.github.io/images/P5/Top10__toxic_words.png"/>
+</figure>
+
+<h2 id="handling-unbalanced-dataset">Handling unbalanced dataset</h2>
 <p>To deal with this unbalanced dataset, I:</p>
 <ol>
 <li>Used <code>stratified data split</code> instead of the traditional train_test_split.<br>
@@ -224,29 +238,29 @@ The weights are inversely proportional to the number of samples in each class, s
 
 <ol start="3">
 <li>Performed <code>text data augmentation</code> to increase the number of minority labels (namely &rsquo;threat&rsquo; and &lsquo;identity_hate&rsquo;).<br>
-I used the <a href="https://pypi.org/project/googletrans/">googletrans</a> API to translate the given comment into French, German and Spanish and then back into English (back-translation).</li>
+I used the <a href="https://pypi.org/project/googletrans/">googletrans</a> API to translate the given comment into French, German and Spanish and then back into English (back-translation). In this way we get new sentences with similar meanings, thus increasing the number of the minority labels.</li>
 </ol>
 <script type="application/javascript" src="https://gist.github.com/AlaGrine/5a7e796ebb329404cdad5ba107faa4f1.js"></script>
 
 <ol start="4">
-<li>Used the the <strong>F1-score</strong> and <strong>AUC</strong> as evaluation metrics instead of the accuracy.</li>
+<li>Used the the <strong>precision</strong>, <strong>recall</strong> and <strong>AUC</strong> as evaluation metrics instead of the accuracy.</li>
 </ol>
-<h2 id="text-preprocessing-textvectorization-and-embedding">Text Preprocessing, TextVectorization and Embedding:</h2>
+<h2 id="text-preprocessing-textvectorization-and-embedding">Text Preprocessing, TextVectorization and Embedding</h2>
 <p>First, I leveraged the <a href="https://www.nltk.org/">NLTK</a> package to clean the messages. Punctuation, special characters and stop words were removed.</p>
 <script type="application/javascript" src="https://gist.github.com/AlaGrine/b30735322c2f4cc99009abc4c59927aa.js"></script>
 
 <p>I then used TensorFlow&rsquo;s <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/TextVectorization">TextVectorization</a> layer to turn the text into numbers by mapping each word to a unique index. I kept all the parameters default for this layer except for:</p>
 <ul>
-<li><em><strong>Max_tokens</strong></em>: the number of unique words in our dataset, which I set to <strong>144K</strong>.</li>
-<li><em><strong>Output_sequence_length</strong></em>: the output length for each vectorized message, which I set to <strong>118</strong> since 95% of the messages are less than 118 words.</li>
+<li><em><strong>Max_tokens</strong></em>: the number of unique words in our dataset, which I set to <strong>153K</strong>.</li>
+<li><em><strong>Output_sequence_length</strong></em>: the output length for each vectorized message, which I set to <strong>118</strong> since 95% of the cleaned messages are less than 118 words.</li>
 </ul>
 <p>Finally, to better represent the relationships between tokens in our corpus, I created a trainable <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding">Embedding</a> layer that is updated during training. It maps each word index to a dense vector representation with a shape (Output_sequence_length,128), where <strong>128</strong> is the output dimension of the dense embedding.</p>
 <script type="application/javascript" src="https://gist.github.com/AlaGrine/a736ba0f580ee5edaa4544440ce1da48.js"></script>
 
-<h2 id="modelling">Modelling:</h2>
+<h2 id="modelling">Modelling</h2>
 <p>I used <code>Tensorflow</code> to build the following model structure:</p>
-<pre tabindex="0"><code>Input (text) -&gt; TextVectorization -&gt; Embedding -&gt; Layers -&gt; Output (sigmoid)
-</code></pre><p>The main component I changed throughout is the <code>Layers</code> component. More specifically, I built the following:</p>
+<pre tabindex="0"><code>Input (text) -&gt; TextVectorization -&gt; Embedding -&gt; Custom_Layers -&gt; Output (sigmoid)
+</code></pre><p>The main component I changed throughout is the <code>Custom_Layers</code> component. More specifically, I built the following:</p>
 <ul>
 <li><strong>Model 1</strong>: A simple Dense model</li>
 <li><strong>Model 2</strong>: LSTM model</li>
@@ -271,29 +285,34 @@ I reused the <code>TextVectorisation</code> layer as it is not updated during tr
                layers.Dense(16,activation=&#34;relu&#34;),
                layers.Dropout(0.2)]
 </code></pre><p>The LSTM layer has 32 units and uses the hyperbolic tangent (tanh) activation function.</p>
-<h2 id="results">Results:</h2>
-<p>To evaluate the model, <strong>AUC</strong> (Area Under the Curve) and <strong>f1-score</strong> metrics were used.</p>
-<figure><img src="https://alagrine.github.io/images/P5/AUC_dense_model_.png"/>
+<h2 id="results-and-interpretation">Results and Interpretation</h2>
+<p>To evaluate the model, <strong>AUC</strong> (Area Under the Curve), <strong>precision</strong> and <strong>recall</strong> metrics were used.</p>
+<figure><img src="https://alagrine.github.io/images/P5/AUC_dense__model.png"/>
 </figure>
 
-<p>As shown above, using the custom binary cross-entropy loss function with class weights, and performing text data augmentation (using the googletrans API) resulted in a <strong>3%</strong> increase in AUC for the Dense model.</p>
+<p>As shown above, using the custom binary cross-entropy loss function with class weights, and performing text data augmentation (using the googletrans API) resulted in a <strong>4%</strong> increase in AUC for the Dense model.</p>
 <p>Both techniques were then applied to the other models that I trained for 5 epochs.</p>
-<figure><img src="https://alagrine.github.io/images/P5/AUC_per_Model_.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/AUC_perModel.png"/>
 </figure>
 
-<p>As we can see, the <em>GRU</em> model performed best with an AUC of <strong>97.4%</strong>, <strong>0.1%</strong> ahead of the <em>LSTM</em> model.</p>
-<figure><img src="https://alagrine.github.io/images/P5/f1-score_.png"/>
+<p>As we can see, the <em>GRU</em> model performed best with an AUC of <strong>97.7%</strong>, <strong>0.3%</strong> ahead of the <em>LSTM</em> model.</p>
+<p>Now let&rsquo;s take a look at precision and recall.</p>
+<figure><img src="https://alagrine.github.io/images/P5/_recall_.png"/>
 </figure>
 
-<p>With the exception of the minority labels <em>threat</em> and <em>identity_hate</em>, the f1 scores for the positive class (i.e. the comment is toxic) are around 50% for all labels.</p>
-<p>This suggests that our neural network based models can be further improved and fine-tuned.</p>
+<p>When data augmentation and custom loss (<em>BinaryCrossentropy with class weights</em>) were used, recall jumped to over 95% for all labels. With the default loss function (<em>BinaryCrossentropy</em>), it was around 0.01% for <em>threat</em> and <em>identity_hate</em>.<br>
+The increase in recall came at the cost of precision, as shown in the next table. In fact, while we tried not to miss any of the toxic comments (positive class), many negative samples were allowed, leading to a decrease in precision.</p>
+<figure><img src="https://alagrine.github.io/images/P5/_precision_.png"/>
+</figure>
+
 <h2 id="possible-improvements">Possible improvements:</h2>
-<p>So far, we have been building our own embedding layer.</p>
-<p>We can take advantage of <code>Transfer Learning</code> and use a pre-trained embedding layer, such as the <a href="https://tfhub.dev/google/universal-sentence-encoder/4">Universal Sentence Encoder</a> or <a href="https://tfhub.dev/google/collections/bert/1">BERT</a> available on the TensorFlow Hub.</p>
+<p>So far, we have been building our own embedding layer from scratch.</p>
+<p>To improve our models, we could try different configurations, such as adding more layers or adjusting the number of neurons per layer.</p>
+<p>Another alternative is to take advantage of <code>Transfer Learning</code> and use a pre-trained embedding layer, such as <a href="https://tfhub.dev/google/collections/bert/1">BERT</a> available on the TensorFlow Hub.</p>
 <h2 id="conclusion">Conclusion:</h2>
-<p>In this project, I built several neural network based models for toxic comment classification using Tensorflow. They were first trained on a cleaned and augmented text data leveraging the <em>NLTK</em> and <em>googletrans</em> APIs, and then evaluated using the <em>AUC</em> and <em>f1-score</em> metrics.</p>
+<p>In this project, I built several neural network based models for toxic comment classification using Tensorflow. They were first trained on a cleaned and augmented text data leveraging the <em>NLTK</em> and <em>googletrans</em> APIs, and then evaluated using the <em>AUC</em>, <em>recall</em> and <em>precision</em> metrics.</p>
 <p>I demonstrated how to deal with class imbalance using several techniques, including stratified data splitting, data augmentation, and creating a custom loss function with class weights.</p>
-<p>A reasonable performance was achieved with the <em>GRU</em> model with an AUC of 97.4%. There is room for improvement, however, as the F1 scores of the minority labels need to be improved.</p>
+<p>A reasonable performance was achieved with the <em>GRU</em> model with an AUC of 97.7%.</p>
 <p><a href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow">Link to GitHub repository</a></p>
 <ul class="pa0">
   
