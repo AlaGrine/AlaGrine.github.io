@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     
-    <title>Toxic Comment Classification | Ala Eddine GRINE</title>
+    <title>Toxic Comment Classification with TensorFlow | Ala Eddine GRINE</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
     <meta name="description" content="NLP multi-label classification using Tensorflow">
     <meta name="generator" content="Hugo 0.118.2">
@@ -31,18 +31,18 @@
 
     
     
-    <meta property="og:title" content="Toxic Comment Classification" />
+    <meta property="og:title" content="Toxic Comment Classification with TensorFlow" />
 <meta property="og:description" content="NLP multi-label classification using Tensorflow" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://alagrine.github.io/post/p5-toxic-comment-classification-with-tensorflow/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2023-09-15T11:14:48-04:00" />
-<meta property="article:modified_time" content="2023-09-15T11:14:48-04:00" />
-<meta itemprop="name" content="Toxic Comment Classification">
-<meta itemprop="description" content="NLP multi-label classification using Tensorflow"><meta itemprop="datePublished" content="2023-09-15T11:14:48-04:00" />
-<meta itemprop="dateModified" content="2023-09-15T11:14:48-04:00" />
-<meta itemprop="wordCount" content="1143">
+<meta property="article:published_time" content="2023-09-20T11:14:48-04:00" />
+<meta property="article:modified_time" content="2023-09-20T11:14:48-04:00" />
+<meta itemprop="name" content="Toxic Comment Classification with TensorFlow">
+<meta itemprop="description" content="NLP multi-label classification using Tensorflow"><meta itemprop="datePublished" content="2023-09-20T11:14:48-04:00" />
+<meta itemprop="dateModified" content="2023-09-20T11:14:48-04:00" />
+<meta itemprop="wordCount" content="1210">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Toxic Comment Classification"/>
+<meta name="twitter:title" content="Toxic Comment Classification with TensorFlow"/>
 <meta name="twitter:description" content="NLP multi-label classification using Tensorflow"/>
 
 	
@@ -134,7 +134,7 @@
 
       <div class="tc-l pv6 ph3 ph4-ns">
         
-          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Toxic Comment Classification</div>
+          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Toxic Comment Classification with TensorFlow</div>
           
             <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
               NLP multi-label classification using Tensorflow
@@ -170,7 +170,7 @@
   <div id="sharing" class="mt3 ananke-socials">
     
       
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p5-toxic-comment-classification-with-tensorflow/&amp;title=Toxic%20Comment%20Classification" class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p5-toxic-comment-classification-with-tensorflow/&amp;title=Toxic%20Comment%20Classification%20with%20TensorFlow" class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
         
         <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
@@ -182,11 +182,11 @@
   </div>
 
 
-      <h1 class="f1 athelas mt3 mb1">Toxic Comment Classification</h1>
+      <h1 class="f1 athelas mt3 mb1">Toxic Comment Classification with TensorFlow</h1>
       
       
       
-      <time class="f6 mv4 dib tracked" datetime="2023-09-15T11:14:48-04:00">September 15, 2023</time>
+      <time class="f6 mv4 dib tracked" datetime="2023-09-20T11:14:48-04:00">September 20, 2023</time>
       
 
       
@@ -203,11 +203,9 @@
 
 <p>The graph above shows that there is an <strong>imbalance</strong> between the 6 categories. At just 3%, comments with the <em><code>threat</code></em> label are the least common.</p>
 <p>There is also an imbalance within each label as the proportion of the positive class is less than <strong>10%</strong> for all categories, and less than <strong>1%</strong> for three categories: <em><code>sever_toxic</code></em>, <em><code>identity_hate</code></em> and <em><code>threat</code></em>.</p>
-<blockquote>
-<p>Our process for dealing with data imbalance is discussed in the next section.</p>
-</blockquote>
+<p><em>My process for dealing with data imbalance is discussed in the next section.</em></p>
 <p>I then looked at the length of the comments to see if there was a correlation with any of the toxicity labels.</p>
-<figure><img src="https://alagrine.github.io/images/P5/fig2.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/Comments_length.png"/>
 </figure>
 
 <p>The plots above show that the comment length is very similar for all labels.<br>
@@ -219,31 +217,35 @@
 
 <p>The heatmap shows that there is a strong correlation between the terms <em><code>toxic</code></em>, <em><code>insulting</code></em> and <em><code>obscene</code></em>. Therefore, if a comment has one of these three labels, it is likely to have the others as well.</p>
 <h3 id="wordcloud">Wordcloud</h3>
-<figure><img src="https://alagrine.github.io/images/P5/toxic_wordcloud.png"/>
+<figure><img src="https://alagrine.github.io/images/P5/wordcloud.png"/>
 </figure>
 
-<p>The <em>wordcloud</em> above displays the most common words used in comments. At first glance, it looks like a list of profane, vulgar or offensive words. But there is a significant difference in the top 10 toxic words between the different labels, as shown in the next graph.</p>
-<figure><img src="https://alagrine.github.io/images/P5/Top10__toxic_words.png"/>
-</figure>
-
+<p>The wordcloud above shows the most common words used in comments. At first glance, it looks respectful and related to online discussions.</p>
+<p>However, when we filter out the toxic comments, the most frequent terms become extremely profane, vulgar and offensive, so I prefer not to show them here.<br>
+Another takeaway is that there is a significant difference in the top 10 toxic words between the different labels. This analysis can be found in this Jupyter <a href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow/blob/main/Toxic-Comment-Classification-with-Tensorflow.ipynb">notebook</a>.</p>
 <h2 id="handling-unbalanced-dataset">Handling unbalanced dataset</h2>
 <p>To deal with this unbalanced dataset, I:</p>
 <ol>
-<li>Used <code>stratified data split</code> instead of the traditional train_test_split.<br>
-I leveraged the <a href="http://scikit.ml/api/skmultilearn.model_selection.iterative_stratification.html">iterative stratification for multi-label data</a> from the <code>scikit-multilearn</code> library.</li>
-<li>Built a <code>custom binary cross-entropy loss function with class weights</code>.<br>
-The weights are inversely proportional to the number of samples in each class, so that the minority labels (namely &rsquo;threat&rsquo; and &lsquo;identity_hate&rsquo;) are given a greater weight.</li>
-</ol>
-<script type="application/javascript" src="https://gist.github.com/AlaGrine/9f433a55b4bb0dcaedb2be7784729d9c.js"></script>
-
-<ol start="3">
-<li>Performed <code>text data augmentation</code> to increase the number of minority labels (namely &rsquo;threat&rsquo; and &lsquo;identity_hate&rsquo;).<br>
-I used the <a href="https://pypi.org/project/googletrans/">googletrans</a> API to translate the given comment into French, German and Spanish and then back into English (back-translation). In this way we get new sentences with similar meanings, thus increasing the number of the minority labels.</li>
+<li>
+<p>Used <code>stratified data split</code> instead of the traditional train_test_split.<br>
+I leveraged the <a href="http://scikit.ml/api/skmultilearn.model_selection.iterative_stratification.html">iterative stratification for multi-label data</a> from the <code>scikit-multilearn</code> library.</p>
+</li>
+<li>
+<p>Performed <code>text data augmentation</code> to increase the number of minority labels (namely &rsquo;threat&rsquo; and &lsquo;identity_hate&rsquo;).<br>
+I used the <a href="https://pypi.org/project/googletrans/">googletrans</a> API to translate the given comment into French, German and Spanish and then back into English (back-translation). In this way we get new sentences with similar meanings, thus increasing the number of the minority labels.</p>
+</li>
 </ol>
 <script type="application/javascript" src="https://gist.github.com/AlaGrine/5a7e796ebb329404cdad5ba107faa4f1.js"></script>
 
+<ol start="3">
+<li>Built a <code>custom binary cross-entropy loss function with class weights</code>.<br>
+The weights are inversely proportional to the number of samples in each class, so that the minority labels are given a greater weight.</li>
+</ol>
+<script type="application/javascript" src="https://gist.github.com/AlaGrine/9f433a55b4bb0dcaedb2be7784729d9c.js"></script>
+
 <ol start="4">
-<li>Used the the <strong>precision</strong>, <strong>recall</strong> and <strong>AUC</strong> as evaluation metrics instead of the accuracy.</li>
+<li>Used the <strong>precision</strong>, <strong>recall</strong> and <strong>AUC</strong> as evaluation metrics instead of the accuracy.<br>
+If the model always predicts <strong>0</strong> (ie. a non toxic comment), we get a good accuracy of 90%. However, this hides the true performance of the classifier, which never identifies a toxic comment. Accuracy is therefore misleading and should not be used here.</li>
 </ol>
 <h2 id="text-preprocessing-textvectorization-and-embedding">Text Preprocessing, TextVectorization and Embedding</h2>
 <p>First, I leveraged the <a href="https://www.nltk.org/">NLTK</a> package to clean the messages. Punctuation, special characters and stop words were removed.</p>
@@ -305,14 +307,14 @@ The increase in recall came at the cost of precision, as shown in the next table
 <figure><img src="https://alagrine.github.io/images/P5/fig4.png"/>
 </figure>
 
-<h2 id="possible-improvements">Possible improvements:</h2>
+<h2 id="possible-improvements">Possible improvements</h2>
 <p>So far, we have been building our own embedding layer from scratch.</p>
 <p>To improve our models, we could try different configurations, such as adding more layers or adjusting the number of neurons per layer.</p>
 <p>Another alternative is to take advantage of <code>Transfer Learning</code> and use a pre-trained embedding layer, such as <a href="https://tfhub.dev/google/collections/bert/1">BERT</a> available on the TensorFlow Hub.</p>
-<h2 id="conclusion">Conclusion:</h2>
+<h2 id="conclusion">Conclusion</h2>
 <p>In this project, I built several neural network based models for toxic comment classification using Tensorflow. They were first trained on a cleaned and augmented text data leveraging the <em>NLTK</em> and <em>googletrans</em> APIs, and then evaluated using the <em>AUC</em>, <em>recall</em> and <em>precision</em> metrics.</p>
 <p>I demonstrated how to deal with class imbalance using several techniques, including stratified data splitting, data augmentation, and creating a custom loss function with class weights.</p>
-<p>A reasonable performance was achieved with the <em>GRU</em> model with an AUC of 97.7%.</p>
+<p>A good performance was achieved with the <em>GRU</em> model with an AUC of 97.7%.</p>
 <p><a href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow">Link to GitHub repository</a></p>
 <ul class="pa0">
   
