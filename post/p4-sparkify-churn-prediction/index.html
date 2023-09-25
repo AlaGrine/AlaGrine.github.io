@@ -1,320 +1,928 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>Churn prediction and machine learning at scale with Pyspark and Spark MLlib. | Ala Eddine GRINE</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="Project Overview:
-This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
-Problem statement:
-This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs.">
-    <meta name="generator" content="Hugo 0.118.2">
-    
-    
-    
-    
-      <meta name="robots" content="noindex, nofollow">
-    
 
-    
-<link rel="stylesheet" href="https://alagrine.github.io/ananke/css/main.min.css" >
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Churn prediction and machine learning at scale with Pyspark and Spark MLlib. | Ala Eddine GRINE</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <meta name="description"
+    content="Project Overview: This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
+For this project, Udacity provided a 12GB dataset of customer activity from Sparkify, a fictional music streaming service similar to Spotify or Pandora.">
+  <meta name="generator" content="Hugo 0.118.2">
 
 
 
-    
-    
-    
-      
-<link rel="shortcut icon" href="https://alagrine.github.io/images/portfolio.png" type="image/x-icon" />
+
+  <meta name="robots" content="noindex, nofollow">
 
 
-    
 
-    
-    
-    <meta property="og:title" content="Churn prediction and machine learning at scale with Pyspark and Spark MLlib." />
-<meta property="og:description" content="Project Overview:
-This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
-Problem statement:
-This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://alagrine.github.io/post/p4-sparkify-churn-prediction/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2023-08-14T11:14:48-04:00" />
-<meta property="article:modified_time" content="2023-08-14T11:14:48-04:00" />
-<meta itemprop="name" content="Churn prediction and machine learning at scale with Pyspark and Spark MLlib.">
-<meta itemprop="description" content="Project Overview:
-This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
-Problem statement:
-This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs."><meta itemprop="datePublished" content="2023-08-14T11:14:48-04:00" />
-<meta itemprop="dateModified" content="2023-08-14T11:14:48-04:00" />
-<meta itemprop="wordCount" content="529">
-<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Churn prediction and machine learning at scale with Pyspark and Spark MLlib."/>
-<meta name="twitter:description" content="Project Overview:
-This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
-Problem statement:
-This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs."/>
+  <link rel="stylesheet" href="https://alagrine.github.io/ananke/css/main.min.css">
 
-	
-  </head>
 
-  <body class="ma0 avenir bg-near-white">
 
-    
-   
-  
 
-  
+
+
+
+  <link rel="shortcut icon" href="https://alagrine.github.io/images/portfolio.png" type="image/x-icon" />
+
+
+
+
+
+
+  <meta property="og:title" content="Churn prediction and machine learning at scale with Pyspark and Spark MLlib." />
+  <meta property="og:description"
+    content="Project Overview: This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
+For this project, Udacity provided a 12GB dataset of customer activity from Sparkify, a fictional music streaming service similar to Spotify or Pandora." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alagrine.github.io/post/p4-sparkify-churn-prediction/" />
+  <meta property="article:section" content="post" />
+  <meta property="article:published_time" content="2023-08-14T11:14:48-04:00" />
+  <meta property="article:modified_time" content="2023-08-14T11:14:48-04:00" />
+  <meta itemprop="name" content="Churn prediction and machine learning at scale with Pyspark and Spark MLlib.">
+  <meta itemprop="description"
+    content="Project Overview: This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
+For this project, Udacity provided a 12GB dataset of customer activity from Sparkify, a fictional music streaming service similar to Spotify or Pandora.">
+  <meta itemprop="datePublished" content="2023-08-14T11:14:48-04:00" />
+  <meta itemprop="dateModified" content="2023-08-14T11:14:48-04:00" />
+  <meta itemprop="wordCount" content="4595">
+  <meta itemprop="keywords" content="" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Churn prediction and machine learning at scale with Pyspark and Spark MLlib." />
+  <meta name="twitter:description"
+    content="Project Overview: This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
+For this project, Udacity provided a 12GB dataset of customer activity from Sparkify, a fictional music streaming service similar to Spotify or Pandora." />
+
+
+</head>
+
+<body class="ma0 avenir bg-near-white">
+
+
+
+
+
+
   <header class="cover bg-top" style="background-image: url('https://alagrine.github.io/images/Sparkify.png');">
     <div class="bg-black-60">
       <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="https://alagrine.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
-      
-        Ala Eddine GRINE
-      
-    </a>
-    <div class="flex-l items-center">
-      
+        <div class="flex-l justify-between items-center center">
+          <a href="https://alagrine.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
 
-      
-        <ul class="pl0 mr3">
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="https://alagrine.github.io/about/" title="About page">
-              About
-            </a>
-          </li>
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="https://alagrine.github.io/post/" title="Projects page">
-              Projects
-            </a>
-          </li>
-          
-        </ul>
-      
-      
-<div class="ananke-socials">
-  
-    
-    <a href="https://github.com/AlaGrine" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener" class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener" class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="Medium link" aria-label="follow on Medium——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-</div>
+            Ala Eddine GRINE
 
-    </div>
-  </div>
-</nav>
+          </a>
+          <div class="flex-l items-center">
+
+
+
+            <ul class="pl0 mr3">
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/about/"
+                  title="About page">
+                  About
+                </a>
+              </li>
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/post/"
+                  title="Projects page">
+                  Projects
+                </a>
+              </li>
+
+            </ul>
+
+
+            <div class="ananke-socials">
+
+
+              <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+                class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+                class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+                class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+            </div>
+
+          </div>
+        </div>
+      </nav>
 
       <div class="tc-l pv6 ph3 ph4-ns">
-        
-          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Churn prediction and machine learning at scale with Pyspark and Spark MLlib.</div>
-          
-        
+
+        <div class="f2 f1-l fw2 white-90 mb0 lh-title">Churn prediction and machine learning at scale with Pyspark and
+          Spark MLlib.</div>
+
+
       </div>
     </div>
   </header>
 
 
 
-    <main class="pb7" role="main">
-      
-  
-  <article class="flex-l flex-wrap justify-between mw8 center ph3">
-    <header class="mt4 w-100">
-      <aside class="instapaper_ignoref b helvetica tracked">
-          
-        PROJECTS
+  <main class="pb7" role="main">
+
+
+    <article class="flex-l flex-wrap justify-between mw8 center ph3">
+      <header class="mt4 w-100">
+        <aside class="instapaper_ignoref b helvetica tracked">
+
+          PROJECTS
+        </aside>
+
+
+
+
+
+
+
+
+
+
+
+        <div id="sharing" class="mt3 ananke-socials">
+
+
+          <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p4-sparkify-churn-prediction/&amp;title=Churn%20prediction%20and%20machine%20learning%20at%20scale%20with%20Pyspark%20and%20Spark%20MLlib."
+            class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
+
+            <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+          </a>
+
+        </div>
+
+
+        <h1 class="f1 athelas mt3 mb1">Churn prediction and machine learning at scale with Pyspark and Spark MLlib.</h1>
+
+
+
+        <time class="f6 mv4 dib tracked" datetime="2023-08-14T11:14:48-04:00">August 14, 2023</time>
+
+
+
+
+      </header>
+      <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
+        <h1 id="project-overview">Project Overview:</h1>
+        <p>This project is part of <a href="https://www.udacity.com/">Udacity</a>&rsquo;s Data Scientist Nanodegree. It
+          focuses on <em>customer churn</em>, a key metric for customer-facing businesses in a wide range of industries,
+          including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer
+          retention is the main driver of a company’s revenue.</p>
+        <p>For this project, Udacity provided a <strong>12GB</strong> dataset of customer activity from
+          <strong>Sparkify</strong>, a fictional music streaming service similar to Spotify or Pandora. The dataset logs
+          user interactions with the service, like listening to streaming songs, adding songs to playlists, thumbs up
+          and down, etc.
+        </p>
+        <p>Tiny (125MB) and medium (237MB) subsets of the full dataset are also provided.</p>
+        <p>Depending on the size of the data, we can use a local machine or deploy a cluster in the cloud. In either
+          case, we will use <a href="https://spark.apache.org/docs/latest/api/python/index.html">PySpark</a>, the Python
+          API for Apache Spark.</p>
+        <h1 id="problem-statement">Problem statement</h1>
+        <p>This is a Sparkify customer churn prediction problem. Users can subscribe to a premium level or a free level
+          that displays ads between songs. They interact with the service as described above. They can upgrade,
+          downgrade, or cancel their subscription at any time.</p>
+        <blockquote>
+          <p>My goal is to build a simple binary classification model that can efficiently predict whether a user will
+            churn or not. By simple, I mean with optimal features.</p>
+        </blockquote>
+        <h1 id="process">Process</h1>
+        <ol>
+          <li>We will first use the small subset of the data to perform exploratory data analysis and build a prototype
+            machine learning model using the <a
+              href="https://spark.apache.org/docs/2.2.0/api/python/pyspark.ml.html">PySpark ML</a> package.</li>
+          <li>We will then scale up using the medium sized dataset (237MB).</li>
+          <li>Finally, we will deploy a cluster in the cloud with AWS using the full 12GB dataset.</li>
+        </ol>
+        <p>In this article, we’ll go through the steps of data analysis, feature engineering and building classification
+          models using <a href="https://spark.apache.org/docs/latest/api/python/index.html">Apache Spark</a>, the most
+          widely used scalable computing engine.</p>
+        <p>Finally, this article concludes with a summary of my end-to-end solution to the problem and a discussion of
+          possible improvements.</p>
+        <h1 id="i-loading-and-cleaning-the-data">I. Loading and cleaning the data</h1>
+        <p>For this part of the project, we will be using the tiny dataset and working on a Jupyter notebook on a local
+          machine (8 GiB of memory) with <strong>Python 3.10.9</strong> and <strong>Spark 3.4.1</strong> installed.<br>
+          The small dataset comes in the form of a JSON file containing 286 500 rows from 225 unique users between
+          October and December 2018.
+          The schema shows that there are 18 columns:</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig1.png" />
+        </figure>
+
+        <p>In addition to user activity, the dataset logs user information such as gender and location, timestamps and
+          session IDs.
+          Data cleaning is the first step before any data analysis. It involves finding incorrect, corrupted, and
+          missing values.<br>
+          To identify missing values, we can use the isNull function as follows:
+          <script type="application/javascript"
+            src="https://gist.github.com/AlaGrine/5fa828f66ca7b1d58809d0771aa62847.js"></script>
+        </p>
+        <p>There are two types of missing values:</p>
+        <ul>
+          <li><strong>Missing information for unregistered users</strong>. Since our goal is to predict churners, we
+            will remove these rows because we don’t know who they belong to.</li>
+          <li><strong>Missing artist and song information for non-song events</strong>. We will not delete these rows.
+          </li>
+        </ul>
+        <h1 id="ii-preliminary-analysis">II. Preliminary analysis</h1>
+        <p>To understand the Sparkify data, I first looked at the distribution of categorical features, such as gender
+          and page visited, at both log and user level. For better visualization and interactivity, I used Plotly to
+          display the plots.</p>
+        <p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig2.png" />
+        </figure>
+
+        <figure><img src="https://alagrine.github.io/images/P4/fig3.png" />
+        </figure>
+        </p>
+        <p>The graphs above show that although there are fewer women than men (104 compared to 121), there are more
+          female interactions (155,000 compared to 124,000).</p>
+        <p>The number of users of the free service is also higher (195 compared to 165 for the paid service) and the
+          “NextSong” page is by far the most visited, as expected for a music streaming service.</p>
+        <p>I then looked at the distribution of the numerical features, such as the number of interactions and session
+          duration per user.</p>
+        <p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig4.png" />
+        </figure>
+
+        The distribution is right skewed. There are some extreme outliers. For instance, the median session length is
+        160 minutes, while some sessions last more than 4400 minutes (3 days). A closer look at the outliers shows that
+        the longer the session, the more logs are generated.</p>
+        <blockquote>
+          <p>We have therefore decided not to delete these extreme values, as they are not errors in the logs, but
+            reflect user behavior.</p>
+        </blockquote>
+        <h1 id="iii-defining-churn">III. Defining Churn</h1>
+        <p>Before building our predictive model, we need to define churn for Sparkify users and create a column called
+          “churn” to use as a label for our model.</p>
+        <p>Two types of churners can be defined: those who have downgraded their account from paid to free (49 users),
+          and those who cancelled the service altogether (52 users).</p>
+        <p>I’ve decided to include only the latter, as those who downgrade are still using the service, even for free,
+          and are not definitively lost.</p>
+        <p><strong>How can we identify churners in our dataset?</strong></p>
+        <p>We can simply use the <strong>“Cancellation Confirmation”</strong> page event, which is the company’s
+          confirmation of a customer’s subscription cancellation request.</p>
+        <p>Using a <strong>UDF</strong> (user-defined function) and a <strong>Window.partitionBy</strong> user ID, we
+          can identify churners as follows:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/340aad938390b87d2e76c4502164567d.js"></script>
+
+        <h1 id="iv-exploratory-data-analysis">IV. Exploratory Data Analysis</h1>
+        <p>Now that we have defined churn, let’s carry out an in-depth exploratory data analysis to observe the behavior
+          of users who have stayed versus those who have left.</p>
+        <h2 id="categorical-features">Categorical features:</h2>
+        <p>Here we compare the churn rate between the two groups of users.</p>
+        <p><strong>Gender and level:</strong> The graph below shows that men are more likely to churn than women (26.4%
+          vs. 19.2%) and free users are slightly more likely to churn (23.6% vs. 21.8%).</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig5.png" />
+        </figure>
+
+        <p><strong>UserAgent:</strong> First, we split the UserAgent column into two columns, Device and Browser, as
+          follows:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/f40b56e20f6ea7c13de366777430a6e4.js"></script>
+
+        <p>Unsurprisingly, the most widely used devices are Windows and Mac. Linux X11 and iPhone have the highest churn
+          rates at 42% and 31% respectively. This may indicate potential problems with the application on these devices.
+        </p>
+        <p>Firefox has a higher churn rate than Safari (32% vs 21%).</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig6.png" />
+        </figure>
+
+        <p><strong>State:</strong> Most users are located in California, Texas, New York/New Jersey/Penn and Florida.
+        </p>
+        <p>Using &ldquo;state&rdquo; for our model will add 58 features (one feature per state), resulting in a high
+          risk of overfitting, especially with our small dataset (225 users). That is why “state” is not going to be
+          part of our feature engineering.</p>
+        <p><strong>Page events:</strong> churners have fewer page events than non-churners: They add fewer friends and
+          playlists, ask for less help, listen to fewer songs, etc.</p>
+        <p>Interestingly, churners also encountered fewer errors, which on second thought makes sense as they are less
+          active and therefore less likely to make errors.</p>
+        <p>Looking at the ratio of page events between the two groups, the most used pages are quite similar for
+          churners and non-churners: 81% of logs come from the NextSong page, which is related to listening to music,
+          with ‘Thumbs Up’ and ‘Home’ accounting for 90% of total page visits.</p>
+        <p>Interestingly, the most significant difference between churners and non-churners relates to “roll advert” and
+          “thumbs down” pages, with a delta of 0.9% and 0.23% respectively. This suggests that churners are particularly
+          unhappy with the ads.</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig7.png" />
+        </figure>
+
+        <h2 id="numerical-features">Numerical features:</h2>
+        <p>Numerical features include the number of sessions, songs, and artists, as well as the session length, the
+          number of days since registration and the length of the songs listened to.</p>
+        <p>To compare the distribution of these variables between the two groups of users, we simply compare the median,
+          mean, and standard deviation.</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig8.png" />
+        </figure>
+
+        <p>As suggested by the statistical measures, the distribution of these characteristics (except for number of
+          sessions) differs noticeably between the two groups.</p>
+        <p>As a final step before moving on to feature engineering, let’s look at another key metric for tracking user
+          engagement: <a
+            href="https://uxcam.com/blog/mobile-app-engagement-metrics/#:~:text=Session%20interval&amp;text=This%20metric%20helps%20you%20understand,longer%20intervals%20show%20lower%20interest">session
+            interval</a>, which is the average time between two consecutive sessions.</p>
+        <p>For mobile and web applications, a shorter session interval should indicate a higher level of engagement, as
+          users visit the app more often and are therefore highly engaged. Conversely, a longer session interval should
+          indicate less interest.</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig9.png" />
+        </figure>
+
+        <p>Surprisingly, as shown in the chart above, the highest session interval for Sparkify is for non-churners,
+          which is counter intuitive. 91% of churners have a session interval of less than 150 minutes compared to 46%
+          of non-churners.</p>
+        <p>Are Sparkify users downloading and listening to their favorite tracks offline (like Spotify Premium users)?
+          Unfortunately, we don’t have a page event that shows download activity to confirm this behavior. However, and
+          most importantly, there is a significant difference in the session interval between the two groups that cannot
+          be ignored. We expect this to be one of the most important features in predicting churn.</p>
+        <h1 id="v-feature-engineering">V. Feature Engineering</h1>
+        <p>Feature engineering is key to getting the best results from machine learning algorithms.</p>
+        <p>From feature selection to dealing with unbalanced data, we will go through all the steps of this process.</p>
+        <p>But first we need to build the features to train our models. In fact, while the small dataset contains an
+          average of about 1,235 rows for each user, binary classification models expect only one row for each user. We
+          therefore need to create aggregate measures.</p>
+        <h2 id="build-out-the-features">Build out the features</h2>
+        <p>Based on our analysis and identifying columns with differences between user groups, I created the following
+          aggregated features.</p>
+        <h3 id="categorical-features-1">Categorical features</h3>
+        <ul>
+          <li>gender: M or F (binary).</li>
+          <li>level: Most recent user level: paid or free (binary).</li>
+          <li>userAgent: split into browser and device (categorical)</li>
+        </ul>
+        <h3 id="numerical-features-1">Numerical features</h3>
+        <ul>
+          <li>Number of sessions (int)</li>
+          <li>Days since registration (float)</li>
+          <li>Session interval, which is the average time between two consecutive sessions (float)</li>
+          <li>Average session length (float)</li>
+          <li>Total_hours, which is the total session length (float)</li>
+          <li>Average songs per session (float)</li>
+          <li>Number of unique artists and songs the user has listened to (int).</li>
+          <li>Total length: the length of songs the user has listened to (float)</li>
+          <li>Number of pages viewed per hour (float)
+            where page is in: about, add_friend, add_to_playlist, downgrade, error, help, home, logout, roll_advert,
+            save_settings, settings, submit_downgrade, submit_upgrade’, thumbs_down, thumbs_up and upgrade.</li>
+        </ul>
+        <p>To create these aggregations, I used a number of functions from the <a
+            href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html">pyspark.sql.functions</a>
+          package. The following code block illustrates how to use these functions:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/2efbe74489df2f3f3c9ae53c53e53100.js"></script>
+
+        <p>I used the PySpark DataFrame. If you are more comfortable with SQL queries, you can use <a
+            href="https://spark.apache.org/docs/2.2.0/sql-programming-guide.html#:~:text=The%20sql%20function%20on%20a,the%20result%20as%20a%20DataFrame%20.">Spark
+            SQL</a> which allows you to execute SQL queries and return the result in the form of a DataFrame.</p>
+        <h2 id="feature-selection">Feature selection</h2>
+        <p><a
+            href="https://www.analyticsvidhya.com/blog/2020/10/feature-selection-techniques-in-machine-learning/">Feature
+            selection techniques</a>, as the name suggests, is the process of selecting features without transforming
+          them. The main benefits of this process are to simplify the model, reduce training time and avoid overfitting.
+        </p>
+        <p>I first removed features, such as count_songs, count_logs and count_sessions, which are highly correlated
+          with total_hours (sum of all session lengths), as shown in the correlation matrix below.</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig10.png" />
+        </figure>
+
+        <p>I then selected the features most closely related to the target variable (churn) using the <a
+            href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html">SelectKBest</a>
+          library, which selects features based on the k highest scores, where the score function is chi-square.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/5155d68869fba730bc87a1d0678d092a.js"></script>
+
+        <figure><img src="https://alagrine.github.io/images/P4/fig11.png" />
+        </figure>
+
+        <p>We can see that days since registrattion and measures of engagement (interval and total_hours or total
+          session length) are the most highly rated.</p>
+        <p><strong>Now, how many features could we choose to have a simple model and avoid over-fitting?</strong></p>
+        <blockquote>
+          <p>To keep it simple and get the best results, we will be building a series of K-fold cross validators using
+            PySpark ML classifiers and various N selected features , where N = range(4,len(features_to_keep)-1,4).
+            As it would take too long to test all the values, we choose a step of 4.</p>
+        </blockquote>
+        <h1 id="vi-modeling">VI. Modeling</h1>
+        <p>The goal of the machine learning models is to predict churn based on the features created in the previous
+          section. Pipeline creation, cross-validation, training, and evaluation of the model are covered in this
+          section.</p>
+        <h2 id="spark-pipeline-and-cross-validation">Spark pipeline and Cross Validation</h2>
+        <p>To effectively chain transformers and estimators, and to avoid data leakage, I created a Pyspark workflow or
+          <strong>pipeline</strong>. It consists of:
+        </p>
+        <ul>
+          <li><strong>VectorAssembler</strong>, which efficiently merges our features into a vector column, using less
+            memory.</li>
+          <li><strong>MinMaxScaler</strong>, which rescales each feature to the range between 0 and 1, so that a column
+            with lower values is as important to the model as a column with higher values.</li>
+          <li><strong>MLlib classifier</strong>: a classifier of choice.</li>
+        </ul>
+        <p>I then created a <strong>K-fold cross validator</strong> using the above pipeline as the estimator and the
+          <strong>f1-score</strong> as the evaluation metric (the choice of this metric is discussed in the next
+          section). <strong>K</strong> is the number of folds, which I have set to 5. Although the evaluation requires
+          five times as many computations, it’s worth it to better estimate model prediction performance and avoid
+          over-fitting, especially with our small data set.
+        </p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/8acffc6ad4c5de84b64df9c72a09a074.js"></script>
+
+        <h2 id="evaluation-metric-and-handling-unbalanced-dataset">Evaluation metric and handling unbalanced dataset.
+        </h2>
+        <p>Our dataset has unbalanced classes, as there are only <strong>23.1%</strong> churners, which means that the
+          model has more information about active users (the majority class) than about churners (the minority class).
+          If the model always predicts for active users, we get a good accuracy of <strong>77%</strong>. However, this
+          hides the true performance of the classifier, which never identifies a churn.</p>
+        <p><strong>Accuracy</strong> is therefore misleading and should not be used here. Instead, we will use the
+          <strong>F1-score</strong> as evaluation metric, which combines precision and recall into one metric as
+          follows:
+        </p>
+        <pre tabindex="0"><code>F1-score = (2 * precision * recall) / (precision + recall)
+</code></pre>
+        <p><strong>Precision</strong> is the proportion of correctly predicted churners (true positives) out of the
+          total number of predicted churners. Higher precision leads to fewer <em>false positives</em> (the model
+          predicts churn when it shouldn’t have).</p>
+        <p><strong>Recall</strong>, on the other hand, is the proportion of correctly predicted churners out of the
+          total number of real churners. Higher recall leads to fewer <em>false negatives</em> (the model predicts no
+          churn when it should have predicted churn).</p>
+        <p>From a business perspective, higher recall and precision means that any discounts or marketing promotions are
+          effectively targeted at people who are at risk of leaving.</p>
+        <p>Finally, it is worth noting that using the <strong>f1 score</strong> as an evaluation metric is not a
+          solution to the imbalance problem. There are some techniques to solve this problem, such as resampling,
+          generating synthetic data for the minority class (<a
+            href="https://machinelearningmastery.com/smote-oversampling-for-imbalanced-classification/">SMOTE</a>), and
+          <a href="https://www.analyticsvidhya.com/blog/2020/10/improve-class-imbalance-class-weights/">balancing class
+            weights</a>.
+        </p>
+        <h2 id="balancing-class-weights-to-deal-with-class-imbalance">Balancing class weights to deal with class
+          imbalance</h2>
+        <p>Balancing class weights is nothing more than giving the minority class a higher weight and reducing the
+          weight of the majority class. Unlike Scikit learn, we first need to create a column which we will call
+          “weight”, as follows:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/fb7ce6c6a0f3d93def3e8c9378d272f8.js"></script>
+
+        <p>This column is then assigned to the <strong>“weightCol”</strong> parameter of the MLlib classifiers as
+          follows:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/edcbcd9fc2e4017516701bacc794306c.js"></script>
+
+        <h2 id="split-data-into-training-and-validation-sets">Split data into training and validation sets</h2>
+        <p>As with Scikit learn, we will split the data into training and validation sets using the
+          <strong>randomSplit</strong> method. The weights are <strong>70%</strong> and <strong>30%</strong>
+          respectively. When a model is training, it only sees data from the training set. Using the validation set, we
+          can see how it performs on unseen data.
+        </p>
+        <h2 id="training-and-evaluation">Training and evaluation</h2>
+        <p>The algorithms we will compare are:</p>
+        <blockquote>
+          <p>LogisticRegression, RandomForestClassifier, GBTClassifier, LinearSVC and DecisionTreeClassifier.</p>
+        </blockquote>
+        <p>First, we instantiate these models, which is straightforward and very similar to scikit-learn.</p>
+        <p>We will then train these models for a few experiments and compare the results of each model to see which
+          performs best. More specifically, we’ll be building the following:</p>
+        <ul>
+          <li><strong>Baseline:</strong> Pipeline using the Naïve Bayes classifier, 16 selected features and a different
+            number of seeds (different training datasets). There is no class weighting here.</li>
+          <li><strong>First experiment:</strong> Build a series of K-fold cross validators using the above classifiers
+            and N selected features where N = range(4,len(features_to_keep)-1,4). Features are selected using the <a
+              href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html">SelectKBest</a>
+            library.</li>
+          <li><strong>Second experiment:</strong> Same as the first experiment with class weight balancing.</li>
+          <li><strong>Third experiment:</strong> Same as the second experiment with hyperparameter tuning.</li>
+        </ul>
+        <p>Each experiment and each model will go through the following steps:</p>
+        <ul>
+          <li>Build the model.</li>
+          <li>Train the model.</li>
+          <li>Evaluate the model and save the prediction evaluation metrics to CSV for later comparison.</li>
+        </ul>
+        <h2 id="results-and-interpretation">Results and Interpretation</h2>
+        <h3 id="baseline-naive-bayes">Baseline: Naive Bayes</h3>
+        <p><em>Naive Bayes</em> is a simple model. It could provide a good baseline for future experiments. The
+          advantage of using Multinomial Naive Bayes is that training is very fast, as shown in the graph below.</p>
+        <p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig12.png" />
+        </figure>
+
+        The <em>Naive Bayes</em> model is trained on different training datasets (a list of seed values is defined to
+        randomly split data into training and test sets).</p>
+        <p>This plot shows that the f1 score of the Naive Bayes model ranges from <strong>0.6</strong> to
+          <strong>0.75</strong> (excluding outliers), with an average of <strong>0.68</strong>.
+        </p>
+        <p><strong>70%</strong> seems a good baseline for our f1-score.</p>
+        <p>For subsequent experiments, we could train our models for different seed values. However, this would take too
+          much time in the training and inference modes.</p>
+        <blockquote>
+          <p>Henceforth, the seeds of the randomsplit and the tree classifiers are set to 42 for simplicity and
+            reproducibility.</p>
+        </blockquote>
+        <h3 id="first-experiment-k-fold-cross-validation-using-n-selected-features-no-class-weighting">First experiment:
+          K-fold cross validation using N selected features. No class weighting.</h3>
+        <p>The results in terms of f1-score and training time are shown below.
+        <figure><img src="https://alagrine.github.io/images/P4/fig13.png" />
+        </figure>
+        </p>
+        <p>For larger numbers of features (above <strong>12</strong> features), the high bias/low variance algorithms,
+          namely <em>Linear SVC</em> and <em>Logistic Regression</em>, outperform the tree-based algorithms, which start
+          to overfit after <strong>16</strong> features.</p>
+        <p>To obtain the simplest model, which is our goal, we can choose either the <em>DecisionTree</em> or the
+          <em>GBTClassifier</em>, as they use the least number of features (<strong>12</strong>) to obtain an f1 score
+          of <strong>82.2%</strong>.
+        </p>
+        <p>In terms of training time (on my local machine), the <em>GBTClassifier</em> and the <em>LinearSVC</em> are
+          the slowest with <strong>44</strong> seconds and <strong>54</strong> seconds respectively.
+          <em>DecisionTreeClassifier</em> and <em>RandomForestClassifier</em> are the fastest with only
+          <strong>7</strong> seconds.
+        </p>
+        <p>At this stage, given its good performance in terms of f1 score and training time, we can choose the
+          <em>DecisionTree</em> algorithm. However, we need to carry out further experiments before choosing the best
+          algorithm.
+        </p>
+        <p>In the next experiment, we will examine the effect of class weighting on the performance of the model.</p>
+        <h3 id="second-experiment-class-weigh-balancing">Second experiment: class weigh balancing.</h3>
+        <p>Here is a graph of the F1 score with and without class weighting.
+        <figure><img src="https://alagrine.github.io/images/P4/fig14.png" />
+        </figure>
+        </p>
+        <p>We can see that class weighting significantly improved the performance of the
+          <em>RandomForestClassifier</em>, <em>LinearSVC</em> and <em>Logistic regression</em>, with an increase of
+          around <strong>10%</strong> with fewer features selected.
+        </p>
+        <p>More than <strong>12</strong> features are needed to see the effect of class weighting for the GBT
+          classifier.
+        <figure><img src="https://alagrine.github.io/images/P4/fig15.png" />
+        </figure>
+        </p>
+        <p>Impressively, <em>LinearSVC</em> achieved a score of 85% with only <strong>4</strong> features, namely
+          session interval, total hours (total session length), days since registration and average number of songs per
+          session.</p>
+        <p>The best f1-score of this experiment is <strong>87.7%</strong>. It was obtained using the RFC classifier and
+          <strong>8</strong> features.
+        </p>
+        <p>Now let us display the most important features for the RFC model. We will use the
+          <strong>“featureImportances”</strong> property of this classifier.
+        </p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig16.png" />
+        </figure>
+
+        <p>The graph above shows that <strong>80%</strong> of the weights can be accounted for by the first
+          <strong>4</strong> most important features: <em>days since registration</em>, <em>session interval</em>,
+          <em>roll advert</em> and <em>thumbs down pages</em>.
+        </p>
+        <blockquote>
+          <p>This suggests that customer behavior and exposure to advertising are key drivers of churn. Interestingly,
+            characteristics such as gender and service level do not appear in the top 8.</p>
+        </blockquote>
+        <h3 id="third-experiment-hyperparameter-tuning">Third experiment: Hyperparameter tuning</h3>
+        <p>To further improve the performance obtained in the second experiment, I performed hyperparameter tuning using
+          a parameter grid, except for the GBT classifier, which I found too slow to train on my local machine.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/239c537e1cfee9f579e3e82d277d7583.js"></script>
+
+        <p>Tuning the regularization parameters of logistic regression yielded an F1 score of <strong>85%</strong>,
+          which is a slight improvement over the default parameters.</p>
+        <p>For the other algorithms, the default parameters continue to give the best performance.
+        <figure><img src="https://alagrine.github.io/images/P4/fig17.png" />
+        </figure>
+        </p>
+        <p>At this stage we can try to tune other hyperparameters, but it is too time consuming, and it is better to use
+          more data.</p>
+        <h1 id="vii-scaling-up-medium-dataset">VII. Scaling up: medium dataset</h1>
+        <p>Now that we know that our smaller modelling code is running correctly, it’s time to scale up with more data,
+          which is a common practice in machine learning.</p>
+        <p>In this section, we will be using the medium dataset (<strong>237MB</strong>), which contains <strong>543
+            705</strong> rows from <strong>448</strong> unique users between October and December 2018.</p>
+        <p>We will repeat all the steps we followed for the small dataset, from exploratory data analysis to modelling,
+          through feature engineering and feature selection.</p>
+        <h2 id="statistics-of-the-medium-vs-small-datasets">Statistics of the medium vs. small datasets</h2>
+        <p>Let us first compare the statistics of the medium with the small datasets.
+        <figure><img src="https://alagrine.github.io/images/P4/fig18.png" />
+        </figure>
+        </p>
+        <p>Above we can see that, in contrast to the mini dataset, females are more likely to churn (22.7% vs. 21.6% for
+          men) and paid users are slightly more likely to leave (23.4% vs. 22.2% for the free tier).</p>
+        <p>These changes will not affect our model as it is based on user behavior rather than user characteristics (as
+          shown in the previous part).</p>
+        <p>Interestingly, both datasets have the same statistics for the “Thumbs down” and “Roll Advert” pages, which
+          have the most significant difference in proportion between churners and non-churners with a delta of 0.9% and
+          0.23% respectively.</p>
+        <p>In terms of numerical features, the variance in the number of songs and artists is more similar between the
+          two groups compared to the small dataset. Active users spend 4 times more minutes listening to music than
+          churners, compared to 5 times in the small dataset. Finally, we still have a significant difference between
+          churners and non-churners in terms of session interval.</p>
+        <h2 id="results-using-the-medium-dataset">Results using the medium dataset</h2>
+        <p>The results in terms of f1-score and training time are shown below.
+        <figure><img src="https://alagrine.github.io/images/P4/fig19.png" />
+        </figure>
+        </p>
+        <p><em>Random Forest</em> and <em>GBT classifiers</em>, outperform <em>Linear SVC</em> and <em>Logistic
+            Regression</em> as they only need <strong>8</strong> features to achieve an f1 score of around
+          <strong>85%</strong>.
+        </p>
+        <p>The best f1-score is <strong>87%</strong>. It was obtained using the <em>Random Forest</em> and
+          <strong>12</strong> features.
+        </p>
+        <p>Interestingly, the <em>RFC classifier</em> performed well on both the small and medium datasets, with peaks
+          above <strong>87%</strong>.</p>
+        <p>The <em>GBT classifier</em> performed better on the medium dataset than on the small one
+          (<strong>85%</strong> vs. <strong>82%</strong>). Let us see how it will perform on the large dataset.</p>
+        <h1 id="viii-machine-learning-at-scale-the-big-dataset">VIII. Machine learning at scale: the big dataset</h1>
+        <p>So far, we have been using Spark on a <em>local machine</em>.
+          To harness its power for big data, we will use the Sparkify’s full dataset (<strong>12 GB</strong>) on a
+          distributed system. Specifically, we will use <a href="https://aws.amazon.com/">Amazon</a> EMR (Amazon Elastic
+          MapReduce) to set up and launch a <strong>Spark cluster</strong> of <em>4 m4-xlarge</em> core nodes (EC2
+          instances).</p>
+        <p>The full dataset contains <em>26.26 million</em> rows from 22,277 users.</p>
+        <p>We will also use <em>Python scripts</em> instead of <em>Jupyter notebook</em> as we have already explored and
+          visualized data and built our machine learning prototype.</p>
+        <h2 id="run-python-script-on-amazon-emr-cluster">Run Python script on Amazon EMR cluster</h2>
+        <p>The script I reworked from my Jupyter notebook can be found <a
+            href="https://github.com/AlaGrine/Udacity_Sparkify_capstoneProject/blob/main/AWS_EMR_bigData/My_script.py">here</a>.
+          It:</p>
+        <ul>
+          <li>Retrieves the full dataset from the <strong>S3</strong> <strong>S</strong>torage <strong>S</strong>ystem
+            <strong>S</strong>ervice: s3n://udacity-dsnd/sparkify/sparkify_event_data.json.
+            Cleans the data.
+          </li>
+          <li>Creates features, and trains models using class weighting, various selected features and default param
+            grid.</li>
+          <li>Evaluates the classifiers, and stores the results (f1-score, training time…) as a parquet file in my S3
+            bucket called “my-sparkify-backet”.</li>
+        </ul>
+        <p>The Python script is then uploaded to my S3 bucket.</p>
+        <p>Finally, once I am connected to the master machine via SSH, I submit the script to my cluster through the
+          command line as follows:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/0c424e6be24d4af33048cbd9db985bb2.js"></script>
+
+        <p>The first command downloads the script from S3 to the master machine for execution.</p>
+        <p>Now our Spark job is running. It takes almost 45 minutes to finish. When the script is complete, I will
+          terminate the EMR cluster and delete my files from S3, as <strong>AWS services are pay-as-you-go.</strong></p>
+        <h2 id="results-and-interpretation-1">Results and Interpretation</h2>
+        <p>The results in terms of f1-score and training time, using the default Grid parameters, are shown below.</p>
+        <figure><img src="https://alagrine.github.io/images/P4/fig20.png" />
+        </figure>
+
+        <p>Selecting only <strong>8</strong> features, <em>tree-based</em> models outperform the <em>LinearSVC</em> and
+          <em>Logistic regression</em> models.
+        </p>
+        <p>The _GBT classifie_r comes first with an f1 score of <strong>85.6%</strong>, ahead of the <em>RFC</em> with
+          <strong>83%</strong> and the <em>DT</em> with <strong>82.2%</strong>.
+        </p>
+        <blockquote>
+          <p>Using <em>Apache Spark</em> on the <em>EMR cluster</em> (4 core nodes) has reduced the training duration of
+            our models. For instance, the training time of the GBT classifier on the cluster for 22,277 users is about
+            55 seconds. On my local machine, it took the same time for only 225 users. This shows the power of Apache
+            Spark.</p>
+        </blockquote>
+        <p>Now let us display the most important features to the <em>GBT</em> model.
+        <figure><img src="https://alagrine.github.io/images/P4/fig21.png" />
+        </figure>
+        </p>
+        <p>It is interesting to note that the main drivers of churn remain almost the same compared to the small
+          dataset.</p>
+        <p><em>Session interval</em>, <em>average session length</em> and <em>days since registration</em> account for
+          almost <strong>60%</strong>. This means that the model mainly looks at how often and for how long users engage
+          with the Sparkify service.</p>
+        <p>Another interesting takeaway is that the <em>roll advert</em> is still a major churn factor, with an
+          importance of <strong>9%</strong>.</p>
+        <p>At this stage, we could still improve the f1-score by tuning the hyperparameters of the <em>GBT</em>
+          classifier.</p>
+        <p>In the next section, we’ll think about other ideas that could improve the results.</p>
+        <h1 id="ix-conclusion">IX. Conclusion</h1>
+        <p>This was a very exciting project for me. From building a prototype model to running a Python script on an EMR
+          cluster with big data, there was a lot to learn and tweak.</p>
+        <h2 id="end-to-end-solution-summary">End-to-end solution summary</h2>
+        <p>First, I used the small dataset to perform <strong>exploratory data analysis</strong>. I then defined churn
+          and analyzed the behavior of users who have stayed versus those who have left.</p>
+        <p>I then covered all the steps for <strong>feature engineering</strong> and building classification models
+          using <strong>Apache Spark</strong>. I leveraged the <em>PySpark DataFrame API</em>, which I found intuitive
+          because it is similar to Panda’s data frames.</p>
+        <p>I built a series of <strong>K-fold cross-validators</strong> using a variety of selected features, class
+          weighting, and hyper-parameter tuning. I found Spark relatively slow on my local machine, especially for
+          hyperparameter tuning of GBT and LinearSVC classifiers.</p>
+        <p>The <strong>f1-score</strong> was used to evaluate the models, which is an appropriate metric for our
+          unbalanced dataset.</p>
+        <p>On the small dataset, <strong>class weighting</strong> significantly improved the performance of
+          RandomForestClassifier, LinearSVC and Logistic regression, with an increase of around 10% with fewer features
+          selected.</p>
+        <p>The GBT classifier needed more data to perform better (85% on the medium and big datasets vs. 82% on the
+          small dataset).</p>
+        <p>The final part of the project focused on <strong>machine learning at scale</strong>. I turned my Jupyter
+          notebook into a Python script before running it on an <strong>EMR cluster</strong>. This significantly reduced
+          the training time of the models and showed the power of Apache Spark in big data.</p>
+        <p>On the full dataset, the GBTClassifier was the best algorithm with an f1 score of 85.6%, 2.5% ahead of the
+          RandomForestClassifier.</p>
+        <p>The <strong>most important features</strong> showed that customer behavior, days since registration and
+          exposure to advertising are the main drivers of churn. Sparkify therefore needs to optimize its advertising
+          system and add more novelty and serendipity (a user is pleasantly surprised by the recommendation) to its
+          recommendation engine to keep its customers engaged.</p>
+        <h2 id="possible-improvements">Possible improvements</h2>
+        <p>Churn has been predicted with an F1 score of <strong>85.6%</strong>. We can be satisfied with this result.
+          However, there is room for improvement in both feature engineering and modelling.</p>
+        <p>Additional features can be derived from the user’s location and the time of the activity, such as the day of
+          the week. In terms of location, adding a feature for each state could lead to overfitting especially in the
+          small dataset. Therefore, creating clusters of states might be a good idea.</p>
+        <p>We trained our models using aggregated features that reflect user behavior. To take this a step further, it
+          would be interesting if our models could see how a user’s behavior changes over time.</p>
+        <p>Prior to feature selection(we used the <a
+            href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html">SelectKBest</a>
+          library), we could perform a <a
+            href="https://machinelearningmastery.com/principal-components-analysis-for-dimensionality-reduction-in-python/">Principal
+            component analysis</a>, which helps to reduce the correlated features to one, thus reducing the dimensions
+          and further simplifying our model.</p>
+        <p>Although outliers reflect user behavior, we could remove them and see if this would improve the F1 score,
+          especially for the full dataset where we have more data available.</p>
+        <p>To deal with our unbalanced dataset, we used class weighting, which we found to be simple and effective. We
+          could also try oversampling using <a
+            href="https://machinelearningmastery.com/smote-oversampling-for-imbalanced-classification/">SMOTE</a>, and
+          see which technique works better with our data.</p>
+        <p>In terms of modelling, we could try the multilayer Perceptron classifier, and for the models we have built so
+          far, other hyperparameters could be tuned.</p>
+        <p>Finally, another improvement would be to use a longer observation period, as user behavior and preferences
+          can change over time.</p>
+        <p>Implementing these changes could further improve the F1 score, allowing Sparkify to accurately target
+          potential churners with appropriate marketing actions, such as discounts.</p>
+        <br>
+        <p><a href="https://github.com/AlaGrine/Udacity_Sparkify_capstoneProject">Link to GitHub
+            repository</a></p>
+
+
+
+        <span class="badge badge-pill badge-success">PySpark</span>
+        <span class="badge badge-pill badge-success">Spark MLlib</span>
+        <span class="badge badge-pill badge-success">AWS</span>
+        <span class="badge badge-pill badge-success">Data Science</span>
+
+        <ul class="pa0">
+
+        </ul>
+        <div class="mt6 instapaper_ignoref">
+
+
+        </div>
+      </div>
+
+      <aside class="w-30-l mt6-l">
+
+
+
+
       </aside>
-      
 
+    </article>
 
-
-
-
-
-
-
-
-
-  <div id="sharing" class="mt3 ananke-socials">
-    
-      
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p4-sparkify-churn-prediction/&amp;title=Churn%20prediction%20and%20machine%20learning%20at%20scale%20with%20Pyspark%20and%20Spark%20MLlib." class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
-        
-        <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-        
+  </main>
+  <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+    <div class="flex justify-between">
+      <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/">
+        &copy; Ala Eddine GRINE 2023
       </a>
-    
-  </div>
+      <div>
+        <div class="ananke-socials">
 
 
-      <h1 class="f1 athelas mt3 mb1">Churn prediction and machine learning at scale with Pyspark and Spark MLlib.</h1>
-      
-      
-      
-      <time class="f6 mv4 dib tracked" datetime="2023-08-14T11:14:48-04:00">August 14, 2023</time>
-      
+          <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+            class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
 
-      
-      
-    </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p><strong>Project Overview:</strong></p>
-<p>This project is part of <a href="https://www.udacity.com/">Udacity</a>&rsquo;s Data Scientist Nanodegree. It focuses on <em>customer churn</em>, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.</p>
-<p><strong>Problem statement:</strong></p>
-<p>This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs. They can upgrade, downgrade, or cancel their subscription at any time.</p>
-<blockquote>
-<p>My goal is to build a simple binary classification model that can efficiently predict whether a user will churn or not. By simple, I mean with optimal features.</p>
-</blockquote>
-<p><strong>Process:</strong></p>
-<p>Along this project, I went through the steps of data analysis, feature engineering and building classification models using <a href="https://spark.apache.org/docs/latest/api/python/index.html">Apache Spark</a>, the most widely used scalable computing engine.</p>
-<ol>
-<li>I Used a small subset (on a local machine) to perform exploratory data analysis and build a prototype machine learning model.</li>
-<li>I Scaled up with a medium dataset (on a local machine) to see how my models work on a larger dataset.</li>
-<li>I Deployed a cluster in the cloud with AWS using the big dataset.</li>
-</ol>
-<p><strong>PySpark:</strong></p>
-<p>I used <a href="https://spark.apache.org/docs/latest/api/python/index.html">PySpark</a>, the Python API for Apache Spark, on both the local machine and the AWS EMR cluster.</p>
-<p>I leveraged the PySpark DataFrame API, which I found intuitive because it is similar to Panda’s data frames.</p>
-<p>I used a number of functions from the <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html">pyspark.sql.functions</a> package. The following code block illustrates how to use these functions:</p>
-<script type="application/javascript" src="https://gist.github.com/AlaGrine/2efbe74489df2f3f3c9ae53c53e53100.js"></script>
+            <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+              </svg>
+            </span>
 
-<p><strong>Spark MLlib:</strong></p>
-<p>I used the following <a href="https://spark.apache.org/docs/2.2.0/api/python/pyspark.ml.html">PySpark ML</a> classifiers:</p>
-<blockquote>
-<p>LogisticRegression, RandomForestClassifier, GBTClassifier, LinearSVC and DecisionTreeClassifier.</p>
-</blockquote>
-<p>First, I instantiated these models, which is straightforward and very similar to scikit-learn:</p>
-<script type="application/javascript" src="https://gist.github.com/AlaGrine/edcbcd9fc2e4017516701bacc794306c.js"></script>
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
 
-<p>I then trained these models for a few experiments and compared the results of each model to see which performs best.</p>
-<p><strong>Machine learning at scale: AWS cluster</strong></p>
-<p>To harness the power of Spark for big data, I used the full Sparkify dataset (12GB) on a distributed system. Specifically, I used Amazon EMR (Amazon Elastic MapReduce) to set up and launch a Spark cluster of 4 m4-xlarge core nodes (EC2 instances).</p>
-<p>The full dataset contains 26.26 million rows from 22,277 users.</p>
-<p><strong>Results and Interpretation:</strong></p>
-<p>The results in terms of f1-score and training time are shown below.
-<figure><img src="https://alagrine.github.io/images/P4-F1score.png"/>
-</figure>
-</p>
-<p>Tree-based models outperformed the LinearSVC and Logistic regression models.</p>
-<p>The <em>GBT classifier</em> came first with an f1 score of 85.6%, ahead of the <em>RandomForestClassifier</em> with 83% and the <em>DecisionTreeClassifier</em> with 82.2%.</p>
-<blockquote>
-<p>Using Apache Spark on the EMR cluster (4 core nodes) had reduced the training duration of my models. For instance, the training time of the GBT classifier on the cluster for 22,277 users took 55 seconds. On my local machine, it took the same time for only 225 users. This shows the power of Apache Spark.</p>
-</blockquote>
-<p>The most important features showed that <em>customer behavior, days since registration and exposure to advertising</em> are the main drivers of churn. Sparkify therefore needs to optimize its advertising system and add more novelty and serendipity (a user is pleasantly surprised by the recommendation) to its recommendation engine to keep its customers engaged.</p>
-<p>Read more about the project on this <a href="https://medium.com/@alaeddine.grine/sparkify-churn-prediction-with-pyspark-47f3c166a952">Medium blog</a>.</p>
-<p><a href="https://github.com/AlaGrine/Udacity_Sparkify_capstoneProject">Link to GitHub repository</a></p>
-<ul class="pa0">
-  
-</ul>
-<div class="mt6 instapaper_ignoref">
-      
-      
+
+          <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+            class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+            class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+        </div>
       </div>
     </div>
+  </footer>
 
-    <aside class="w-30-l mt6-l">
+</body>
 
-
-
-
-</aside>
-
-  </article>
-
-    </main>
-    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/" >
-    &copy;  Ala Eddine GRINE 2023 
-  </a>
-    <div>
-<div class="ananke-socials">
-  
-    
-    <a href="https://github.com/AlaGrine" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener" class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener" class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="Medium link" aria-label="follow on Medium——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-</div>
-</div>
-  </div>
-</footer>
-
-  </body>
 </html>

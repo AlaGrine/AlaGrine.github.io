@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Data Science Portfolio on Ala Eddine GRINE</title>
-    <link>https://alagrine.github.io/</link>
-    <description>Recent content in Data Science Portfolio on Ala Eddine GRINE</description>
+    <title>Projects on Ala Eddine GRINE</title>
+    <link>https://alagrine.github.io/post/</link>
+    <description>Recent content in Projects on Ala Eddine GRINE</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 07 Sep 2023 12:00:00 -0500</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 07 Sep 2023 12:00:00 -0500</lastBuildDate><atom:link href="https://alagrine.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Toxic Comment Classification with TensorFlow</title>
+      <link>https://alagrine.github.io/post/p5-toxic-comment-classification-with-tensorflow/</link>
+      <pubDate>Wed, 20 Sep 2023 11:14:48 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p5-toxic-comment-classification-with-tensorflow/</guid>
+      <description>Project Overview: Negative online behaviors, like toxic comments, are likely to make people stop expressing themselves and leave a conversation. Platforms struggle to identify and flag potentially harmful or offensive online comments, leading many communities to restrict or shut down user comments altogether.
+Kaggle issued a challenge to build a multi-label classification model that&amp;rsquo;s able to detect different types of toxicity like threats, obscenity and insults, and thus help make online discussion more productive and respectful.</description>
+    </item>
+    
     <item>
       <title>Churn prediction and machine learning at scale with Pyspark and Spark MLlib.</title>
       <link>https://alagrine.github.io/post/p4-sparkify-churn-prediction/</link>
       <pubDate>Mon, 14 Aug 2023 11:14:48 -0400</pubDate>
       
       <guid>https://alagrine.github.io/post/p4-sparkify-churn-prediction/</guid>
-      <description>Project Overview:
-This project is part of Udacity&amp;rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
-Problem statement:
-This is a customer churn prediction problem. Users can subscribe to a premium level or a free level that displays ads between songs.</description>
+      <description>Project Overview: This project is part of Udacity&amp;rsquo;s Data Scientist Nanodegree. It focuses on customer churn, a key metric for customer-facing businesses in a wide range of industries, including telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer retention is the main driver of a company’s revenue.
+For this project, Udacity provided a 12GB dataset of customer activity from Sparkify, a fictional music streaming service similar to Spotify or Pandora.</description>
     </item>
     
     <item>
@@ -48,18 +56,9 @@ The Project is divided in the following sections:</description>
       <pubDate>Thu, 11 May 2023 10:58:08 -0400</pubDate>
       
       <guid>https://alagrine.github.io/post/p1-boston-airbnb-dataanalysis/</guid>
-      <description>Throughout this project, I was interested in using Boston Airbnb Open dataset, available here, to answer the following questions:
-How does seasonality affect AirBnB prices in Boston? How does location affect AirBnB prices? What are the most important features to predict AirBnB prices? What is the relationship between reviews and price? Link to GitHub repository</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://alagrine.github.io/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://alagrine.github.io/about/</guid>
-      <description>Hi, I&amp;rsquo;m Ala Eddine GRINE.
-I&amp;rsquo;m a certified data scientist professional with expertise in programming languages such as Python and Java, SQL databases, and data visualisation tools such as Tableau. I hold a Master&amp;rsquo;s degree in Telecommunication Engineering. I&amp;rsquo;m currently leading network analytics at Ooredoo TN. I&amp;rsquo;m skilled in most steps of data science: pre-processing data, applying statistical methods, building machine learning models, visualising data and communicating results. alaeddine.grine@gmail.com</description>
+      <description>Project overview: In this project, I leveraged the Cross Industry Process for DataMining (CRISP-DM), a process used for many data science problems.
+I explored the Boston Airbnb open dataset, available here, to get insights into the following questions:
+How does seasonality affect AirBnB prices in Boston? How does location affect AirBnB prices? What are the most important features to predict AirBnB prices? What is the relationship between reviews and price? The dataset describes AirBnB activity, including full descriptions of 3585 listings, 68275 reviews, and daily prices and availability from September 2016 to September 2017.</description>
     </item>
     
   </channel>
