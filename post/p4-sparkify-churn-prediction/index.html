@@ -6,6 +6,42 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+  <style>
+    /* Dashed border */
+    hr.dashed {
+      border-top: 3px dashed #bbb;
+    }
+
+    /* Dotted border */
+    hr.dotted {
+      border-top: 3px dotted #bbb;
+    }
+
+    /* Solid border */
+    hr.solid {
+      border-top: 3px solid #bbb;
+    }
+
+    /* Rounded border */
+    hr.rounded {
+      margin-top: 4%;
+      margin-bottom: 3%;
+      border-top: 8px solid #bbb;
+      border-radius: 5px;
+    }
+
+    figure.center {
+      /* height: 500px; */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* border: 3px solid #dbe4ed; */
+      /* Border color is optional */
+
+    }
+  </style>
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -202,13 +238,6 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
 
 
 
-
-
-
-
-
-
-
         <div id="sharing" class="mt3 ananke-socials">
 
 
@@ -269,18 +298,22 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           <li>We will then scale up using the medium sized dataset (237MB).</li>
           <li>Finally, we will deploy a cluster in the cloud with AWS using the full 12GB dataset.</li>
         </ol>
-        <p>In this article, we’ll go through the steps of data analysis, feature engineering and building classification
+        <p>In this article, we'll go through the steps of data analysis, feature engineering and building classification
           models using <a href="https://spark.apache.org/docs/latest/api/python/index.html">Apache Spark</a>, the most
           widely used scalable computing engine.</p>
         <p>Finally, this article concludes with a summary of my end-to-end solution to the problem and a discussion of
           possible improvements.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="i-loading-and-cleaning-the-data">I. Loading and cleaning the data</h1>
         <p>For this part of the project, we will be using the tiny dataset and working on a Jupyter notebook on a local
           machine (8 GiB of memory) with <strong>Python 3.10.9</strong> and <strong>Spark 3.4.1</strong> installed.<br>
           The small dataset comes in the form of a JSON file containing 286 500 rows from 225 unique users between
           October and December 2018.
           The schema shows that there are 18 columns:</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig1.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig1.png" />
         </figure>
 
         <p>In addition to user activity, the dataset logs user information such as gender and location, timestamps and
@@ -298,15 +331,21 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           <li><strong>Missing artist and song information for non-song events</strong>. We will not delete these rows.
           </li>
         </ul>
+
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="ii-preliminary-analysis">II. Preliminary analysis</h1>
         <p>To understand the Sparkify data, I first looked at the distribution of categorical features, such as gender
           and page visited, at both log and user level. For better visualization and interactivity, I used Plotly to
           display the plots.</p>
         <p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig2.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig2.png" />
         </figure>
 
-        <figure><img src="https://alagrine.github.io/images/P4/fig3.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig3.png" />
         </figure>
         </p>
         <p>The graphs above show that although there are fewer women than men (104 compared to 121), there are more
@@ -316,7 +355,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>I then looked at the distribution of the numerical features, such as the number of interactions and session
           duration per user.</p>
         <p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig4.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig4.png" />
         </figure>
 
         The distribution is right skewed. There are some extreme outliers. For instance, the median session length is
@@ -326,6 +365,11 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           <p>We have therefore decided not to delete these extreme values, as they are not errors in the logs, but
             reflect user behavior.</p>
         </blockquote>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="iii-defining-churn">III. Defining Churn</h1>
         <p>Before building our predictive model, we need to define churn for Sparkify users and create a column called
           “churn” to use as a label for our model.</p>
@@ -341,14 +385,19 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/340aad938390b87d2e76c4502164567d.js"></script>
 
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="iv-exploratory-data-analysis">IV. Exploratory Data Analysis</h1>
         <p>Now that we have defined churn, let’s carry out an in-depth exploratory data analysis to observe the behavior
           of users who have stayed versus those who have left.</p>
+        <br>
         <h2 id="categorical-features">Categorical features:</h2>
         <p>Here we compare the churn rate between the two groups of users.</p>
         <p><strong>Gender and level:</strong> The graph below shows that men are more likely to churn than women (26.4%
           vs. 19.2%) and free users are slightly more likely to churn (23.6% vs. 21.8%).</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig5.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig5.png" />
         </figure>
 
         <p><strong>UserAgent:</strong> First, we split the UserAgent column into two columns, Device and Browser, as
@@ -360,7 +409,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           rates at 42% and 31% respectively. This may indicate potential problems with the application on these devices.
         </p>
         <p>Firefox has a higher churn rate than Safari (32% vs 21%).</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig6.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig6.png" />
         </figure>
 
         <p><strong>State:</strong> Most users are located in California, Texas, New York/New Jersey/Penn and Florida.
@@ -378,15 +427,15 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Interestingly, the most significant difference between churners and non-churners relates to “roll advert” and
           “thumbs down” pages, with a delta of 0.9% and 0.23% respectively. This suggests that churners are particularly
           unhappy with the ads.</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig7.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig7.png" />
         </figure>
-
+        <br>
         <h2 id="numerical-features">Numerical features:</h2>
         <p>Numerical features include the number of sessions, songs, and artists, as well as the session length, the
           number of days since registration and the length of the songs listened to.</p>
         <p>To compare the distribution of these variables between the two groups of users, we simply compare the median,
           mean, and standard deviation.</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig8.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig8.png" />
         </figure>
 
         <p>As suggested by the statistical measures, the distribution of these characteristics (except for number of
@@ -398,7 +447,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>For mobile and web applications, a shorter session interval should indicate a higher level of engagement, as
           users visit the app more often and are therefore highly engaged. Conversely, a longer session interval should
           indicate less interest.</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig9.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig9.png" />
         </figure>
 
         <p>Surprisingly, as shown in the chart above, the highest session interval for Sparkify is for non-churners,
@@ -408,12 +457,18 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           Unfortunately, we don’t have a page event that shows download activity to confirm this behavior. However, and
           most importantly, there is a significant difference in the session interval between the two groups that cannot
           be ignored. We expect this to be one of the most important features in predicting churn.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="v-feature-engineering">V. Feature Engineering</h1>
         <p>Feature engineering is key to getting the best results from machine learning algorithms.</p>
         <p>From feature selection to dealing with unbalanced data, we will go through all the steps of this process.</p>
         <p>But first we need to build the features to train our models. In fact, while the small dataset contains an
           average of about 1,235 rows for each user, binary classification models expect only one row for each user. We
           therefore need to create aggregate measures.</p>
+        <br>
         <h2 id="build-out-the-features">Build out the features</h2>
         <p>Based on our analysis and identifying columns with differences between user groups, I created the following
           aggregated features.</p>
@@ -446,6 +501,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>I used the PySpark DataFrame. If you are more comfortable with SQL queries, you can use <a
             href="https://spark.apache.org/docs/2.2.0/sql-programming-guide.html#:~:text=The%20sql%20function%20on%20a,the%20result%20as%20a%20DataFrame%20.">Spark
             SQL</a> which allows you to execute SQL queries and return the result in the form of a DataFrame.</p>
+        <br>
         <h2 id="feature-selection">Feature selection</h2>
         <p><a
             href="https://www.analyticsvidhya.com/blog/2020/10/feature-selection-techniques-in-machine-learning/">Feature
@@ -454,7 +510,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         </p>
         <p>I first removed features, such as count_songs, count_logs and count_sessions, which are highly correlated
           with total_hours (sum of all session lengths), as shown in the correlation matrix below.</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig10.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig10.png" />
         </figure>
 
         <p>I then selected the features most closely related to the target variable (churn) using the <a
@@ -463,7 +519,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/5155d68869fba730bc87a1d0678d092a.js"></script>
 
-        <figure><img src="https://alagrine.github.io/images/P4/fig11.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig11.png" />
         </figure>
 
         <p>We can see that days since registrattion and measures of engagement (interval and total_hours or total
@@ -474,10 +530,16 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
             PySpark ML classifiers and various N selected features , where N = range(4,len(features_to_keep)-1,4).
             As it would take too long to test all the values, we choose a step of 4.</p>
         </blockquote>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="vi-modeling">VI. Modeling</h1>
         <p>The goal of the machine learning models is to predict churn based on the features created in the previous
           section. Pipeline creation, cross-validation, training, and evaluation of the model are covered in this
           section.</p>
+        <br>
         <h2 id="spark-pipeline-and-cross-validation">Spark pipeline and Cross Validation</h2>
         <p>To effectively chain transformers and estimators, and to avoid data leakage, I created a Pyspark workflow or
           <strong>pipeline</strong>. It consists of:
@@ -498,6 +560,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/8acffc6ad4c5de84b64df9c72a09a074.js"></script>
 
+        <br>
         <h2 id="evaluation-metric-and-handling-unbalanced-dataset">Evaluation metric and handling unbalanced dataset.
         </h2>
         <p>Our dataset has unbalanced classes, as there are only <strong>23.1%</strong> churners, which means that the
@@ -525,6 +588,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           <a href="https://www.analyticsvidhya.com/blog/2020/10/improve-class-imbalance-class-weights/">balancing class
             weights</a>.
         </p>
+        <br>
         <h2 id="balancing-class-weights-to-deal-with-class-imbalance">Balancing class weights to deal with class
           imbalance</h2>
         <p>Balancing class weights is nothing more than giving the minority class a higher weight and reducing the
@@ -537,13 +601,14 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           follows:</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/edcbcd9fc2e4017516701bacc794306c.js"></script>
-
+        <br>
         <h2 id="split-data-into-training-and-validation-sets">Split data into training and validation sets</h2>
         <p>As with Scikit learn, we will split the data into training and validation sets using the
           <strong>randomSplit</strong> method. The weights are <strong>70%</strong> and <strong>30%</strong>
           respectively. When a model is training, it only sees data from the training set. Using the validation set, we
           can see how it performs on unseen data.
         </p>
+        <br>
         <h2 id="training-and-evaluation">Training and evaluation</h2>
         <p>The algorithms we will compare are:</p>
         <blockquote>
@@ -568,12 +633,13 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           <li>Train the model.</li>
           <li>Evaluate the model and save the prediction evaluation metrics to CSV for later comparison.</li>
         </ul>
+        <br>
         <h2 id="results-and-interpretation">Results and Interpretation</h2>
         <h3 id="baseline-naive-bayes">Baseline: Naive Bayes</h3>
         <p><em>Naive Bayes</em> is a simple model. It could provide a good baseline for future experiments. The
           advantage of using Multinomial Naive Bayes is that training is very fast, as shown in the graph below.</p>
         <p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig12.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig12.png" />
         </figure>
 
         The <em>Naive Bayes</em> model is trained on different training datasets (a list of seed values is defined to
@@ -591,7 +657,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <h3 id="first-experiment-k-fold-cross-validation-using-n-selected-features-no-class-weighting">First experiment:
           K-fold cross validation using N selected features. No class weighting.</h3>
         <p>The results in terms of f1-score and training time are shown below.
-        <figure><img src="https://alagrine.github.io/images/P4/fig13.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig13.png" />
         </figure>
         </p>
         <p>For larger numbers of features (above <strong>12</strong> features), the high bias/low variance algorithms,
@@ -613,7 +679,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>In the next experiment, we will examine the effect of class weighting on the performance of the model.</p>
         <h3 id="second-experiment-class-weigh-balancing">Second experiment: class weigh balancing.</h3>
         <p>Here is a graph of the F1 score with and without class weighting.
-        <figure><img src="https://alagrine.github.io/images/P4/fig14.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig14.png" />
         </figure>
         </p>
         <p>We can see that class weighting significantly improved the performance of the
@@ -622,7 +688,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         </p>
         <p>More than <strong>12</strong> features are needed to see the effect of class weighting for the GBT
           classifier.
-        <figure><img src="https://alagrine.github.io/images/P4/fig15.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig15.png" />
         </figure>
         </p>
         <p>Impressively, <em>LinearSVC</em> achieved a score of 85% with only <strong>4</strong> features, namely
@@ -634,7 +700,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Now let us display the most important features for the RFC model. We will use the
           <strong>“featureImportances”</strong> property of this classifier.
         </p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig16.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig16.png" />
         </figure>
 
         <p>The graph above shows that <strong>80%</strong> of the weights can be accounted for by the first
@@ -654,11 +720,16 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Tuning the regularization parameters of logistic regression yielded an F1 score of <strong>85%</strong>,
           which is a slight improvement over the default parameters.</p>
         <p>For the other algorithms, the default parameters continue to give the best performance.
-        <figure><img src="https://alagrine.github.io/images/P4/fig17.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig17.png" />
         </figure>
         </p>
         <p>At this stage we can try to tune other hyperparameters, but it is too time consuming, and it is better to use
           more data.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="vii-scaling-up-medium-dataset">VII. Scaling up: medium dataset</h1>
         <p>Now that we know that our smaller modelling code is running correctly, it’s time to scale up with more data,
           which is a common practice in machine learning.</p>
@@ -666,9 +737,10 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
             705</strong> rows from <strong>448</strong> unique users between October and December 2018.</p>
         <p>We will repeat all the steps we followed for the small dataset, from exploratory data analysis to modelling,
           through feature engineering and feature selection.</p>
+        <br>
         <h2 id="statistics-of-the-medium-vs-small-datasets">Statistics of the medium vs. small datasets</h2>
         <p>Let us first compare the statistics of the medium with the small datasets.
-        <figure><img src="https://alagrine.github.io/images/P4/fig18.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig18.png" />
         </figure>
         </p>
         <p>Above we can see that, in contrast to the mini dataset, females are more likely to churn (22.7% vs. 21.6% for
@@ -682,9 +754,10 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           two groups compared to the small dataset. Active users spend 4 times more minutes listening to music than
           churners, compared to 5 times in the small dataset. Finally, we still have a significant difference between
           churners and non-churners in terms of session interval.</p>
+        <br>
         <h2 id="results-using-the-medium-dataset">Results using the medium dataset</h2>
         <p>The results in terms of f1-score and training time are shown below.
-        <figure><img src="https://alagrine.github.io/images/P4/fig19.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig19.png" />
         </figure>
         </p>
         <p><em>Random Forest</em> and <em>GBT classifiers</em>, outperform <em>Linear SVC</em> and <em>Logistic
@@ -698,6 +771,12 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           above <strong>87%</strong>.</p>
         <p>The <em>GBT classifier</em> performed better on the medium dataset than on the small one
           (<strong>85%</strong> vs. <strong>82%</strong>). Let us see how it will perform on the large dataset.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+
         <h1 id="viii-machine-learning-at-scale-the-big-dataset">VIII. Machine learning at scale: the big dataset</h1>
         <p>So far, we have been using Spark on a <em>local machine</em>.
           To harness its power for big data, we will use the Sparkify’s full dataset (<strong>12 GB</strong>) on a
@@ -707,6 +786,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>The full dataset contains <em>26.26 million</em> rows from 22,277 users.</p>
         <p>We will also use <em>Python scripts</em> instead of <em>Jupyter notebook</em> as we have already explored and
           visualized data and built our machine learning prototype.</p>
+        <br>
         <h2 id="run-python-script-on-amazon-emr-cluster">Run Python script on Amazon EMR cluster</h2>
         <p>The script I reworked from my Jupyter notebook can be found <a
             href="https://github.com/AlaGrine/Udacity_Sparkify_capstoneProject/blob/main/AWS_EMR_bigData/My_script.py">here</a>.
@@ -730,9 +810,11 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>The first command downloads the script from S3 to the master machine for execution.</p>
         <p>Now our Spark job is running. It takes almost 45 minutes to finish. When the script is complete, I will
           terminate the EMR cluster and delete my files from S3, as <strong>AWS services are pay-as-you-go.</strong></p>
+        <br>
+        <br>
         <h2 id="results-and-interpretation-1">Results and Interpretation</h2>
         <p>The results in terms of f1-score and training time, using the default Grid parameters, are shown below.</p>
-        <figure><img src="https://alagrine.github.io/images/P4/fig20.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig20.png" />
         </figure>
 
         <p>Selecting only <strong>8</strong> features, <em>tree-based</em> models outperform the <em>LinearSVC</em> and
@@ -748,7 +830,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
             Spark.</p>
         </blockquote>
         <p>Now let us display the most important features to the <em>GBT</em> model.
-        <figure><img src="https://alagrine.github.io/images/P4/fig21.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig21.png" />
         </figure>
         </p>
         <p>It is interesting to note that the main drivers of churn remain almost the same compared to the small
@@ -761,9 +843,15 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>At this stage, we could still improve the f1-score by tuning the hyperparameters of the <em>GBT</em>
           classifier.</p>
         <p>In the next section, we’ll think about other ideas that could improve the results.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="ix-conclusion">IX. Conclusion</h1>
         <p>This was a very exciting project for me. From building a prototype model to running a Python script on an EMR
           cluster with big data, there was a lot to learn and tweak.</p>
+        <br>
         <h2 id="end-to-end-solution-summary">End-to-end solution summary</h2>
         <p>First, I used the small dataset to perform <strong>exploratory data analysis</strong>. I then defined churn
           and analyzed the behavior of users who have stayed versus those who have left.</p>
@@ -789,6 +877,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           exposure to advertising are the main drivers of churn. Sparkify therefore needs to optimize its advertising
           system and add more novelty and serendipity (a user is pleasantly surprised by the recommendation) to its
           recommendation engine to keep its customers engaged.</p>
+        <br>
         <h2 id="possible-improvements">Possible improvements</h2>
         <p>Churn has been predicted with an F1 score of <strong>85.6%</strong>. We can be satisfied with this result.
           However, there is room for improvement in both feature engineering and modelling.</p>
