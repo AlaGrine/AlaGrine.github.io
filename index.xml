@@ -13,10 +13,10 @@
       <pubDate>Fri, 20 Oct 2023 11:14:48 -0400</pubDate>
       
       <guid>https://alagrine.github.io/post/p6-bitcoin_price_forecast/</guid>
-      <description>Project Overview: Time series analysis is widely used to identify patterns and trends that can be used to predict the future.
-In this article I forecast daily closing price series of Bitcoin, a peer-to-peer online currency, using the historical price of Bitcoin.
-I followed different approaches to time series forecasting, implementing both statistical techniques and machine learning algorithms.
-I started by building an ARIMA (AutoRegressive Integrated Moving Average) model, one of the most widely used approaches to time series forecasting.</description>
+      <description>Project Overview: Time series forecasting is one of the most widely used data science techniques in business and finance to make future strategic decisions.
+In this project we will forecast daily closing price series of Bitcoin, a peer-to-peer online currency, using the historical price of Bitcoin.
+We will follow different approaches to time series forecasting, implementing both statistical techniques and machine learning algorithms.
+We will start by building an ARIMA (AutoRegressive Integrated Moving Average) model, one of the most widely used approaches to time series forecasting.</description>
     </item>
     
     <item>

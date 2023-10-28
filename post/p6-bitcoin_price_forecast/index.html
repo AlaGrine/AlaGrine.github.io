@@ -34,12 +34,27 @@
 
     figure.center {
       /* height: 500px; */
-      display: flex;
+      /* display: flex; */
       align-items: center;
       justify-content: center;
       /* border: 3px solid #dbe4ed; */
       /* Border color is optional */
 
+    }
+
+    figure {
+      /* border: 1px #cccccc solid; */
+      padding: 4px;
+      margin: auto;
+
+    }
+
+    figcaption {
+      background-color: black;
+      color: white;
+      font-style: italic;
+      padding: 2px;
+      text-align: center;
     }
   </style>
 
@@ -274,9 +289,10 @@
         <h1 id="project-overview">Project Overview:</h1>
         <p>Time series forecasting is one of the most widely used data science techniques in business and finance to
           make future strategic decisions.</p>
-        <p>In this project we will forecast daily closing price series of <a
-            href="https://coinmarketcap.com/currencies/bitcoin/">Bitcoin</a>, a peer-to-peer online currency, using
-          the historical price of Bitcoin.</p>
+        <p>In this project, we will be forecasting a series of daily closing prices for
+          <a href="https://coinmarketcap.com/currencies/bitcoin/">Bitcoin</a>, a peer-to-peer online currency, based on
+          its historical prices.
+        </p>
         <p>We will follow different approaches to time series forecasting, implementing both statistical techniques
           and machine learning algorithms.</p>
         <p>We will start by building an ARIMA (AutoRegressive Integrated Moving Average) model, one of the most widely
@@ -322,16 +338,22 @@
         <p>If one or more large spikes are outside these bounds, then the series is probably not white noise.</p>
         <p>To display the autocorrelation coefficients, we can use the <a
             href="https://www.statsmodels.org/stable/generated/statsmodels.graphics.tsaplots.plot_acf.html">plot_acf</a>
-          function from <code>statsmodels.graphics.tsaplots</code> or <a
+          function from <em> statsmodels.graphics.tsaplots</em> or <a
             href="https://pandas.pydata.org/docs/reference/api/pandas.plotting.autocorrelation_plot.html">autocorrelation_plot</a>
-          from <code>pandas.plotting</code>. But for better visibility, we will create our own
+          from <em>pandas.plotting</em>. But for better visibility, we will create our own
           <code>plot_xACF_plotly</code> function using <a href="https://plotly.com/python/">Plotly</a> as follows:
         </p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/2e943d9aef8dc13ebf441d10b74e80ea.js"></script>
 
-        <p>The graph above shows a strong autocorrelation between the current price and the closest previous
-          observations, and a linear slowly decrease from there to the first 2200 lagged values.</p>
+        <p>The graph below shows:</p>
+        <ul>
+          <li> This is a typical ACF of a trended time series characterised by a strong autocorrelation between the
+            current price and the closest previous observations, and a linear slow decrease as the lags increase.
+          </li>
+          <li>There are no seasonal lags. </li>
+        </ul>
+
         <figure><img src="https://alagrine.github.io/images/P6/2-ACF.png" />
         </figure>
 
@@ -481,44 +503,27 @@
         <h2 id="predictions">Predictions</h2>
         <p>Our ARIMA model has be trained using the y_train dataset.</p>
         <p>To evaluate our model, we will compare our predictions to y_test, the test set which is a
-          pseudofuture
-          and
-          not the actual future.</p>
+          pseudofuture and not the actual future.</p>
         <p>As explained <a href="https://alkaline-ml.com/pmdarima/refreshing.html">here</a>, we can
-          update our
-          ARIMA
-          model with only new observations (in our case, prices from y_test dataset), so that future
-          forecasts
-          take
-          the
-          latest observations into account. This allows us to keep our ARIMA model updated without
-          having to
-          completely
-          refitting it.</p>
+          update our ARIMA model with only new observations (in our case, prices from y_test dataset), so that future
+          forecasts take the latest observations into account. This allows us to keep our ARIMA model updated without
+          having to completely refitting it.</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/6052f08aa7f944d8b629cd8b3cb5058b.js"></script>
+
+        <p>The next graph shows both point predictions and confidence intervals (light orange area). The former
+          represent the most likely values according to the model, while the latter give us a measure of uncertainty.
+        </p>
 
         <figure><img src="https://alagrine.github.io/images/P6/8_predictions_ARIMA.png" />
         </figure>
 
-        <p>Our ARIMA predictions seem to follow the data well. When we zoom in, we see that they come
-          slightly
-          after
-          the
+        <p>Our ARIMA predictions seem to follow the data well. When we zoom in, we see that they come slightly after the
           test data.</p>
-        <p>On average each ARIMA forecast is ~$567 different than the actual Bitcoin price.</p>
-        <p>The average price of Bitcoin in the test dataset is: $27,042.
-          Each prediction in the ARIMA(0,1,4) forecast is off by an average of $527.7, which is 2% of
-          the mean.
-        </p>
-        <p>In the next section, we are going to be using TensorFlow to build deep learning models to
-          try and
-          improve
-          on
+        <p>Each prediction in the ARIMA(0,1,4) forecast is off by an average of $527.7, which is 2% of the mean Bitcoin
+          price.</p>
+        <p>In the next section, we are going to be using TensorFlow to build deep learning models to try and improve on
           our ARIMA forecasting results.</p>
-        <p>There are many other kinds of models we are going to look into for performing forecasts.
-        </p>
-        <p>Some of them may even beat our best performing models in this notebook.</p>
 
         <div class="mb-4">
           <hr class="rounded">
@@ -563,28 +568,14 @@
 
         <h2 id="make-a-multivariate-time-series">Make a multivariate time series</h2>
         <p>In addition to the lagged values of the BTC price, we can use other features related to
-          Bitcoin, such
-          as
-          the
-          the <a href="https://www.investopedia.com/terms/b/block-reward.asp">Bitcoin block reward
-            size</a>,
-          which
-          is
-          the number of Bitcoin awarded for mining a Bitcoin block.</p>
+          Bitcoin, such as the the <a href="https://www.investopedia.com/terms/b/block-reward.asp">Bitcoin block reward
+            size</a>, which is the number of Bitcoin awarded for mining a Bitcoin block.</p>
         <p>The block reward size is halved after the creation of every 210,000 blocks (ie. 1% of
-          bitcoins). It
-          went
-          from
-          50 in January 2009 to 25 in November 2012 and 6.25 in May 2020.</p>
+          bitcoins). It went from 50 in January 2009 to 25 in November 2012 and 6.25 in May 2020.</p>
         <blockquote>
           <p>By adding an extra feature to our dataset, such as the size of the Bitcoin block
-            reward, our data
-            goes
-            from
-            <strong>univariate</strong> (only the historical price of bitcoin) to
-            <strong>multivariate</strong>
-            (the
-            price of Bitcoin and the size of the block reward).
+            reward, our data goes from <strong>univariate</strong> (only the historical price of bitcoin) to
+            <strong>multivariate</strong> (the price of Bitcoin and the size of the block reward).
           </p>
         </blockquote>
         <figure><img src="https://alagrine.github.io/images/P6/9-block-reward.png" />
@@ -595,9 +586,7 @@
         <pre tabindex="0"><code>Input (windowed dataset) -&gt; Custom_Layers -&gt; Output (BTC price)
 </code></pre>
         <p>The main component we&rsquo;ll be changing throughout is the <code>Custom_Layers</code>
-          component.
-          More
-          specifically, we will build the following:</p>
+          component. More specifically, we will build the following:</p>
         <ul>
           <li><strong>Model 1</strong>: A simple Dense model</li>
           <li><strong>Model 2</strong>: LSTM model</li>
@@ -615,10 +604,8 @@
         </figure>
 
         <p>Clearly, the smaller the window size, the better the MAE. The optimal window size for
-          all models is
-          <strong>1</strong>. This means that the best performance is obtained by replicating the
-          <strong>Naïve</strong>
-          model.
+          all models is <strong>1</strong>. This means that the best performance is obtained by replicating the
+          <strong>Naïve</strong> model.
         </p>
         <p>For window sizes greater than 1, the Dense model yield the best results.</p>
 
@@ -629,22 +616,20 @@
         </h1>
         <p>So far, we have been building our models with only few layers.</p>
         <p>In this section, we will step things up a notch by replicating the the generic version
-          of
-          <a href="https://arxiv.org/pdf/1905.10437.pdf">N-BEATS (Neural Basis Expansion Analysis
-            for
-            Interpretable
-            Time
-            Series Forecasting) algorithm</a>, which focuses on univariate time series problems
-          and
-          achieved
-          state-of-the-art performance.
+          of <a href="https://arxiv.org/pdf/1905.10437.pdf">N-BEATS (Neural Basis Expansion Analysis
+            for Interpretable Time Series Forecasting) algorithm</a>, which focuses on univariate time series problems
+          and achieved state-of-the-art performance.
         </p>
         <p>The <code>N-BEATS</code> architecture is deep, yet very simple as shown in the
-          following
-          figure:
+          following figure:
         </p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P6/NBETAS_architecture.png" />
+        <figure>
+          <img src="https://alagrine.github.io/images/P6/NBETAS_architecture.png" style="width:100%" />
+          <figcaption>N-BEATS architecture <a href="https://arxiv.org/pdf/1905.10437.pdf">source</a></figcaption>
         </figure>
+        <br>
+
+
 
         <p>There are 3 main components:</p>
         <ol>
@@ -704,7 +689,7 @@
           means
           that
           they
-          basically replicate what a Naive model would do, simply predicting the previous time
+          basically replicate what a Naïve model would do, simply predicting the previous time
           step
           value
           for
@@ -758,10 +743,11 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
 </code></pre>
         <p>With ElasticNetCV, and using the relevant features returned by tsfresh, the MAE is
           around
-          <strong>429</strong>. This is much better than what we got with the ARIMA and
-          Tensorflow
-          models.
+          <strong>429</strong>. This is much better than what we got with the ARIMA and Tensorflow models.
         </p>
+        <p>The most important features of the model are shown in the graph below.</p>
+        <figure><img src="https://alagrine.github.io/images/P6/11_most_important_features.png" />
+        </figure>
         <div class="mb-4">
           <hr class="rounded">
         </div>
@@ -773,24 +759,15 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
         <p>I built a variety of models, from classics such as <strong>ARIMA</strong> to deep
           neural networks using the
           historical price of Bitcoin.</p>
-        <p>I found that these models basically replicate the Naive model, which simply
-          predicts
-          the previous time step
-          value for the next value. This goes to show how hard it is to beat the Naive model
-          in
-          open systems such as
-          stock or crypto markets.</p>
+        <p>I found that these models basically replicate the Naïve model, which simply
+          predicts the previous time step value for the next value. This goes to show how hard it is to beat the Naïve
+          model in open systems such as stock or crypto markets.</p>
         <p>Finally, I harnessed the power of <strong>tsfresh</strong> to extract and select
-          time
-          series features. Using
-          relevant features with ElasticNetCV (in fact, we could use any regression model from
-          sklearn) yielded the best
-          results with an MAE of 429 compared to 528 for the previous models.</p>
+          time series features. Using relevant features with ElasticNetCV (in fact, we could use any regression model
+          from sklearn) yielded the best results with an MAE of 429 compared to 528 for the previous models.</p>
         <br>
         <p><a href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow">Link
-            to
-            GitHub
-            repository</a></p>
+            to GitHub repository</a></p>
 
 
         <span class="badge badge-pill badge-success">Time series analysis</span>
