@@ -298,7 +298,8 @@
         <p>We will start by building an ARIMA (AutoRegressive Integrated Moving Average) model, one of the most widely
           used approaches to time series forecasting.</p>
         <p>We will then use Tensorflow to build several artificial neural networks, including Dense, Long Short-Term
-          Memory (LSTM) and N-BEATS algorithms.</p>
+          Memory (LSTM) and 1D Convolutional Neural Network.</p>
+        <p>We will then step things up by building the N-BEATS algorith with Tensorflow and DARTS.</p>
         <p>Finally, we will leverage the <code>tsfresh</code> package to automatically extract and select time series
           features.</p>
 
@@ -502,8 +503,7 @@
           and the bias problem is solved.</p>
         <h2 id="predictions">Predictions</h2>
         <p>Our ARIMA model has be trained using the y_train dataset.</p>
-        <p>To evaluate our model, we will compare our predictions to y_test, the test set which is a
-          pseudofuture and not the actual future.</p>
+        <p>To evaluate our model, we will compare our predictions to y_test (the test set).</p>
         <p>As explained <a href="https://alkaline-ml.com/pmdarima/refreshing.html">here</a>, we can
           update our ARIMA model with only new observations (in our case, prices from y_test dataset), so that future
           forecasts take the latest observations into account. This allows us to keep our ARIMA model updated without
@@ -529,23 +529,15 @@
           <hr class="rounded">
         </div>
 
-        <h1 id="bitcoin-price-forecasting-with-deep-learning-models-using-tensorflow">Bitcoin price
-          forecasting
-          with
+        <h1 id="bitcoin-price-forecasting-with-deep-learning-models-using-tensorflow">Bitcoin price forecasting with
           deep learning models using Tensorflow
         </h1>
-        <p>We will be building a variety of deep learning models (including Linear, CNN and RNN models
-          and the
-          <a href="https://arxiv.org/pdf/1905.10437.pdf">N-BEATs Algorithm</a>). These models will make
-          predictions
-          based
-          on a <strong>window</strong> of successive or lagged values of the data.
+        <p>We will be building a variety of deep learning models (including Dense, CNN and RNN models). These models
+          will make predictions based on a <strong>window</strong> of successive or lagged values of the data.
         </p>
         <blockquote>
           <p>A deep learning model with <strong>p</strong> lagged inputs and <strong>0</strong> nodes in
-            the
-            hidden
-            layer is equivalent to an ARIMA(p,0,0).</p>
+            the hidden layer is equivalent to an ARIMA(p,0,0).</p>
         </blockquote>
         <h2 id="windowing">Windowing</h2>
         <p>Windowing is used to turn a time series dataset into <em>supervised learning problem</em>.
@@ -557,9 +549,7 @@
             HORIZON.</li>
         </ul>
         <p>For example, with a horizon of 1 and a window size of 7, we can predict the price of BTC
-          for tomorrow
-          based
-          on the prices of the previous week.</p>
+          for tomorrow based on the prices of the previous week.</p>
         <p>We can use the <a
             href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.shift.html">pandas.DataFrame.shift()</a>
           method to create a windowed time series, as follows:</p>
@@ -607,7 +597,7 @@
           all models is <strong>1</strong>. This means that the best performance is obtained by replicating the
           <strong>Naïve</strong> model.
         </p>
-        <p>For window sizes greater than 1, the Dense model yield the best results.</p>
+        <p>For window sizes greater than 1, the Dense model yields the best results.</p>
 
         <div class="mb-4">
           <hr class="rounded">
@@ -615,7 +605,7 @@
         <h1 id="n-beats-algorithm-with-tensorflow">N-BEATS algorithm with Tensorflow
         </h1>
         <p>So far, we have been building our models with only few layers.</p>
-        <p>In this section, we will step things up a notch by replicating the the generic version
+        <p>In this section, we will step things up by replicating the the generic version
           of <a href="https://arxiv.org/pdf/1905.10437.pdf">N-BEATS (Neural Basis Expansion Analysis
             for Interpretable Time Series Forecasting) algorithm</a>, which focuses on univariate time series problems
           and achieved state-of-the-art performance.
@@ -656,8 +646,8 @@
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/d13f20aaf9075a218ed969a16b253b88.js"></script>
 
-        <p>The results of the NBEATS model are similar to those of the simple Dense model (with an MAE of around 528 for
-          a Window size of 1).</p>
+        <p>Despite its deep architecture, the results of the NBEATS model are similar to those of the simple Dense
+          model (with an MAE of around 528 for a Window size of 1).</p>
 
         <div class="mb-4">
           <hr class="rounded">
@@ -680,31 +670,13 @@
         <h1 id="bitcoin-price-forecasting-with-tsfresh">Bitcoin price forecasting with Tsfresh
         </h1>
         <p>So far, we have built ARIMA and deep learning models. These models use lagged values of
-          the
-          data
-          to
-          predict
-          the BTC price.</p>
+          the data to predict the BTC price.</p>
         <p>We have found that the best results are obtained with a window size (or lag) of 1. This
-          means
-          that
-          they
-          basically replicate what a Naïve model would do, simply predicting the previous time
-          step
-          value
-          for
-          the
-          next
-          value.</p>
+          means that they basically replicate what a Naïve model would do, simply predicting the previous time
+          step value for the next value.</p>
         <p>In this section, we will be leveraging <a href="https://tsfresh.readthedocs.io/en/latest/">Tsfresh</a>
           (<em>Time Series Feature extraction based on scalable hypothesis tests</em>), an
-          open-source
-          Python
-          package
-          that automatically calculates hundreds of time series features, calculates the feature
-          importance
-          and
-          assists
+          open-source Python package that automatically calculates hundreds of time series features and assists
           in feature selection.</p>
         <h2 id="feature-extraction-with-tsfresh">Feature extraction with tsfresh</h2>
         <p>Feature engineering with tsfresh is very simple.</p>
@@ -712,23 +684,13 @@
           src="https://gist.github.com/AlaGrine/8155c95b100e7d480e4fe31a529a0f4e.js"></script>
 
         <p>The <code>extract_features</code> method returned <strong>783</strong> time-series
-          features
-          (including
-          min,
-          max, standard deviation, etc.).</p>
+          features (including min, max, standard deviation, etc.).</p>
         <p>To narrow down this list, we can use the <code>select_features</code> method to
-          remove
-          all NaN
-          values
-          and
-          select only the relevant features. In our case, In our case, we are left with 164
-          relevant
-          features.
+          remove all NaN values and select only the relevant features. In our case, we are left with 164
+          relevant features.
         </p>
         <h2 id="modelling">Modelling</h2>
-        <p>Now that we have selected relevant features, we can leverage any regression model
-          from
-          sklearn.
+        <p>Now that we have selected relevant features, we can leverage any regression model from sklearn.
         </p>
         <p>We will use ElasticNetCV.</p>
         <pre tabindex="0"><code>from sklearn.linear_model import ElasticNetCV
@@ -748,6 +710,52 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
         <p>The most important features of the model are shown in the graph below.</p>
         <figure><img src="https://alagrine.github.io/images/P6/11_most_important_features.png" />
         </figure>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="forecast-bitcoins-price-into-the-future-with-full-historical-data">Forecast Bitcoin&rsquo;s price into
+          the future with full historical data</h1>
+        <p>Previously, we split our data into training and test sets to evaluate our models on pseudo-future data (the
+          test set).</p>
+        <p>Now, we will fit our models to the full historical data to make a one step forecast.</p>
+        <h2 id="forecasts-with-arima-and-univariate-data">Forecasts with ARIMA and univariate data</h2>
+        <p>Fitting the ARIMA model to the full data yields the following results:</p>
+        <ul>
+          <li>The full search (stepwise=False) has found that an ARIMA(2,1,2) gives the lowest AIC value, with an
+            intercept of 15.936.</li>
+          <li>The automated stepwise selection has identified an ARIMA(0,1,0) model, equivalent to a random walk.</li>
+        </ul>
+        <p>We will make forecasts with ARIMA(2,1,2).</p>
+        <blockquote>
+          <p>Note that for each forecast, we will update our ARIMA model with this new prediction using the
+            <code>update</code> function.
+          </p>
+        </blockquote>
+        <figure><img src="https://alagrine.github.io/images/P6/12-ARIMA-forecasts.png" />
+        </figure>
+
+        <p>The plot shows that the mean forecasts look very similar to what we would get with a random walk (equivalent
+          to an ARIMA(0,1,0)). Including include AR and MA terms (p=2 and q=2) has made little difference to the point
+          forecasts.</p>
+        <h2 id="forecasts-with-a-multivariate-dense-model-using-tensorflow">Forecasts with a multivariate Dense model
+          using Tensorflow</h2>
+        <p>We will use a multivariate data (the price of Bitcoin and the size of the block reward).</p>
+        <p>Our forecasting process is as follows:</p>
+        <ol>
+          <li>Make a one step forecast (one timestep into the future)</li>
+          <li>Retrain our model with this new prediction</li>
+          <li>Appended the new prediction to the data,</li>
+          <li>Make a prediction, append the prediction, retrain a model&hellip; etc.</li>
+        </ol>
+        <figure><img src="https://alagrine.github.io/images/P6/13-Dense-Forecasts.png" />
+        </figure>
+
+        <p>Here the last observation (Window size =1) and the block reward are used as predictors and there are 128
+          neurons in the hidden Dense layer.</p>
+
+
         <div class="mb-4">
           <hr class="rounded">
         </div>
