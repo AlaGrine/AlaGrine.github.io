@@ -16,44 +16,27 @@
       scroll-behavior: smooth;
     }
 
-    #scrollUp {
+    .scrollToTopBtn {
       position: fixed;
-      bottom: 10px;
-      right: -100px;
-      opacity: 0.5;
-    }
-
-    .scrollTop {
-      position: fixed;
-      bottom: 15%;
-      right: 2%;
-      padding: 10px 15px;
-      background-color: #000;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 10px;
+      background-color: #27ae60;
       color: #fff;
-      border-radius: 5px;
-      border-radius: 1px solid #fff;
+      border-radius: 25px;
+      border-radius: 30px solid #fff;
       cursor: pointer;
       transition: all 0.5s ease 0s;
+      /* keep it at the top of everything else */
+      z-index: 100;
+      /* hide with opacity */
+      opacity: 0;
+
     }
 
-    .scrollTop:hover {
-      background-color: #27ae60;
-      color: #000;
-    }
-
-    /* Dashed border */
-    hr.dashed {
-      border-top: 3px dashed #bbb;
-    }
-
-    /* Dotted border */
-    hr.dotted {
-      border-top: 3px dotted #bbb;
-    }
-
-    /* Solid border */
-    hr.solid {
-      border-top: 3px solid #bbb;
+    .showBtn {
+      opacity: 1;
     }
 
     /* Rounded border */
@@ -65,20 +48,14 @@
     }
 
     figure.center {
-      /* height: 500px; */
       /* display: flex; */
       align-items: center;
       justify-content: center;
-      /* border: 3px solid #dbe4ed; */
-      /* Border color is optional */
-
     }
 
     figure {
-      /* border: 1px #cccccc solid; */
       padding: 4px;
       margin: auto;
-
     }
 
     figcaption {
@@ -945,12 +922,47 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
   </footer>
 
 
-  <!-- Add ScrollTop button -->
-  <div onclick="scrolltoTop()" class="scrollTop"><i class="fas fa-arrow-up"></i></div>
+  <!-- Add ScrollToTop button; only visible when we scroll up -->
+  <div id="scrollToTopBtn" class="scrollToTopBtn"> <i class="fas fa-arrow-up"></i> Back to
+    top</div>
+
   <script>
-    function scrolltoTop() {
-      window.scrollTo(0, 0);
+
+    window.onscroll = function () {
+      if (pageYOffset >= 100) {
+        document.getElementById('scrollToTopBtn').style.visibility = "visible";
+      } else {
+        document.getElementById('scrollToTopBtn').style.visibility = "hidden";
+      }
+    };
+    var scrollToTopBtn = document.querySelector(".scrollToTopBtn");
+    var rootElement = document.documentElement;
+
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    function handleScroll() {
+      var scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTopPosition > lastScrollTop) {
+        // Hide button
+        scrollToTopBtn.classList.remove("showBtn");
+      } else if (scrollTopPosition < lastScrollTop) {
+        // Show button
+        scrollToTopBtn.classList.add("showBtn");
+      }
+      lastScrollTop = scrollTopPosition <= 0 ? 0 : scrollTopPosition;
     }
+
+    function scrollToTop() {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      handleScroll();
+    }
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    document.addEventListener("scroll", handleScroll);
   </script>
 
 
