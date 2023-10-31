@@ -6,6 +6,63 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+  <!-- Math formulas -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+  <style type="text/css">
+    * {
+      scroll-behavior: smooth;
+    }
+
+    .scrollToTopBtn {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 10px;
+      background-color: #27ae60;
+      color: #fff;
+      border-radius: 25px;
+      border-radius: 30px solid #fff;
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+      /* keep it at the top of everything else */
+      z-index: 100;
+      /* hide with opacity */
+      opacity: 0;
+
+    }
+
+    .showBtn {
+      opacity: 1;
+    }
+
+    /* Rounded border */
+    hr.rounded {
+      margin-top: 4%;
+      margin-bottom: 3%;
+      border-top: 4px solid #bbb;
+      border-radius: 3px;
+    }
+
+    figure {
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    figcaption {
+      background-color: black;
+      color: white;
+      font-style: italic;
+      padding: 2px;
+      text-align: center;
+    }
+  </style>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -226,7 +283,7 @@
 
       </header>
       <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
-        <h2 id="project-overview">Project overview:</h2>
+        <h1 id="project-overview">Project overview:</h1>
         <p>In this project, I leveraged the Cross Industry Process for DataMining (<strong>CRISP-DM</strong>), a process
           used for many data science problems.<br>
           I explored the Boston Airbnb open dataset, available <a href="https://www.kaggle.com/airbnb/boston">here</a>,
@@ -239,7 +296,12 @@
         </ol>
         <p>The dataset describes AirBnB activity, including full descriptions of 3585 listings, 68275 reviews, and daily
           prices and availability from September 2016 to September 2017.</p>
-        <h2 id="approach">Approach:</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="approach">Approach:</h1>
         <p>For each question, I have applied the CRISP-DM process, which consists of 6 steps:</p>
         <ol>
           <li>Business Understanding</li>
@@ -254,8 +316,13 @@
           I used <code>Python</code>, <code>Sklearn</code> for modeling and <code>Plotly</code> for data visualisation.
           The <code>Jupyter</code> notebook can be found <a
             href="https://github.com/AlaGrine/Boston_AirBnB_DataAnalysis">here</a>.</p>
-        <h2 id="question-1-how-does-seasonality-affect-airbnb-prices-in-boston">Question 1: How does seasonality affect
-          AirBnB prices in Boston?</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="question-1-how-does-seasonality-affect-airbnb-prices-in-boston">Question 1: How does seasonality affect
+          AirBnB prices in Boston?</h1>
         <p>The chart below displays the trend of AirBnB prices in Boston, which ranged from <strong>$10</strong> to
           <strong>$4000</strong> from September 2016 to September 2017. The median price is listed at
           <strong>$150</strong> per day.
@@ -283,8 +350,13 @@
 
         <p>The first quarter is the low season. This is when you will find the most accommodations available at the
           lowest prices.</p>
-        <h2 id="question-2-how-does-location-affect-airbnb-prices">Question 2: How does location affect AirBnB prices?
-        </h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="question-2-how-does-location-affect-airbnb-prices">Question 2: How does location affect AirBnB prices?
+        </h1>
         <p>As can be seen from the graph below, average prices and distance to downtown are highly correlated; prices
           tend to decrease as the distance from the city centre increases.</p>
         <p>For instance, locations such as Hyde Park or Roslindale, which are more than 10 kilometers from downtown, are
@@ -307,8 +379,13 @@
           the distance to the city centre is greater than 4.5 kilometers. For areas closer to downtown, there is a wide
           range of prices from <strong>$85</strong> to <strong>$160</strong>, giving you plenty of choice. The highest
           prices are in downtown and the Leather District, at around <strong>$205</strong>.</p>
-        <h2 id="question-3-what-are-the-most-important-features-to-predict-airbnb-prices">Question 3: What are the most
-          important features to predict AirBnB prices?</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="question-3-what-are-the-most-important-features-to-predict-airbnb-prices">Question 3: What are the most
+          important features to predict AirBnB prices?</h1>
         <p>In the previous sections, we have seen that seasonality and location play a significant role in AirBnB
           pricing.</p>
         <p>But what about other features, such as amenities and the number of bedrooms?</p>
@@ -318,7 +395,7 @@
         </p>
         <p>Although not perfect, this model is very simple and can clearly identify the most important features that
           affect pricing.</p>
-        <figure><img src="https://alagrine.github.io/images/P1/features.png" />
+        <figure class="center"><img src="https://alagrine.github.io/images/P1/features.png" />
         </figure>
 
         <p><strong>How can we use this graph to predict prices?</strong></p>
@@ -339,8 +416,13 @@
         <p>Amenities are an interesting case. On the one hand, facilities such as elevators in buildings or air
           conditioning increase the price. On the other hand, amenities, such as kitchen or hangers reduce the price.
           The latter can be considered as necessities.</p>
-        <h2 id="question-4-what-is-the-relationship-between-reviews-and-price">Question 4: What is the relationship
-          between reviews and price?</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="question-4-what-is-the-relationship-between-reviews-and-price">Question 4: What is the relationship
+          between reviews and price?</h1>
         <p>Now that we have analyzed AirBnB prices, we can focus on review analysis.</p>
         <p>As can be seen in the graph below, the communication score is the highest, with an average value of
           <strong>9.7</strong>. We can say that visitors are satisfied with the communication, regardless of the price.
@@ -364,7 +446,11 @@
         <figure><img src="https://alagrine.github.io/images/P1/wordclouds.png" />
         </figure>
 
-        <h2 id="conclusion">Conclusion</h2>
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="conclusion">Conclusion</h1>
         <p>In this article, we explored AirBnB pricing and listing reviews.</p>
         <p>We found that seasonality and location stand out as key factors in determining price.</p>
         <p>The most expensive locations are the ones closest to the city centre.</p>
@@ -473,6 +559,49 @@
       </div>
     </div>
   </footer>
+
+  <!-- Add ScrollToTop button; only visible when we scroll up -->
+  <div id="scrollToTopBtn" class="scrollToTopBtn"> <i class="fas fa-arrow-up"></i> Back to
+    top</div>
+
+  <script>
+
+    window.onscroll = function () {
+      if (pageYOffset >= 200) {
+        document.getElementById('scrollToTopBtn').style.visibility = "visible";
+      } else {
+        document.getElementById('scrollToTopBtn').style.visibility = "hidden";
+      }
+    };
+    var scrollToTopBtn = document.querySelector(".scrollToTopBtn");
+    var rootElement = document.documentElement;
+
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    function handleScroll() {
+      var scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTopPosition > lastScrollTop) {
+        // Hide button
+        scrollToTopBtn.classList.remove("showBtn");
+      } else if (scrollTopPosition < lastScrollTop) {
+        // Show button
+        scrollToTopBtn.classList.add("showBtn");
+      }
+      lastScrollTop = scrollTopPosition <= 0 ? 0 : scrollTopPosition;
+    }
+
+    function scrollToTop() {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      handleScroll();
+    }
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    document.addEventListener("scroll", handleScroll);
+  </script>
 
 </body>
 
