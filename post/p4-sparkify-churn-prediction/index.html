@@ -47,15 +47,11 @@
       border-radius: 3px;
     }
 
-    figure.center {
-      /* display: flex; */
-      align-items: center;
-      justify-content: center;
-    }
-
     figure {
-      padding: 4px;
-      margin: auto;
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
     }
 
     figcaption {
@@ -337,7 +333,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           The small dataset comes in the form of a JSON file containing 286 500 rows from 225 unique users between
           October and December 2018.
           The schema shows that there are 18 columns:</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig1.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig1.png" />
         </figure>
 
         <p>In addition to user activity, the dataset logs user information such as gender and location, timestamps and
@@ -366,10 +362,10 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           and page visited, at both log and user level. For better visualization and interactivity, I used Plotly to
           display the plots.</p>
         <p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig2.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig2.png" />
         </figure>
 
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig3.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig3.png" />
         </figure>
         </p>
         <p>The graphs above show that although there are fewer women than men (104 compared to 121), there are more
@@ -379,7 +375,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>I then looked at the distribution of the numerical features, such as the number of interactions and session
           duration per user.</p>
         <p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig4.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig4.png" />
         </figure>
 
         The distribution is right skewed. There are some extreme outliers. For instance, the median session length is
@@ -421,7 +417,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Here we compare the churn rate between the two groups of users.</p>
         <p><strong>Gender and level:</strong> The graph below shows that men are more likely to churn than women (26.4%
           vs. 19.2%) and free users are slightly more likely to churn (23.6% vs. 21.8%).</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig5.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig5.png" />
         </figure>
 
         <p><strong>UserAgent:</strong> First, we split the UserAgent column into two columns, Device and Browser, as
@@ -433,7 +429,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           rates at 42% and 31% respectively. This may indicate potential problems with the application on these devices.
         </p>
         <p>Firefox has a higher churn rate than Safari (32% vs 21%).</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig6.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig6.png" />
         </figure>
 
         <p><strong>State:</strong> Most users are located in California, Texas, New York/New Jersey/Penn and Florida.
@@ -451,7 +447,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Interestingly, the most significant difference between churners and non-churners relates to “roll advert” and
           “thumbs down” pages, with a delta of 0.9% and 0.23% respectively. This suggests that churners are particularly
           unhappy with the ads.</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig7.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig7.png" />
         </figure>
         <br>
         <h2 id="numerical-features">Numerical features:</h2>
@@ -459,7 +455,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
           number of days since registration and the length of the songs listened to.</p>
         <p>To compare the distribution of these variables between the two groups of users, we simply compare the median,
           mean, and standard deviation.</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig8.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig8.png" />
         </figure>
 
         <p>As suggested by the statistical measures, the distribution of these characteristics (except for number of
@@ -471,7 +467,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>For mobile and web applications, a shorter session interval should indicate a higher level of engagement, as
           users visit the app more often and are therefore highly engaged. Conversely, a longer session interval should
           indicate less interest.</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig9.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig9.png" />
         </figure>
 
         <p>Surprisingly, as shown in the chart above, the highest session interval for Sparkify is for non-churners,
@@ -534,7 +530,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         </p>
         <p>I first removed features, such as count_songs, count_logs and count_sessions, which are highly correlated
           with total_hours (sum of all session lengths), as shown in the correlation matrix below.</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig10.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig10.png" />
         </figure>
 
         <p>I then selected the features most closely related to the target variable (churn) using the <a
@@ -543,7 +539,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/5155d68869fba730bc87a1d0678d092a.js"></script>
 
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig11.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig11.png" />
         </figure>
 
         <p>We can see that days since registrattion and measures of engagement (interval and total_hours or total
@@ -663,7 +659,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p><em>Naive Bayes</em> is a simple model. It could provide a good baseline for future experiments. The
           advantage of using Multinomial Naive Bayes is that training is very fast, as shown in the graph below.</p>
         <p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig12.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig12.png" />
         </figure>
 
         The <em>Naive Bayes</em> model is trained on different training datasets (a list of seed values is defined to
@@ -681,7 +677,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <h3 id="first-experiment-k-fold-cross-validation-using-n-selected-features-no-class-weighting">First experiment:
           K-fold cross validation using N selected features. No class weighting.</h3>
         <p>The results in terms of f1-score and training time are shown below.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig13.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig13.png" />
         </figure>
         </p>
         <p>For larger numbers of features (above <strong>12</strong> features), the high bias/low variance algorithms,
@@ -703,7 +699,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>In the next experiment, we will examine the effect of class weighting on the performance of the model.</p>
         <h3 id="second-experiment-class-weigh-balancing">Second experiment: class weigh balancing.</h3>
         <p>Here is a graph of the F1 score with and without class weighting.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig14.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig14.png" />
         </figure>
         </p>
         <p>We can see that class weighting significantly improved the performance of the
@@ -712,7 +708,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         </p>
         <p>More than <strong>12</strong> features are needed to see the effect of class weighting for the GBT
           classifier.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig15.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig15.png" />
         </figure>
         </p>
         <p>Impressively, <em>LinearSVC</em> achieved a score of 85% with only <strong>4</strong> features, namely
@@ -724,7 +720,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Now let us display the most important features for the RFC model. We will use the
           <strong>“featureImportances”</strong> property of this classifier.
         </p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig16.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig16.png" />
         </figure>
 
         <p>The graph above shows that <strong>80%</strong> of the weights can be accounted for by the first
@@ -744,7 +740,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <p>Tuning the regularization parameters of logistic regression yielded an F1 score of <strong>85%</strong>,
           which is a slight improvement over the default parameters.</p>
         <p>For the other algorithms, the default parameters continue to give the best performance.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig17.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig17.png" />
         </figure>
         </p>
         <p>At this stage we can try to tune other hyperparameters, but it is too time consuming, and it is better to use
@@ -764,7 +760,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <br>
         <h2 id="statistics-of-the-medium-vs-small-datasets">Statistics of the medium vs. small datasets</h2>
         <p>Let us first compare the statistics of the medium with the small datasets.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig18.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig18.png" />
         </figure>
         </p>
         <p>Above we can see that, in contrast to the mini dataset, females are more likely to churn (22.7% vs. 21.6% for
@@ -781,7 +777,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <br>
         <h2 id="results-using-the-medium-dataset">Results using the medium dataset</h2>
         <p>The results in terms of f1-score and training time are shown below.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig19.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig19.png" />
         </figure>
         </p>
         <p><em>Random Forest</em> and <em>GBT classifiers</em>, outperform <em>Linear SVC</em> and <em>Logistic
@@ -838,7 +834,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
         <br>
         <h2 id="results-and-interpretation-1">Results and Interpretation</h2>
         <p>The results in terms of f1-score and training time, using the default Grid parameters, are shown below.</p>
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig20.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig20.png" />
         </figure>
 
         <p>Selecting only <strong>8</strong> features, <em>tree-based</em> models outperform the <em>LinearSVC</em> and
@@ -854,7 +850,7 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
             Spark.</p>
         </blockquote>
         <p>Now let us display the most important features to the <em>GBT</em> model.
-        <figure class="center"><img src="https://alagrine.github.io/images/P4/fig21.png" />
+        <figure><img src="https://alagrine.github.io/images/P4/fig21.png" />
         </figure>
         </p>
         <p>It is interesting to note that the main drivers of churn remain almost the same compared to the small
