@@ -2,13 +2,45 @@
 <html lang="en">
 
 <head>
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 
   <!-- Math formulas -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 
-  <style>
+  <style type="text/css">
+    * {
+      scroll-behavior: smooth;
+    }
+
+    #scrollUp {
+      position: fixed;
+      bottom: 10px;
+      right: -100px;
+      opacity: 0.5;
+    }
+
+    .scrollTop {
+      position: fixed;
+      bottom: 15%;
+      right: 2%;
+      padding: 10px 15px;
+      background-color: #000;
+      color: #fff;
+      border-radius: 5px;
+      border-radius: 1px solid #fff;
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+    }
+
+    .scrollTop:hover {
+      background-color: #27ae60;
+      color: #000;
+    }
+
     /* Dashed border */
     hr.dashed {
       border-top: 3px dashed #bbb;
@@ -322,6 +354,8 @@
           models.</p>
         <p>To confirm these observations, let&rsquo;s take a look at the <strong>ACF</strong> of our time series.
         </p>
+        <br>
+        <br>
         <h2 id="acf-autocorrelation-function">ACF (Autocorrelation Function)</h2>
         <p>Autocorrelation measures the linear relationship between lagged values of a time series. The
           relationship
@@ -385,6 +419,7 @@
         <p>Tests of stationarity (like <em>ADF</em> or <em>KPSS</em>) are required to estimate the the
           differencing
           term, <strong>d</strong>.</p>
+        <br>
         <h2 id="train_test_split">Train_test_split</h2>
         <p>Instead of a traditional random train/test split, we will split our dataset (bitcoin_prices) into
           <strong>sequential</strong> train and test subsets to have a dataset that reflects the past (train set)
@@ -401,7 +436,7 @@
           set (the future).</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/2ce75d725bde1d96e4abedaed82b21c8.js"></script>
-
+        <br>
         <h2 id="differencing-d">Differencing (d)</h2>
         <p>To address the non-stationarity of our series, we will take a first difference of the data.
           <script type="application/javascript"
@@ -421,6 +456,7 @@
           zero).
           Thus,
           the parameter <strong>d</strong> is likely to be 1.</p>
+        <br>
         <h2 id="tests-of-stationarity">Tests of stationarity</h2>
         <p>To determine more quantitatively whether we need to difference our data to make it stationary, and
           to
@@ -432,6 +468,7 @@
           src="https://gist.github.com/AlaGrine/12c85cc32ba8a359ccae5df753675069.js"></script>
 
         <p>Tests show that one difference (ie, d=1) suffices to make our series stationary.</p>
+        <br>
         <h2 id="use-acf-and-pacf-plots-to-determine-appropriate-values-for-p-and-q">Use ACF and PACF plots to
           determine
           appropriate values for p and q</h2>
@@ -455,6 +492,7 @@
           automatically
           identify
           the most optimal parameters for an ARIMA(p,d,q) model.</p>
+        <br>
         <h2 id="auto_arima">Auto_arima</h2>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/e9d4abc3833776a5239061f1f9b8709d.js"></script>
@@ -479,6 +517,7 @@
             AIC
             value, with an intercept of 16.1521.</li>
         </ul>
+        <br>
         <h2 id="residual-diagnostics">Residual diagnostics</h2>
         <p>It is important to check that the residuals are uncorrelated, so that no information is left
           in the
@@ -503,6 +542,7 @@
           all
           forecasts
           and the bias problem is solved.</p>
+        <br>
         <h2 id="predictions">Predictions</h2>
         <p>Our ARIMA model has be trained using the y_train dataset.</p>
         <p>To evaluate our model, we will compare our predictions to y_test (the test set).</p>
@@ -541,6 +581,7 @@
           <p>A deep learning model with <strong>p</strong> lagged inputs and <strong>0</strong> nodes in
             the hidden layer is equivalent to an ARIMA(p,0,0).</p>
         </blockquote>
+        <br>
         <h2 id="windowing">Windowing</h2>
         <p>Windowing is used to turn a time series dataset into <em>supervised learning problem</em>.
         </p>
@@ -558,6 +599,7 @@
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/decfb154bb051b6a5920a4697ef8785a.js"></script>
 
+        <br>
         <h2 id="make-a-multivariate-time-series">Make a multivariate time series</h2>
         <p>In addition to the lagged values of the BTC price, we can use other features related to
           Bitcoin, such as the the <a href="https://www.investopedia.com/terms/b/block-reward.asp">Bitcoin block reward
@@ -572,7 +614,7 @@
         </blockquote>
         <figure><img src="https://alagrine.github.io/images/P6/9-block-reward.png" />
         </figure>
-
+        <br>
         <h2 id="modelling-and-evaluation">Modelling and Evaluation</h2>
         <p>We will be building the following model structure:</p>
         <pre tabindex="0"><code>Input (windowed dataset) -&gt; Custom_Layers -&gt; Output (BTC price)
@@ -654,8 +696,7 @@
         <div class="mb-4">
           <hr class="rounded">
         </div>
-
-        <h2 id="n-beats-algorithm-with-darts">N-BEATS algorithm with DARTS</h2>
+        <h1 id="n-beats-algorithm-with-darts">N-BEATS algorithm with DARTS</h1>
         <p>In the previous section, we have built the N-BEATS algorithm from the scratch using Tensorflow.</p>
         <p>In this section, we will use <a href="https://unit8co.github.io/darts/README.html">DARTS</a> (Data Analytics
           and Real-Time Systems) to automatically build the N-BEATS algorithm and make <a
@@ -680,6 +721,7 @@
           (<em>Time Series Feature extraction based on scalable hypothesis tests</em>), an
           open-source Python package that automatically calculates hundreds of time series features and assists
           in feature selection.</p>
+        <br>
         <h2 id="feature-extraction-with-tsfresh">Feature extraction with tsfresh</h2>
         <p>Feature engineering with tsfresh is very simple.</p>
         <script type="application/javascript"
@@ -691,6 +733,7 @@
           remove all NaN values and select only the relevant features. In our case, we are left with 164
           relevant features.
         </p>
+        <br>
         <h2 id="modelling">Modelling</h2>
         <p>Now that we have selected relevant features, we can leverage any regression model from sklearn.
         </p>
@@ -722,6 +765,7 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
         <p>Previously, we split our data into training and test sets to evaluate our models on pseudo-future data (the
           test set).</p>
         <p>Now, we will fit our models to the full historical data to make a one step forecast.</p>
+        <br>
         <h2 id="forecasts-with-arima-and-univariate-data">Forecasts with ARIMA and univariate data</h2>
         <p>Fitting the ARIMA model to the full data yields the following results:</p>
         <ul>
@@ -739,8 +783,9 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
         </figure>
 
         <p>The plot shows that the mean forecasts look very similar to what we would get with a random walk (equivalent
-          to an ARIMA(0,1,0)). Including include AR and MA terms (p=2 and q=2) has made little difference to the point
+          to an ARIMA(0,1,0)). Including AR and MA terms (p=2 and q=2) has made little difference to the point
           forecasts.</p>
+        <br>
         <h2 id="forecasts-with-a-multivariate-dense-model-using-tensorflow">Forecasts with a multivariate Dense model
           using Tensorflow</h2>
         <p>We will use a multivariate data (the price of Bitcoin and the size of the block reward).</p>
@@ -810,15 +855,17 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
       </div>
 
       <aside class="w-30-l mt6-l">
-
-
-
-
       </aside>
 
     </article>
 
+
+
+
   </main>
+
+
+
   <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
     <div class="flex justify-between">
       <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/">
@@ -896,6 +943,16 @@ metrics_ElasticNetCV = evaluate_model(y_test, preds,&#34;ElasticNetCV_and_tsfres
       </div>
     </div>
   </footer>
+
+
+  <!-- Add ScrollTop button -->
+  <div onclick="scrolltoTop()" class="scrollTop"><i class="fas fa-arrow-up"></i></div>
+  <script>
+    function scrolltoTop() {
+      window.scrollTo(0, 0);
+    }
+  </script>
+
 
 </body>
 
