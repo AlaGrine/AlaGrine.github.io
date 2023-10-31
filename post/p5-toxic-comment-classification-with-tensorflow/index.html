@@ -43,7 +43,7 @@
     hr.rounded {
       margin-top: 4%;
       margin-bottom: 3%;
-      border-top: 5px solid #bbb;
+      border-top: 4px solid #bbb;
       border-radius: 3px;
     }
 
@@ -290,12 +290,9 @@
 
         <time class="f6 mv4 dib tracked" datetime="2023-09-20T11:14:48-04:00">September 20, 2023</time>
 
-
-
-
       </header>
       <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
-        <h2 id="project-overview">Project Overview:</h2>
+        <h1 id="project-overview">Project Overview:</h1>
         <p>Negative online behaviors, like toxic comments, are likely to make people stop expressing themselves and
           leave a conversation. Platforms struggle to identify and flag potentially harmful or offensive online
           comments, leading many communities to restrict or shut down user comments altogether.</p>
@@ -305,7 +302,12 @@
           respectful.</p>
         <p>The data for the problem is a dataset of 159,571 comments from Wikipedia’s talk page edits. These comments
           have been flagged for toxic behaviour by human reviewers.</p>
-        <h2 id="exploratory-data-analysis">Exploratory data analysis</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="exploratory-data-analysis">Exploratory data analysis</h1>
         <p>To understand the data, I first look at the distribution of labels.</p>
         <figure><img src="https://alagrine.github.io/images/P5/fig1.png" />
         </figure>
@@ -324,7 +326,8 @@
 
         <p>The plots above show that the comment length is very similar for all labels.<br>
           95% of the comments have less than 180 words for all labels except for <em>sever_toxic</em> (473 words).</p>
-        <h3 id="correlation-matrix">Correlation matrix</h3>
+        <br>
+        <h2 id="correlation-matrix">Correlation matrix</h2>
         <p>The Pearson correlation analysis presented below also confirms that there is no correlation between text
           length and labels.</p>
         <figure><img src="https://alagrine.github.io/images/P5/fig3.png" />
@@ -334,7 +337,8 @@
           <em><code>insulting</code></em> and <em><code>obscene</code></em>. Therefore, if a comment has one of these
           three labels, it is likely to have the others as well.
         </p>
-        <h3 id="wordcloud">Wordcloud</h3>
+        <br>
+        <h2 id="wordcloud">Wordcloud</h2>
         <figure><img src="https://alagrine.github.io/images/P5/wordcloud.png" />
         </figure>
 
@@ -346,7 +350,13 @@
           labels. This analysis can be found in this Jupyter <a
             href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow/blob/main/Toxic-Comment-Classification-with-Tensorflow.ipynb">notebook</a>.
         </p>
-        <h2 id="handling-unbalanced-dataset">Handling unbalanced dataset</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+
+        <h1 id="handling-unbalanced-dataset">Handling unbalanced dataset</h1>
         <p>To deal with this unbalanced dataset, I:</p>
         <ol>
           <li>
@@ -381,8 +391,13 @@
             However, this hides the true performance of the classifier, which never identifies a toxic comment. Accuracy
             is therefore misleading and should not be used here.</li>
         </ol>
-        <h2 id="text-preprocessing-textvectorization-and-embedding">Text Preprocessing, TextVectorization and Embedding
-        </h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="text-preprocessing-textvectorization-and-embedding">Text Preprocessing, TextVectorization and Embedding
+        </h1>
         <p>First, I leveraged the <a href="https://www.nltk.org/">NLTK</a> package to clean the messages. Punctuation,
           special characters and stop words were removed.</p>
         <script type="application/javascript"
@@ -406,7 +421,11 @@
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/a736ba0f580ee5edaa4544440ce1da48.js"></script>
 
-        <h2 id="modelling">Modelling</h2>
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="modelling">Modelling</h1>
         <p>I used <code>Tensorflow</code> to build the following model structure:</p>
         <pre tabindex="0"><code>Input (text) -&gt; TextVectorization -&gt; Embedding -&gt; Custom_Layers -&gt; Output (sigmoid)
 </code></pre>
@@ -443,7 +462,13 @@
                layers.Dropout(0.2)]
 </code></pre>
         <p>The LSTM layer has 32 units and uses the hyperbolic tangent (tanh) activation function.</p>
-        <h2 id="results-and-interpretation">Results and Interpretation</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+
+        <h1 id="results-and-interpretation">Results and Interpretation</h1>
         <p>To evaluate the model, <strong>AUC</strong> (Area Under the Curve), <strong>precision</strong> and
           <strong>recall</strong> metrics were used.
         </p>
@@ -473,14 +498,23 @@
         <figure><img src="https://alagrine.github.io/images/P5/fig4.png" />
         </figure>
 
-        <h2 id="possible-improvements">Possible improvements</h2>
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="possible-improvements">Possible improvements</h1>
         <p>So far, we have been building our own embedding layer from scratch.</p>
         <p>To improve our models, we could try different configurations, such as adding more layers or adjusting the
           number of neurons per layer.</p>
         <p>Another alternative is to take advantage of <code>Transfer Learning</code> and use a pre-trained embedding
           layer, such as <a href="https://tfhub.dev/google/collections/bert/1">BERT</a> available on the TensorFlow Hub.
         </p>
-        <h2 id="conclusion">Conclusion</h2>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
+        <h1 id="conclusion">Conclusion</h1>
         <p>In this project, I built several neural network based models for toxic comment classification using
           Tensorflow. They were first trained on a cleaned and augmented text data leveraging the <em>NLTK</em> and
           <em>googletrans</em> APIs, and then evaluated using the <em>AUC</em>, <em>recall</em> and <em>precision</em>
