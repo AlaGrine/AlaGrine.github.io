@@ -6,6 +6,67 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+  <!-- Math formulas -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+  <style type="text/css">
+    * {
+      scroll-behavior: smooth;
+    }
+
+    .scrollToTopBtn {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 10px;
+      background-color: #27ae60;
+      color: #fff;
+      border-radius: 25px;
+      border-radius: 30px solid #fff;
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+      /* keep it at the top of everything else */
+      z-index: 100;
+      /* hide with opacity */
+      opacity: 0;
+
+    }
+
+    .showBtn {
+      opacity: 1;
+    }
+
+    /* Rounded border */
+    hr.rounded {
+      margin-top: 4%;
+      margin-bottom: 3%;
+      border-top: 5px solid #bbb;
+      border-radius: 3px;
+    }
+
+    figure.center {
+      /* display: flex; */
+      align-items: center;
+      justify-content: center;
+    }
+
+    figure {
+      padding: 4px;
+      margin: auto;
+    }
+
+    figcaption {
+      background-color: black;
+      color: white;
+      font-style: italic;
+      padding: 2px;
+      text-align: center;
+    }
+  </style>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -533,6 +594,50 @@
       </div>
     </div>
   </footer>
+
+
+  <!-- Add ScrollToTop button; only visible when we scroll up -->
+  <div id="scrollToTopBtn" class="scrollToTopBtn"> <i class="fas fa-arrow-up"></i> Back to
+    top</div>
+
+  <script>
+
+    window.onscroll = function () {
+      if (pageYOffset >= 200) {
+        document.getElementById('scrollToTopBtn').style.visibility = "visible";
+      } else {
+        document.getElementById('scrollToTopBtn').style.visibility = "hidden";
+      }
+    };
+    var scrollToTopBtn = document.querySelector(".scrollToTopBtn");
+    var rootElement = document.documentElement;
+
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    function handleScroll() {
+      var scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTopPosition > lastScrollTop) {
+        // Hide button
+        scrollToTopBtn.classList.remove("showBtn");
+      } else if (scrollTopPosition < lastScrollTop) {
+        // Show button
+        scrollToTopBtn.classList.add("showBtn");
+      }
+      lastScrollTop = scrollTopPosition <= 0 ? 0 : scrollTopPosition;
+    }
+
+    function scrollToTop() {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      handleScroll();
+    }
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    document.addEventListener("scroll", handleScroll);
+  </script>
 
 </body>
 
