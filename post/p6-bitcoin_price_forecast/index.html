@@ -17,13 +17,6 @@
       scroll-behavior: smooth;
     }
 
-    .th1,
-    .td1 {
-      border: 1px solid black;
-      border-radius: 10px;
-      padding: 5px 25px;
-    }
-
     .scrollToTopBtn {
       position: fixed;
       top: 10%;
@@ -55,15 +48,11 @@
       border-radius: 3px;
     }
 
-    figure.center {
-      /* display: flex; */
-      align-items: center;
-      justify-content: center;
-    }
-
     figure {
-      padding: 4px;
-      margin: auto;
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
     }
 
     figcaption {
@@ -72,6 +61,13 @@
       font-style: italic;
       padding: 2px;
       text-align: center;
+    }
+
+    .th1,
+    .td1 {
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: 5px 25px;
     }
   </style>
 
@@ -302,12 +298,13 @@
 
       </header>
       <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
+
         <h1 id="project-overview">Project Overview:</h1>
         <p>Time series forecasting is one of the most widely used data science techniques in business and finance to
           make future strategic decisions.</p>
-        <p>In this project we will forecast daily closing price series of <a
-            href="https://coinmarketcap.com/currencies/bitcoin/">Bitcoin</a>, a peer-to-peer online currency, using the
-          historical price of Bitcoin.</p>
+        <p>In this project, we will forecast daily closing price series of <a
+            href="https://coinmarketcap.com/currencies/bitcoin/">Bitcoin</a>, a peer-to-peer online currency, using its
+          historical price.</p>
         <p>We will follow different approaches to time series forecasting, implementing both statistical techniques and
           machine learning algorithms.</p>
         <p>We will start with classical approaches to time series forecasting, including moving averages, exponential
@@ -320,14 +317,27 @@
           <hr class="rounded">
         </div>
 
+        <h1 id="get_data">Get data</h1>
+        <p>We can request the historical Bitcoin price via the <a href="https://pypi.org/project/yfinance/">yfinance
+            API</a>, which provides a pythonic way to download it, as follows:</p>
+
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/6cd545b205edea08784df4e1f402cb96.js"></script>
+        <p>As the upward trend is almost absent before 2018, we will exclude earlier dates.</p>
+
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="time-series-analysis">Time Series analysis</h1>
         <p>Here is the evolution of the Bitcoin closing price over time:</p>
         <figure><img src="https://alagrine.github.io/images/P6/1-price.png" />
         </figure>
 
         <p>The above graph shows no clear trend or seasonality.</p>
-        <p>At the beginning, from 2015 to February 2017, the upward trend is almost absent.</p>
-        <p>Then the trend seems to change over time. There is a spectacular increase from October 2020 to November 2021
+        <p>Since 2018, the trend seems to be changing over time. There is a spectacular increase from October 2020 to
+          November 2021
           (from 11K to 65K), before a decrease is observed until June 2022. A new increase is observed in 2023.</p>
         <p>We will consider whether a trended method (namely the Holt model) would be better for this series later on.
         </p>
@@ -363,9 +373,9 @@
         </figure>
 
         <p>If we zoom in, we can see that the Naive forecast lags one step behind the time series.</p>
-        <p>Each prediction in the the Naive forecast is off by an average of $533.2, which is 2% of the mean Bitcoin
+        <p>Each prediction in the the Naive forecast is off by an average of $378.9, which is 1.6% of the mean Bitcoin
           price.</p>
-        <p>Our baseline, which we will try to beat with other models, is an <strong>MAE</strong> of 533.2.</p>
+        <p>Our baseline, which we will try to beat with other models, is an <strong>MAE</strong> of 378.9.</p>
         <p>Let&rsquo;s start with moving averages.</p>
 
         <div class="mb-4">
@@ -406,7 +416,8 @@
         <blockquote>
           <p>Moving averages with a centred window are more accurate in estimating the trend of our series than moving
             averages with a trailing window.<br>
-            <em>For example, a 3-MA gives an MAE of 271.6 with a centred window versus 689 with a trailing window.</em>
+            <em>For example, a 3-MA gives an MAE of 190.1 with a centred window versus 418.9 with a trailing
+              window.</em>
           </p>
           <p>However, we can&rsquo;t use centred windows to predict present values because we don&rsquo;t know the
             future values (the next <strong>k</strong> values, to be precise).</p>
@@ -505,8 +516,12 @@
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/1ae1b9a8f332d58ecff653fd68b5dc49.js"></script>
 
-        <p>The snippet above shows the code used to compare SES and Holt’s <code>additive</code> and <code>damped</code>
-          methods for various window sizes (last month, last 2 months, last year&hellip;).</p>
+        <p>The snippet above shows how to compare SES and Holt’s <em>additive</em> and <em>damped</em>
+          methods for various window sizes (last month, last 2 months, last year&hellip;) using
+          <a
+            href="https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html">statsmodels.tsa.holtwinters</a>
+          package.
+        </p>
         <ul>
           <li>A one-step prediction is performed.</li>
           <li>For each prediction, we add y_test[k], the new observation, to the list of previous values. We then
@@ -517,9 +532,10 @@
         <figure><img src="https://alagrine.github.io/images/P6/18-ExpSmoothing.png" />
         </figure>
 
-        <p>The best MAE of 531.3 is observed for a window size of two years using the Holt additive damped method.</p>
-        <p>With these two methods, we have a slight improvement over the Naive forecast.</p>
-        <p>Now, let&rsquo;s make a 14-step-ahead forecast with exponential smoothing methods.</p>
+        <p>With a window size greater than one year, the SES and Holt damped methods slightly outperformed the naive
+          model, with an MAE of 377.</p>
+        <p>Comparable MAEs to the damped Holt are obtained with the SES, with a faster execution time, making it the
+          best model so far.</p>
         <figure><img src="https://alagrine.github.io/images/P6/19-ExpSmoothing_forecasts.png" />
         </figure>
 
@@ -551,22 +567,22 @@
           function or ACF is made up of the autocorrelation coefficients. <br>
           It can be calculated using the <a
             href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.acf.html">ACF()</a> function
-          from <code>statsmodels.tsa.stattools</code>.</p>
+          from <em>statsmodels.tsa.stattools</em>.</p>
         <p>For white noise series, we expect each autocorrelation to be close to zero and 95% of the spikes in the ACF
           to lie within <strong>± 1.96/\(\sqrt{T}\)</strong>.</p>
         <p>If one or more large spikes are outside these bounds, then the series is probably not white noise.</p>
         <p>To display the autocorrelation coefficients, we can use the <a
             href="https://www.statsmodels.org/stable/generated/statsmodels.graphics.tsaplots.plot_acf.html">plot_acf</a>
-          function from <code>statsmodels.graphics.tsaplots</code> or <a
+          function from <em>statsmodels</em> or <a
             href="https://pandas.pydata.org/docs/reference/api/pandas.plotting.autocorrelation_plot.html">autocorrelation_plot</a>
-          from <code>pandas.plotting</code>. But for better visibility, we will create our own
+          from <em>Pandas</em>. But for better visibility, we will create our own
           <code>plot_xACF_plotly</code> function using <a href="https://plotly.com/python/">Plotly</a> as follows:
         </p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/2e943d9aef8dc13ebf441d10b74e80ea.js"></script>
 
-        <p>The graph above shows a strong autocorrelation between the current price and the closest previous
-          observations, and a linear slowly decrease from there to the first 2200 lagged values.</p>
+        <p>The ACF plot shows a strong autocorrelation between the current price and the closest previous observations,
+          and a slow linear decrease from there.</p>
         <figure><img src="https://alagrine.github.io/images/P6/2-ACF.png" />
         </figure>
 
@@ -585,7 +601,8 @@
           <li><strong>q</strong> = The order of the moving average (MA) model.</li>
         </ul>
         <p>The parameters <strong>p</strong> and <strong>q</strong> can be iteratively searched-for with the
-          <code>auto_arima</code> function.
+          <a href="https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html">auto_arima</a>
+          function.
         </p>
         <p>Tests of stationarity (like <em>ADF</em> or <em>KPSS</em>) are required to estimate the the differencing
           term, <strong>d</strong>.</p>
@@ -607,15 +624,15 @@
         <br>
         <h2 id="tests-of-stationarity">Tests of stationarity</h2>
         <p>To determine more quantitatively whether we need to difference our data to make it stationary, and to
-          estimate the number of differences, we can run a test of stationarity (either <em>ADF Test</em>, <em>PP
-            Test</em> or <em>KPSS Test</em>).</p>
+          estimate the number of differences, we can run a test of stationarity (like <em>ADF</em> or <em>KPSS</em>).
+        </p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/12c85cc32ba8a359ccae5df753675069.js"></script>
 
         <p>Tests show that one difference (ie, d=1) suffices to make our series stationary.</p>
         <br>
         <h2 id="use-acf-and-pacf-plots-to-determine-appropriate-values-for-p-and-q">Use ACF and PACF plots to determine
-          appropriate values for p and q</h2>
+          the paremeters (p and q)</h2>
         <p>ACF and PACF can soetimes helps to guess the paremeters (p and q) of the ARIMA model.</p>
         <p>Partial autocorrelations measure the relationship between \(y_{t}\) and \(y_{t-k}\) after removing the
           effects of lags 1,2,3,..k.</p>
@@ -627,7 +644,9 @@
         <p>Since there is no significant spike at lag <strong>p</strong> in the ACF and PACF plots of the differenced
           data, it is not possible to detremine (simply from these plots) whether the data are from an ARIMA(p,d,0) or
           an ARIMA(0,d,q).</p>
-        <p>In the next section, we will use the <code>auto_arima</code> process from pmdarima to automatically identify
+        <p>In the next section, we will use the <a
+            href="https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html">auto_arima</a>
+          process from pmdarima to automatically identify
           the most optimal parameters for an ARIMA(p,d,q) model.</p>
         <br>
         <h2 id="auto_arima">Auto_arima</h2>
@@ -642,17 +661,17 @@
         <p>The summary displays the AIC values and estimated model parameters for each candidate model that was
           evaluated:</p>
         <ul>
-          <li>The automated stepwise selection has identified an <strong>ARIMA(1,1,0)</strong> model, which has the
-            lowest AIC value and no intercept.</li>
-          <li>The full search (stepwise=False) has found that an <strong>ARIMA(0,1,4)</strong> gives the lowest AIC
-            value, with an intercept of 16.1521.</li>
+          <li>The automated stepwise selection has identified an <strong>ARIMA(0,1,0)</strong> model, which is
+            equivalent to a <em>random walk</em>.</li>
+          <li>The full search (stepwise=False) has found that an <strong>ARIMA(2,1,2)</strong> gives the lowest AIC
+            value.</li>
         </ul>
         <br>
         <h2 id="residual-diagnostics">Residual diagnostics</h2>
-        <p>It is important to check that the residuals are uncorrelated, so that no information is left in the
-          residuals, and that they have a mean of zero, so that the forecasts are not biased.</p>
-        <pre tabindex="0"><code>ARIMA_residuals = ARIMA_model.resid()
-</code></pre>
+        <p>It is important to check that the residuals are uncorrelated, so that there is no information left in them,
+          and that they have a mean of zero, so that the forecasts are not biased.</p>
+        <pre tabindex="0"
+          style="overflow: hidden;"><code >ARIMA_residuals = ARIMA_model<span style="color:cyan;">.resid()</span></code></pre>
         <p>
         <figure><img src="https://alagrine.github.io/images/P6/5_residuals_ARIMA.png" />
         </figure>
@@ -663,9 +682,9 @@
         <figure><img src="https://alagrine.github.io/images/P6/7_residuals_ACF_ARIMA.png" />
         </figure>
         </p>
-        <p>The ACF plot of the residuals from the ARIMA(0,1,4) model shows that the residuals are uncorrelated, so there
-          is no information left in the residuals that should be used to compute forecasts.</p>
-        <p>As the mean is not zero, then the forecasts are biased. To handle this, we can add 17.334 to all forecasts
+        <p>The ACF plot of the residuals from the ARIMA(2,1,2) model shows that the residuals are uncorrelated, so there
+          is no information left in them that should be used to compute forecasts.</p>
+        <p>As the mean is not zero, then the forecasts are biased. To handle this, we can add 9.2 to all forecasts
           and the bias problem is solved.</p>
         <br>
         <h2 id="predictions-with-arima-model">Predictions with ARIMA model</h2>
@@ -680,38 +699,40 @@
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/6052f08aa7f944d8b629cd8b3cb5058b.js"></script>
 
-        <p>The next graph shows both point predictions and confidence intervals (light orange area). The former
+        <p>The next graph shows both point predictions and confidence intervals (orange area). The
+          former
           represent the most likely values according to the model, while the latter give us a measure of uncertainty.
         </p>
         <figure><img src="https://alagrine.github.io/images/P6/8_ARIMA_preds.png" />
         </figure>
 
         <p>If we zoom in, we see that the ARIMA predictions follow the test data. They are slightly behind.</p>
-        <p>Each prediction in the ARIMA(0,1,4) forecast is off by an average of $535.9, which is worse than the Naive
+        <p>Each prediction in the ARIMA(2,1,2) forecast is off by an average of $391.5, which is worse than the Naive
           predictions.</p>
         <br>
-        <p>Now, let’s make a 14-step-ahead forecast with ARIMA.</p>
+        <h2 id="forecast-with-arima-model">Forecast 14 steps ahead with ARIMA</h2>
+
         <p>Fitting the ARIMA model to the full data yields the following results:</p>
         <ul>
-          <li>The full search (stepwise=False) has found that an ARIMA(2,1,2) gives the lowest AIC value, with an
-            intercept of 15.936.</li>
+          <li>The full search (stepwise=False) has found that an ARIMA(2,1,3) yields the lowest AIC value</li>
           <li>The automated stepwise selection has identified an ARIMA(0,1,0) model, equivalent to a random walk.</li>
         </ul>
-        <p>We will make forecasts with ARIMA(2,1,2).</p>
+        <p>We will make forecasts with ARIMA(2,1,3).</p>
         <blockquote>
           <p>Note that for each forecast, we will update our ARIMA model with this new prediction using the
-            <code>update</code> function.
+            <a href="https://alkaline-ml.com/pmdarima/refreshing.html">update</a> function.
           </p>
         </blockquote>
         <figure><img src="https://alagrine.github.io/images/P6/12-ARIMA-forecasts.png" />
         </figure>
 
-        <p>The plot shows that the mean forecasts look very similar to what we would get with a random walk (equivalent
-          to an ARIMA(0,1,0)). Including AR and MA terms (p=2 and q=2) has made little difference to the point
-          forecasts.</p>
-        <p>So far, we have used classical approaches to forecast Bitcoin prices. We found that the SES and Holt damped
-          methods slightly outperform the Naive model. This shows how difficult it is to beat the Naive model in open
-          systems such as stock or crypto markets.</p>
+        <p>The plot shows that the mean forecasts look very similar to what we would get with a random walk. That is,
+          including the AR and MA terms (p=2 and q=3) has made little difference to the point forecasts.</p>
+        <br>
+        <p>So far, we have used classical approaches to forecast Bitcoin prices. We found that the exponential smoothing
+          methods (SES and Holt damped) slightly outperform the Naive model, which yields better results than the ARIMA
+          model. This shows how difficult it is to beat the Naive model in open systems such as stock or crypto markets.
+        </p>
         <p>In the next section we will use a different approach: deep learning models using TensorFlow.</p>
 
         <div class="mb-4">
@@ -730,15 +751,16 @@
         <h2 id="feature-engineering">Feature engineering</h2>
         <p>To identify potential trend changes, We will feed our models with the following key features:</p>
         <ol>
-          <li>
+          <!-- <li>
             <p>Relative strength index <a href="https://en.wikipedia.org/wiki/Relative_strength_index">RSI</a> which
               measures the velocity and magnitude of price movements and can be mathematically expressed as follows:</p>
-            <p>$$RSI = 100*avg_{up}/(avg_{up}+avg_{down})$$</p>
-            <p>where \(avg_up\) and \(avg_down\) are the average gains and losses over a typical 14 day window.</p>
+            <p>$$RSI = 100*avg_{u}/(avg_{u}+avg_{d})$$</p>
+            <p>where \(avg_u\) and \(avg_d\) are the average gains and losses over a typical 14 day window.
+            </p>
             <script type="application/javascript"
               src="https://gist.github.com/AlaGrine/7312ccbc260f739e431cabaf787cccf2.js"></script>
 
-          </li>
+          </li> -->
           <li>
             <p>Moving Average Convergence Divergence <a href="https://en.wikipedia.org/wiki/MACD">MACD</a> which is
               commoly calculated by subtracting the 26-period EMA from the 12-period EMA.</p>
@@ -749,12 +771,20 @@
               src="https://gist.github.com/AlaGrine/d09fd7bbd601b16cfe4226d37239a178.js"></script>
 
           </li>
+          <!-- <li>
+            <p>The daily Bitcoin price fluctuation expressed as : \(High - Low\)</p>
+          </li> -->
+          <li>
+            <p>The <a href="https://www.investopedia.com/terms/b/block-reward.asp">block reward size</a>,
+              which is the number of bitcoins awarded for mining a block of bitcoin, as halving this factor is
+              associated
+              with price increases, as shown in the next chart.</p>
+            <figure><img src="https://alagrine.github.io/images/P6/9-block-reward.png" />
+            </figure>
+          </li>
+
         </ol>
-        <p>We will also use the <a href="https://www.investopedia.com/terms/b/block-reward.asp">block reward size</a>,
-          which is the number of bitcoins awarded for mining a block of bitcoin, as halving this factor is associated
-          with price increases, as shown in the next chart.</p>
-        <figure><img src="https://alagrine.github.io/images/P6/9-block-reward.png" />
-        </figure>
+
 
         <br>
         <h2 id="scale-the-data">Scale the data</h2>
@@ -762,19 +792,19 @@
         </p>
         <p>A common way to scale them is the <code>MinMaxScaler</code> which translates each feature to the range of 0
           and 1. This transformation should be computed using only the <strong>training</strong> dataset as follows:</p>
-        <pre tabindex="0"><code>SPLIT_SIZE = 0.8
-n = len(bitcoin_data)
+        <pre tabindex="0" style="overflow: hidden;"><code>SPLIT_SIZE = 0.8
+n = <span style="color:cyan;">len</span>(bitcoin_data)
 
-train_df = bitcoin_data[0:int(n*SPLIT_SIZE)]
-train_min = train_df.min()
-train_max = train_df.max()
+train_df = bitcoin_data[0:<span style="color:cyan;">int</span>(n*SPLIT_SIZE)]
+train_min = train_df<span style="color:cyan;">.min()</span>
+train_max = train_df<span style="color:cyan;">.max()</span>
 
-bitcoin_data = (bitcoin_data - train_min) / (train_max-train_min) # MinMaxscaler
+bitcoin_data = (bitcoin_data - train_min) / (train_max-train_min) 
 </code></pre>
         <p>That is, our neural network will predict the scaled prices. To get back to real BTC prices, we can use the
           following code:</p>
-        <pre tabindex="0"><code># Scaled price predictions
-preds = tf.squeeze(model.predict(test_dataset,verbose=0))
+        <pre tabindex="0" style="overflow: hidden;"><code># Scaled price predictions
+preds = tf.squeeze(model<span style="color:cyan;">.predict</span>(test_dataset,verbose=0))
 
 # Get back to real BTC prices:
 preds_BTC = (train_max[&#39;Price&#39;]-train_min[&#39;Price&#39;])*preds+train_min[&#39;Price&#39;]
@@ -788,9 +818,9 @@ preds_BTC = (train_max[&#39;Price&#39;]-train_min[&#39;Price&#39;])*preds+train_
           <li><code>WINDOW_SIZE</code>: number of timesteps or lags from past used to predict HORIZON.</li>
         </ul>
         <p>For example, with a horizon of 1 and a window size of 7, we can predict the scaled price based on the
-          previous week&rsquo;s values as follows:</p>
-        <figure><img src="https://alagrine.github.io/images/P6/windowing.png" />
-        </figure>
+          previous week&rsquo;s values.</p>
+
+        <p>The following code block illustrates how to make windows of consecutive samples from the data:</p>
 
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/016262b053a2b15d18bfb22ca9f89a30.js"></script>
@@ -798,7 +828,7 @@ preds_BTC = (train_max[&#39;Price&#39;]-train_min[&#39;Price&#39;])*preds+train_
         <br>
         <h2 id="modelling-and-evaluation">Modelling and Evaluation</h2>
         <p>We will be building the following model structure:</p>
-        <pre tabindex="0"><code>Input (windowed dataset) -&gt; Custom_Layers -&gt; Output (BTC price)
+        <pre tabindex="0" style="overflow: hidden;"><code>Input (windowed dataset) -&gt; <span style="color:rgb(221, 26, 149);">Custom_Layers</span> -&gt; Output (BTC price)
 </code></pre>
         <p>The main component we&rsquo;ll be changing throughout is the <code>Custom_Layers</code> component. More
           specifically, we will build the following:</p>
@@ -812,9 +842,10 @@ preds_BTC = (train_max[&#39;Price&#39;]-train_min[&#39;Price&#39;])*preds+train_
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/25980c4f7a49fae7e8f79cc6737df879.js"></script>
 
-        <p>For example, to create a <code>Dense</code> model, the following layers are used:</p>
-        <pre tabindex="0"><code>Dense_layers = [layers.Flatten(),
-                layers.Dense(64)]
+        <p>For example, to create a <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Dense">Dense</a>
+          model, the following layers are used:</p>
+        <pre tabindex="0"><code>Dense_layers = [layers<span style="color:cyan;">.Flatten()</span>,
+                layers<span style="color:cyan;">.Dense(32)</span>]
 </code></pre>
         <figure><img src="https://alagrine.github.io/images/P6/10-MAE_tensorflow.png" />
         </figure>
@@ -823,44 +854,52 @@ preds_BTC = (train_max[&#39;Price&#39;]-train_min[&#39;Price&#39;])*preds+train_
           <strong>1</strong>.
         </p>
         <p>For window sizes greater than 1, the <em>GRU</em> model yields the best results.</p>
-        <p>Here is a comparison of the performance of all the models that we have built so far.</p>
-        <figure><img src="https://alagrine.github.io/images/P6/20__MAE_models.png" />
-        </figure>
 
-        <p>With an MAE of 520, the simple Dense model (with one layer and 64 neurons) gives the best results so far.</p>
+        <br>
+        <h2 id="compare_results">Compare results</h1>
+          <p>Here is a comparison of the performance of all the models that we have built so far.</p>
+          <figure><img src="https://alagrine.github.io/images/P6/20_MAE_models.png" />
+          </figure>
 
-        <div class="mb-4">
-          <hr class="rounded">
-        </div>
+          <p>The <a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Conv1D">Conv1D</a> and <a
+              href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/Dense">Dense</a> models (with one layer
+            and 32 neurons) yield the best results
+            with an MAE of 370, ahead of the SES and GRU models, with an MAE of 377.
+          </p>
 
-        <h1 id="conclusion">Conclusion</h1>
-        <p>In this project, I have been forecasting a series of daily closing prices for Bitcoin.</p>
-        <p>I built a variety of models, from classics like <em>ARIMA</em> and <em>exponential smoothing</em> to deep
-          neural networks. The
-          latter were used with multivariate time series, as in addition to the historical price of Bitcoin, we fed them
-          other features such as RSI and MACD, which slightly improved the performance of our model.</p>
-        <p>I found that these models slightly outperformed the Naive model. This shows how difficult it is to make
-          predictions in open systems like stock or crypto markets.</p>
+          <div class="mb-4">
+            <hr class="rounded">
+          </div>
 
-        <p>Throughout this project, I have used pmdarima and Tensorflow.
+          <h1 id="conclusion">Conclusion</h1>
+          <p>In this project, I have been forecasting a series of daily closing prices for Bitcoin.</p>
+          <p>I built a variety of models, from classics like <em>ARIMA</em> and <em>exponential smoothing</em> to deep
+            neural networks. The
+            latter were used with multivariate time series, as in addition to the historical price of Bitcoin, we fed
+            them
+            with other features such as MACD, which slightly improved the performance of our model.</p>
+          <p>I found that these models slightly outperformed the Naive model. This shows how difficult it is to make
+            predictions in open systems like stock or crypto markets.</p>
 
-          There are other time series libraries we can use, such as sktime, prophet and greykite to name a
-          few.</p>
+          <p>Throughout this project, I have used pmdarima and Tensorflow.
 
-        <p><a href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow">Link to GitHub
-            repository</a></p>
+            There are other time series libraries we can use, such as sktime, prophet and greykite to name a
+            few.</p>
 
-        <span class="badge badge-pill badge-success">Time series analysis</span>
-        <span class="badge badge-pill badge-success">ARIMA</span>
-        <span class="badge badge-pill badge-success">Tesnsorflow</span>
-        <span class="badge badge-pill badge-success">Tsfresh</span>
-        <ul class="pa0">
+          <p><a href="https://github.com/AlaGrine/Toxic-Comment-Classification-with-Tensorflow">Link to GitHub
+              repository</a></p>
 
-        </ul>
-        <div class="mt6 instapaper_ignoref">
+          <span class="badge badge-pill badge-success">Time series analysis</span>
+          <span class="badge badge-pill badge-success">Exponontiel Smoothing</span>
+          <span class="badge badge-pill badge-success">ARIMA</span>
+          <span class="badge badge-pill badge-success">Tesnsorflow</span>
+          <ul class="pa0">
+
+          </ul>
+          <div class="mt6 instapaper_ignoref">
 
 
-        </div>
+          </div>
       </div>
 
       <aside class="w-30-l mt6-l">
