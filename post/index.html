@@ -2,6 +2,28 @@
 <html lang="en">
 
 <head>
+
+  <style type="text/css">
+    .badge_container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 5px;
+      margin: 2px;
+      border-radius: 25px;
+      background-color: #14A44D;
+      color: white;
+      font-size: 14px;
+      display: inline-block;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+    }
+  </style>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -159,7 +181,7 @@
 
     <div class="pa3 pa4-ns w-100 w-70-ns center">
       <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
-        <p>The full list of my data science projects, available as open source on GitHub.</p>
+        <p>List of my open source data science projects on GitHub.</p>
 
       </section>
       <section class="w-100 mw8 center">
@@ -185,26 +207,25 @@
                     </a>
                   </h1>
                   <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-                    Project Overview: Time series forecasting is one of the most widely used data science techniques in
-                    business and finance to
-                    make future strategic decisions.
+                    <strong>Project Overview:</strong> Time series forecasting is one of the most widely used data
+                    science techniques in
+                    business and finance to make future strategic decisions.
                     <br>
-                    In this project, we will forecast daily closing price series of <a
-                      href="https://coinmarketcap.com/currencies/bitcoin/">Bitcoin</a>, a peer-to-peer online currency,
-                    using its historical price.
-                    <br>
-                    We will follow different approaches to time series forecasting, implementing both statistical
-                    techniques and machine learning algorithms...
-                    <br>
-                    <br>
-                    <span style="background-color:#14A44D;color:#fff; border-radius: 25px; padding: 5px;">
-                      Time series analysis</span>
-                    <span style="background-color:#14A44D;color:#fff; border-radius: 25px; padding: 5px;">
-                      Exponontiel Smoothing</span>
-                    <span style="background-color:#14A44D; color:#fff; border-radius: 25px; padding: 5px;">
-                      ARIMA</span>
-                    <span style="background-color:#14A44D; color:#fff; border-radius: 25px; padding: 5px;">
-                      Tesnsorflow</span>
+                    <strong>Problem statement:</strong> In this project, I forecast daily closing price series of
+                    Bitcoin, a
+                    peer-to-peer online currency,
+                    using historical data. <br>
+                    <strong>Process:</strong> I followed different approaches to time series forecasting,
+                    implementing both statistical techniques and machine learning algorithms.<br>
+                    I built a variety of models, from classics like ARIMA and exponential
+                    smoothing to deep neural networks.
+                    <br><br>
+                    <div class="badge_container">
+                      <span class="badge">Time series analysis</span>
+                      <span class="badge">Exponontiel Smoothing</span>
+                      <span class="badge">ARIMA</span>
+                      <span class="badge">Tesnsorflow</span>
+                    </div>
                   </div>
                   <br>
                   <a href="https://alagrine.github.io/post/p6-bitcoin_price_forecast/"
@@ -241,21 +262,25 @@
                     </a>
                   </h1>
                   <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-                    Project Overview: Negative online behaviors, like toxic comments, are likely to make people stop
-                    expressing themselves and leave a conversation. Platforms struggle to identify and flag potentially
-                    harmful or offensive online comments, leading many communities to restrict or shut down user
-                    comments altogether.
-                    Kaggle issued a challenge to build a multi-label classification model that&rsquo;s able to detect
-                    different types of toxicity like threats, obscenity and insults, and thus help make online
-                    discussion more productive and respectful.
+                    <strong>Project Overview:</strong> Negative online behaviors, like toxic comments, are likely to
+                    make people stop
+                    expressing themselves and leave a conversation. <br>
+                    <strong>Problem statement:</strong> The aim of this project is to build a multi-label classification
+                    model that&rsquo;s able to detect
+                    different types of toxicity, such as threats, obscenities and insults, and thus help make online
+                    discussion more productive and respectful.<br>
+                    <strong>Process:</strong> I built several neural networks using Tensorflow. I
+                    first trained them on a cleaned and augmented text data
+                    leveraging the NLTK and googletrans APIs, and then evaluated them using the AUC, recall and
+                    precision
+                    metrics.
                     <br>
                     <br>
-                    <span style="background-color:#14A44D;color:#fff; border-radius: 25px; padding: 5px;">
-                      Tensorflow</span>
-                    <span style="background-color:#14A44D;color:#fff; border-radius: 25px; padding: 5px;">
-                      NLP</span>
-                    <span style="background-color:#14A44D; color:#fff; border-radius: 25px; padding: 5px;">
-                      Classification</span>
+                    <div class="badge_container">
+                      <span class="badge">Tensorflow</span>
+                      <span class="badge">NLP</span>
+                      <span class="badge">Classification</span>
+                    </div>
                   </div>
                   <br>
                   <a href="https://alagrine.github.io/post/p5-toxic-comment-classification-with-tensorflow/"
@@ -291,22 +316,26 @@
                     </a>
                   </h1>
                   <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-                    Project Overview: This project is part of Udacity&rsquo;s Data Scientist Nanodegree. It focuses on
-                    customer churn, a key metric for customer-facing businesses in a wide range of industries, including
-                    telecommunications, e-commerce, and streaming services. Predicting churn is critical, as customer
-                    retention is the main driver of a company’s revenue.
-                    For this project, Udacity provided a 12GB dataset of customer activity from Sparkify, a fictional
-                    music streaming service similar to Spotify or Pandora.
+                    <strong>Project Overview:</strong> This project is part of Udacity&rsquo;s Data Scientist
+                    Nanodegree. Udacity
+                    provided
+                    a 12GB dataset of customer activity from Sparkify, a fictional music streaming service similar to
+                    Spotify or Pandora. <br>
+                    <strong>Problem statement:</strong> The goal is to build a binary classification model that can
+                    efficiently predict
+                    whether a user will churn or not.<br>
+                    <strong>Process:</strong> I first used a small subset of the data to perform exploratory data
+                    analysis and build a prototype machine learning model using the PySpark ML package.<br>
+                    I then deployed a cluster in the cloud with AWS using the full 12GB dataset.
                     <br>
                     <br>
-                    <span style="background-color:#14A44D;color:#fff; border-radius: 25px; padding: 5px;">
-                      PySpark</span>
-                    <span style="background-color:#14A44D;color:#fff; border-radius: 25px; padding: 5px;">
-                      Spark MLlib</span>
-                    <span style="background-color:#14A44D; color:#fff; border-radius: 25px; padding: 5px;">
-                      AWS</span>
-                    <span style="background-color:#14A44D; color:#fff; border-radius: 25px; padding: 5px;">
-                      Big Data</span>
+                    <div class="badge_container">
+                      <span class="badge">PySpark</span>
+                      <span class="badge">Spark MLlib</span>
+                      <span class="badge">AWS</span>
+                      <span class="badge">Big Data</span>
+                      <span class="badge">Churn prediction</span>
+                    </div>
                   </div>
                   <br>
                   <a href="https://alagrine.github.io/post/p4-sparkify-churn-prediction/"
@@ -421,15 +450,25 @@
                     </a>
                   </h1>
                   <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-                    Project overview: In this project, I leveraged the Cross Industry Process for DataMining (CRISP-DM),
-                    a process used for many data science problems.
-                    I explored the Boston Airbnb open dataset, available here, to get insights into the following
-                    questions:
-                    How does seasonality affect AirBnB prices in Boston? How does location affect AirBnB prices? What
-                    are the most important features to predict AirBnB prices? What is the relationship between reviews
-                    and price? The dataset describes AirBnB activity, including full descriptions of 3585 listings,
-                    68275 reviews, and daily prices and availability from September 2016 to September 2017.
+                    <strong>Project Overview:</strong> In this project, I leveraged the Cross Industry Process for
+                    DataMining (CRISP-DM), a process used for many data science problems.<br>
+                    <strong>Process:</strong> I explored the Boston Airbnb open dataset to get insights
+                    into the following questions:<br>
+                    <ol>
+                      <li>How does seasonality affect AirBnB prices in Boston? How does location affect AirBnB
+                        prices?
+                      </li>
+                      <li>What are the most important features to predict AirBnB prices?</li>
+                      <li>What is the relationship between reviews and price?</li>
+                    </ol>
+
+                    <div class="badge_container">
+                      <span class="badge">CRISP-DM</span>
+                      <span class="badge">Data analysis</span>
+                      <span class="badge">Data science</span>
+                    </div>
                   </div>
+                  <br>
                   <a href="https://alagrine.github.io/post/p1-boston-airbnb-dataanalysis/"
                     class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read
                     more</a>
