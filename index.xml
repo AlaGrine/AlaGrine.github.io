@@ -6,7 +6,19 @@
     <description>Recent content in Data Science Portfolio on Ala Eddine GRINE</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 20 Oct 2023 11:14:48 -0400</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 27 Nov 2023 01:14:48 -0400</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LinkedIn Job Scraper and Matcher</title>
+      <link>https://alagrine.github.io/post/p7-linkedin_scraper_matcher/</link>
+      <pubDate>Mon, 27 Nov 2023 01:14:48 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p7-linkedin_scraper_matcher/</guid>
+      <description>Project Overview: If you&amp;rsquo;re looking for a job, say a data science role, you&amp;rsquo;re probably using Linkedin Jobs. But with hundreds of jobs posted every day, it can be hard to find the ones that best match your skills.
+The main purpose of this project is to help you find the best matching jobs automatically.
+We&amp;rsquo;ll start by scraping job postings from LinkedIn using Selenium, Requests, and BeautifulSoup.
+Next, a text analysis of both your resume and LinkedIn jobs will be carried out using Spacy.</description>
+    </item>
+    
     <item>
       <title>Forecasting Bitcoin closing price series</title>
       <link>https://alagrine.github.io/post/p6-bitcoin_price_forecast/</link>
@@ -16,7 +28,7 @@
       <description>Project Overview: Time series forecasting is one of the most widely used data science techniques in business and finance to make future strategic decisions.
 In this project we will forecast daily closing price series of Bitcoin, a peer-to-peer online currency, using the historical price of Bitcoin.
 We will follow different approaches to time series forecasting, implementing both statistical techniques and machine learning algorithms.
-We will start by building an ARIMA (AutoRegressive Integrated Moving Average) model, one of the most widely used approaches to time series forecasting.</description>
+We will start with classical approaches to time series forecasting, including moving averages, exponential smoothing methods and the ARIMA (AutoRegressive Integrated Moving Average) model.</description>
     </item>
     
     <item>
