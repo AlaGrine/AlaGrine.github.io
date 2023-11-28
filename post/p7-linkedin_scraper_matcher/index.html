@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+  <!-- Math formulas -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+
+  <style type="text/css">
+    * {
+      scroll-behavior: smooth;
+    }
+
+    .scrollToTopBtn {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 10px;
+      background-color: #27ae60;
+      color: #fff;
+      border-radius: 25px;
+      border-radius: 30px solid #fff;
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+      /* keep it at the top of everything else */
+      z-index: 100;
+      /* hide with opacity */
+      opacity: 0;
+
+    }
+
+    .showBtn {
+      opacity: 1;
+    }
+
+    /* Rounded border */
+    hr.rounded {
+      margin-top: 4%;
+      margin-bottom: 3%;
+      border-top: 5px solid #bbb;
+      border-radius: 3px;
+    }
+
+    figure {
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    figcaption {
+      background-color: black;
+      color: white;
+      font-style: italic;
+      padding: 2px;
+      text-align: center;
+    }
+
+    .th1,
+    .td1 {
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: 5px 25px;
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>LinkedIn Job Scraper and Matcher | Ala Eddine GRINE</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <meta name="description" content="WEB scraping with selenium and BeautifulSoup.
+Text analysis with Spacy">
+  <meta name="generator" content="Hugo 0.118.2">
+
+
+
+
+  <meta name="robots" content="noindex, nofollow">
+
+
+
+  <link rel="stylesheet" href="https://alagrine.github.io/ananke/css/main.min.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://alagrine.github.io/images/portfolio.png" type="image/x-icon" />
+
+
+
+
+
+
+  <meta property="og:title" content="LinkedIn Job Scraper and Matcher" />
+  <meta property="og:description" content="WEB scraping with selenium and BeautifulSoup.
+Text analysis with Spacy" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alagrine.github.io/post/p7-linkedin_scraper_matcher/" />
+  <meta property="article:section" content="post" />
+  <meta property="article:published_time" content="2023-11-27T01:14:48-04:00" />
+  <meta property="article:modified_time" content="2023-11-27T01:14:48-04:00" />
+  <meta itemprop="name" content="LinkedIn Job Scraper and Matcher">
+  <meta itemprop="description" content="WEB scraping with selenium and BeautifulSoup.
+Text analysis with Spacy">
+  <meta itemprop="datePublished" content="2023-11-27T01:14:48-04:00" />
+  <meta itemprop="dateModified" content="2023-11-27T01:14:48-04:00" />
+  <meta itemprop="wordCount" content="1267">
+  <meta itemprop="keywords" content="" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="LinkedIn Job Scraper and Matcher" />
+  <meta name="twitter:description" content="WEB scraping with selenium and BeautifulSoup.
+Text analysis with Spacy" />
+
+
+</head>
+
+<body class="ma0 avenir bg-near-white">
+
+
+
+
+
+
+  <header class="cover bg-top"
+    style="background-image: url('https://alagrine.github.io/images/P7/Leonardo_Diffusion_XL_LinkedIn_Job_scraping_2.jpg');">
+    <div class="bg-black-60">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+        <div class="flex-l justify-between items-center center">
+          <a href="https://alagrine.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+
+            Ala Eddine GRINE
+
+          </a>
+          <div class="flex-l items-center">
+
+
+
+            <ul class="pl0 mr3">
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/about/"
+                  title="About page">
+                  About
+                </a>
+              </li>
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/post/"
+                  title="Projects page">
+                  Projects
+                </a>
+              </li>
+
+            </ul>
+
+
+            <div class="ananke-socials">
+
+
+              <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+                class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+                class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+                class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+            </div>
+
+          </div>
+        </div>
+      </nav>
+
+      <div class="tc-l pv6 ph3 ph4-ns">
+
+        <div class="f2 f1-l fw2 white-90 mb0 lh-title">LinkedIn Job Scraper and Matcher</div>
+
+        <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
+          WEB scraping with selenium and BeautifulSoup.
+          Text analysis with Spacy
+        </div>
+
+
+      </div>
+    </div>
+  </header>
+
+
+
+  <main class="pb7" role="main">
+
+
+    <article class="flex-l flex-wrap justify-between mw8 center ph3">
+      <header class="mt4 w-100">
+        <aside class="instapaper_ignoref b helvetica tracked">
+
+          PROJECTS
+        </aside>
+
+
+
+
+
+
+
+
+
+
+
+        <div id="sharing" class="mt3 ananke-socials">
+
+
+          <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p7-linkedin_scraper_matcher/&amp;title=LinkedIn%20Job%20Scraper%20and%20Matcher"
+            class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
+
+            <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+          </a>
+
+        </div>
+
+
+        <h1 class="f1 athelas mt3 mb1">LinkedIn Job Scraper and Matcher</h1>
+
+
+
+        <time class="f6 mv4 dib tracked" datetime="2023-11-27T01:14:48-04:00">November 27, 2023</time>
+
+
+
+
+      </header>
+      <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
+        <h1 id="project-overview">Project Overview:</h1>
+        <p>If you&rsquo;re looking for a job, say a data science role, you&rsquo;re probably using Linkedin Jobs. But
+          with hundreds of jobs posted every day, it can be hard to find the ones that best match your skills.</p>
+        <p>The main purpose of this project is to help you find the best matching jobs automatically.</p>
+        <p>We&rsquo;ll start by scraping job postings from LinkedIn using Selenium, Requests, and BeautifulSoup.</p>
+        <p>Next, a text analysis of both your resume and LinkedIn jobs will be carried out using Spacy.</p>
+        <p>Finally, We will create a Flask application to display data visualisations, such as word cloud of in-demand
+          skills. The app identifies job-specific skills and keywords, compares them to your skills and provides a list
+          of the most relevant job matches.</p>
+        <h1 id="linkedin-job-scraping">LinkedIn Job Scraping</h1>
+        <p>In this section, we’ll cover the process of web scraping, from accessing web pages to extracting data and
+          storing it in a json file.</p>
+        <p>we will use three python libraries:</p>
+        <ul>
+          <li><strong>Selenium</strong>: We will harness the power of Selenium to automate web browsing. First we need
+            to download a webDriver. <em>Chrome</em>, <em>Edge</em>, <em>Firefox</em>, <em>IE</em> and <em>Safari</em>
+            are supported. I&rsquo;ve selected the Chrome driver executable, which can be downloaded from <a
+              href="(https://chromedriver.chromium.org/downloads)">here</a> and should be saved in the project
+            directory.</li>
+          <li><strong>Requests:</strong> Make GET requests easily with this package.</li>
+          <li><strong>BeautifulSoup:</strong> to parse HTML content and get relevant data (Job title, Seniority Level,
+            Job description&hellip;).</li>
+        </ul>
+        <h2 id="scraping-job-ids">Scraping Job IDs</h2>
+        <p>Selenium and BeautifulSoup will come in handy here.</p>
+        <ol>
+          <li>The first step is login to the Linkedin page.</li>
+        </ol>
+        <p>The following snippet shows the code used to initialize a new instance of the Chrome driver, open the
+          LinkedIn login page, enter your login credentials (email address and password) and click the Login button.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/bf538f5a9a8ee1281d74c426f377cd6e.js"></script>
+
+        <ol start="2">
+          <li>The next step is to search for jobs.</li>
+        </ol>
+        <figure><img src="https://alagrine.github.io/images/P7/linkedin_jobs.png" />
+        </figure>
+
+        <p>The number of results can be found in the top left corner.
+          Search results are displayed over several pages with 25 jobs per page.</p>
+        <p>Every selected job will display its details (description, number of candiadates&hellip;) in the box on the
+          right-hand side of the page.</p>
+        <p>We could use Selenium to click on each job to show its details in the right box. However, this method is too
+          time-consuming. In the following section, we will obtain these details through a simple GET request. Now, we
+          will get the number of jobs and their corresponding IDs.</p>
+        <p>The URL for the job search page is:</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>url = f&#39;https://www.linkedin.com/jobs/search/?keywords={<span style="color:cyan;">keywords</span>}&amp;location={<span style="color:cyan;">location</span>}&amp;start={<span style="color:cyan;">start</span>}&#39;
+</code></pre>
+        <p>There are three query parameters: <em>keywords</em>, <em>location</em> and <em>strat</em>.</p>
+        <ul>
+          <li>
+            <p><em>Keywords</em> and <em>location</em>: relate to the job title and location respectively, say a data
+              science job in Montreal, Canada.</p>
+          </li>
+          <li>
+            <p><em>strat</em>: refers to the page number. As there are 25 jobs per page, the values of
+              &lsquo;<em>start</em>&rsquo; are 25, 50, 75, and so on.</p>
+          </li>
+        </ul>
+        <p>To view all job postings, it&rsquo;s necessary to scroll down to the bottom of the page.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>def <span style="color:cyan;">scroll_to_bottom</span>(driver,sleep_time=120):
+    last_height = driver.<span style="color:cyan;">execute_script</span></span>(&#39;return document.body.scrollHeight&#39;)
+    while True:
+    driver.<span style="color:cyan;">execute_script</span>(&#39;window.scrollTo(0, document.body.scrollHeight);&#39;)
+        new_height = driver.<span style="color:cyan;">execute_script</span>(&#39;return document.body.scrollHeight&#39;)
+        if new_height == last_height:
+            break
+        last_height = new_height
+
+        time.<span style="color:cyan;">sleep</span>(sleep_time)  
+</code></pre>
+        <p><em>sleep_time</em> is a timer set in seconds which allows for supplementary loading time for the webpage.
+          The timer can be adjusted depending on your Internet speed.</p>
+        <ol start="3">
+          <li>Parse the HTML content of the webpage using <a href="BeautifulSoup">BeautifulSoup</a> is the third step of
+            the scraping process.</li>
+        </ol>
+        <pre tabindex="0" style="overflow: hidden;"><code>soup = <span style="color:cyan;">BeautifulSoup</span>(driver.page_source, &#39;html.parser&#39;)
+</code></pre>
+        <p>Let&rsquo;s first scrape the number of jobs and the job IDs from the first page.</p>
+        <p>These can be obtained by utilizing BeautifulSoup&rsquo;s <code>find()</code> and <code>find_all()</code>
+          methods, along with the appropriate CSS tags and classes. For instance, the number of results can be parsed as
+          follows:</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>div = soup.<span style="color:cyan;">find</span>(&#34;div&#34;,{&#34;class&#34;:&#34;jobs-search-results-list__subtitle&#34;})
+number_of_jobs = int(div.<span style="color:cyan;">find</span>(&#39;span&#39;).get_text().strip().split()[0])
+number_of_pages=math.<span style="color:cyan;">ceil</span>(number_of_jobs/25)
+</code></pre>
+        <p>We can then iterate over the remaining pages.</p>
+        <p>The snippet below displays the entire code for scraping Job IDs.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/3f59487d635e382576b8aac8457c5dd8.js"></script>
+
+        <p>Now that we have extracted all of the Job IDs, we can save them to a CSV file.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>pd.DataFrame({&#34;Job_Id&#34;:List_Job_IDs}).<span style="color:cyan;">to_csv()</span>(&#39;../data/Job_Ids.csv&#39;,index=False)
+</code></pre>
+        <p>Finally, let&rsquo;s close the browser and shut down the ChromiumDriver executable.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>driver.<span style="color:cyan;">quit()</span>
+</code></pre>
+        <h2 id="scraping-job-details">Scraping Job details</h2>
+        <p>As explained <a href="https://www.scrapingdog.com/blog/scrape-linkedin-jobs/">here</a>, we will retrieve job
+          details such as seniority level and job descriptions by sending a simple GET request from the
+          <em>Requests</em> library to this URL:
+        </p>
+        <pre tabindex="0" style="overflow: hidden;"><code>job_url=&#39;https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_Id}&#39;
+</code></pre>
+        <p>This is easier than using clicks from <em>Selenium</em>.</p>
+        <p>Note that I attempted to extract Job IDs using the guest URL
+          <code>https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?</code> but achieved imprecise
+          results. Hence, in the previous section, I retrieved Job IDs utilizing Selenium.
+        </p>
+        <p>This is the code I used to obtain job specifications:
+          <script type="application/javascript"
+            src="https://gist.github.com/AlaGrine/483566f8b457ec08c33cac82d79423ef.js"></script>
+        </p>
+        <p>Now that we&rsquo;ve gathered all the job listings, we can save the results to a JSON file and proceed to the
+          second part of the project: text analysis with Spacy.</p>
+        <h1 id="text-analysis-with-spacy">Text analysis with Spacy</h1>
+        <p>We need to install the trained English pipeline from <a
+            href="https://spacy.io/models/en#en_core_web_lg">Spacy.io</a>,then follow with loading the Spacy model.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>python -m spacy download en_core_web_lg
+nlp = spacy.<span style="color:cyan;">load()</span>(&#34;en_core_web_lg&#34;)
+</code></pre>
+        <p>The Spacy pipeline includes a tagger, a lemmatizer, a parser and an entity recognizer.</p>
+        <p>We will add another component to this pipeline to highlight skills and keywords.
+          These are retrieved from a jsonl file containg skill patterns.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>ruler = nlp.<span style="color:cyan;">add_pipe</span>(&#34;entity_ruler&#34;)
+ruler.<span style="color:cyan;">from_disk</span>(&#34;../data/Skill_patterns.jsonl&#34;)
+</code></pre>
+        <p>Some examples of skill patterns in the jsonl file are:</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>{&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;python&#34;}]}
+{&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;machine&#34;}, {&#34;LOWER&#34;: &#34;learning&#34;}]}
+{&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;natural&#34;}, {&#34;LOWER&#34;: &#34;language&#34;}, {&#34;LOWER&#34;: &#34;processing&#34;}]}
+</code></pre>
+        <p>Each dictionary represents one token.</p>
+        <h2 id="skills">Skills</h2>
+        <p>We have added a new feature, <em>skills</em>, to the jobs dataframe allowing us to obtain valuable insights
+          into the job market and the top skills in-demand.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/854a6158b067f5a44719305f627bc6e3.js"></script>
+
+        <figure><img src="https://alagrine.github.io/images/P7/wordcloud.png" />
+        </figure>
+
+        <p>As we can see, business emerges among the most frequent keywords in job descriptions for data science
+          positions, alongside Python, analytics, and machine learning.</p>
+        <h2 id="entity-recognition">Entity Recognition</h2>
+        <p>Using Spacy&rsquo;s entity recognition capabilities and <strong>displacy.render</strong>, we can display
+          various entities, such as skills, ORGs and GEPs.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>displacy.<span style="color:cyan;">render</span>(nlp(job_txt_example), style=&#34;ent&#34;, jupyter=True)
+</code></pre>
+        <figure><img src="https://alagrine.github.io/images/P7/displacy.png" />
+        </figure>
+
+        <p>As we can see, some skills are mapped as ORG (such as Machine Learning and Computer Vision).</p>
+        <p>Since our goal is to match and highlight all skills, we can reload spacy model and <strong>disable the NER
+            entity.</strong></p>
+        <pre tabindex="0" style="overflow: hidden;"><code>nlp_without_NER = spacy.<span style="color:cyan;">load</span>(&#34;en_core_web_lg&#34;, disable = [&#39;ner&#39;])
+
+ruler_without_NER = nlp_without_NER.<span style="color:cyan;">add_pipe</span>(&#34;entity_ruler&#34;)
+ruler_without_NER.<span style="color:cyan;">from_disk</span>(skill_pattern_path)
+</code></pre>
+        <h2 id="the-best-matching-jobs">The best matching jobs</h2>
+        <p>In this section, we assess your skills against the required skills.</p>
+        <p>This can be calculated easily using this function.</p>
+        <pre tabindex="0" style="overflow: hidden;"><code>def <span style="color:cyan;">get_match_score</span>(job_skills, your_skills):
+    score = 0
+    for skill in job_skills:
+        if skill in your_skills:
+            score += 1
+    job_skills_len = len(job_skills)
+    try:
+        match_score = round(score / job_skills_len * 100, 1)
+    except:
+        match_score = None
+    return match_score
+</code></pre>
+        <p>The jobs dataframe is then ordered by match score, and the highest results are returned.</p>
+        <p>Another way to showcase skills is by utilising the <a
+            href="https://spacy.io/usage/rule-based-matching">Matcher</a> function.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/0b8c38509e07bbc773cbfaf148ca7868.js"></script>
+
+        <p>The matcher returns a list of (match_id, start, end) matching the span doc[start:end] of the selected job
+          document.</p>
+        <p>We can create two matchers: one for the skills required for the job that you have, and the other for the
+          skills you lack.</p>
+        <p>The results look like this:</p>
+        <figure><img src="https://alagrine.github.io/images/P7/matcher_flask.png" />
+        </figure>
+
+        <h1 id="flask-application">Flask application</h1>
+        <p>Building a Flask application that integrates all the features described in the previous sections is the final
+          part of the project.</p>
+        <p>The app is available on Github. You can find it <a
+            href="https://github.com/AlaGrine/LinkedIn_Job_Scraper_and_Matcher/tree/main/FLASK_app">here</a>.</p>
+        <p>In addition to the Linkedin Job Scarper and the Dashboard page, which displays a word cloud of in-demand
+          skills, the Resume_Analyzer page uploads your resume, displays your skills, and assesses them against the most
+          in-demand skills.
+        <figure><img src="https://alagrine.github.io/images/P7/skills.png" />
+        </figure>
+        </p>
+        <p>This will help you define what you should be looking for to further broaden your skills.</p>
+        <p>The best matching jobs are showcased within a Carousel that emphasises the matching scores.</p>
+        <figure><img src="https://alagrine.github.io/images/P7/best_matching_jobs.png" />
+        </figure>
+
+        <h1 id="conclusion">Conclusion</h1>
+        <p>In this project, we have scraped job postings from LinkedIn using Selenium, Requests, and BeautifulSoup.</p>
+        <p>We built a text analysis using Spacy. We added an entity ruler to the Sapcy pipeline to highlight the skills
+          and keywords associated with the job post.</p>
+        <p>We have also built a Flask app to help you find the most relevant jobs and top skills in demand.</p>
+        <p><a href="https://github.com/AlaGrine/LinkedIn_Job_Scraper_and_Matcher">Link to GitHub repository</a></p>
+
+        <span class="badge badge-pill badge-success">WEB Scraping</span>
+        <span class="badge badge-pill badge-success">Selenium</span>
+        <span class="badge badge-pill badge-success">BeautifulSoup</span>
+        <span class="badge badge-pill badge-success">NLP</span>
+        <span class="badge badge-pill badge-success">Spacy</span>
+        <span class="badge badge-pill badge-success">Flask</span>
+        <ul class="pa0">
+
+        </ul>
+        <div class="mt6 instapaper_ignoref">
+
+
+        </div>
+      </div>
+
+      <aside class="w-30-l mt6-l">
+
+
+
+
+      </aside>
+
+    </article>
+
+  </main>
+  <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+    <div class="flex justify-between">
+      <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/">
+        &copy; Ala Eddine GRINE 2023
+      </a>
+      <div>
+        <div class="ananke-socials">
+
+
+          <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+            class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+            class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+            class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Add ScrollToTop button; only visible when we scroll up -->
+  <div id="scrollToTopBtn" class="scrollToTopBtn"> <i class="fas fa-arrow-up"></i> Back to
+    top</div>
+
+  <script>
+
+    window.onscroll = function () {
+      if (pageYOffset >= 100) {
+        document.getElementById('scrollToTopBtn').style.visibility = "visible";
+      } else {
+        document.getElementById('scrollToTopBtn').style.visibility = "hidden";
+      }
+    };
+    var scrollToTopBtn = document.querySelector(".scrollToTopBtn");
+    var rootElement = document.documentElement;
+
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    function handleScroll() {
+      var scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTopPosition > lastScrollTop) {
+        // Hide button
+        scrollToTopBtn.classList.remove("showBtn");
+      } else if (scrollTopPosition < lastScrollTop) {
+        // Show button
+        scrollToTopBtn.classList.add("showBtn");
+      }
+      lastScrollTop = scrollTopPosition <= 0 ? 0 : scrollTopPosition;
+    }
+
+    function scrollToTop() {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      handleScroll();
+    }
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    document.addEventListener("scroll", handleScroll);
+  </script>
+
+
+</body>
+
+</html>
