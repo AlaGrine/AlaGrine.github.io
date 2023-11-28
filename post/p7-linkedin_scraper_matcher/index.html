@@ -312,32 +312,44 @@ Text analysis with Spacy" />
         <p>Finally, We will create a Flask application to display data visualisations, such as word cloud of in-demand
           skills. The app identifies job-specific skills and keywords, compares them to your skills and provides a list
           of the most relevant job matches.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="linkedin-job-scraping">LinkedIn Job Scraping</h1>
         <p>In this section, we’ll cover the process of web scraping, from accessing web pages to extracting data and
           storing it in a json file.</p>
         <p>we will use three python libraries:</p>
         <ul>
-          <li><strong>Selenium</strong>: We will harness the power of Selenium to automate web browsing. First we need
-            to download a webDriver. <em>Chrome</em>, <em>Edge</em>, <em>Firefox</em>, <em>IE</em> and <em>Safari</em>
+          <li><strong><a href="https://www.selenium.dev">Selenium</a></strong>: We will harness the power of Selenium
+            to automate web browsing. First we need
+            to download a webDriver.
+            <br>
+            <em>Chrome</em>, <em>Edge</em>, <em>Firefox</em>, <em>IE</em> and <em>Safari</em>
             are supported. I&rsquo;ve selected the Chrome driver executable, which can be downloaded from <a
-              href="(https://chromedriver.chromium.org/downloads)">here</a> and should be saved in the project
-            directory.</li>
-          <li><strong>Requests:</strong> Make GET requests easily with this package.</li>
-          <li><strong>BeautifulSoup:</strong> to parse HTML content and get relevant data (Job title, Seniority Level,
+              href="https://chromedriver.chromium.org/downloads">here</a> and should be saved in the project
+            directory.
+          </li>
+          <li><strong><a href="https://requests.readthedocs.io/en/latest">Requests</a>:</strong> Make GET requests
+            easily with this
+            package.</li>
+          <li><strong><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc">BeautifulSoup</a>:</strong> to
+            parse HTML content and get
+            relevant data (Job title, Seniority Level,
             Job description&hellip;).</li>
         </ul>
         <h2 id="scraping-job-ids">Scraping Job IDs</h2>
-        <p>Selenium and BeautifulSoup will come in handy here.</p>
+        <p>Here we use Selenium and BeautifulSoup.</p>
         <ol>
           <li>The first step is login to the Linkedin page.</li>
         </ol>
         <p>The following snippet shows the code used to initialize a new instance of the Chrome driver, open the
-          LinkedIn login page, enter your login credentials (email address and password) and click the Login button.</p>
+          LinkedIn login page, enter credentials (email address and password) and click the Login button.</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/bf538f5a9a8ee1281d74c426f377cd6e.js"></script>
 
         <ol start="2">
-          <li>The next step is to search for jobs.</li>
+          <li>The next step is to search for jobs (e.g. data science positions in Montreal).</li>
         </ol>
         <figure><img src="https://alagrine.github.io/images/P7/linkedin_jobs.png" />
         </figure>
@@ -346,25 +358,25 @@ Text analysis with Spacy" />
           Search results are displayed over several pages with 25 jobs per page.</p>
         <p>Every selected job will display its details (description, number of candiadates&hellip;) in the box on the
           right-hand side of the page.</p>
-        <p>We could use Selenium to click on each job to show its details in the right box. However, this method is too
-          time-consuming. In the following section, we will obtain these details through a simple GET request. Now, we
-          will get the number of jobs and their corresponding IDs.</p>
+        <p>We could use Selenium to click on each job to show its details in the right-hand box.
+          In the following section, we will obtain these details using a simple GET request. Now, we
+          will retrieve the number of jobs and their corresponding IDs.</p>
         <p>The URL for the job search page is:</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>url = f&#39;https://www.linkedin.com/jobs/search/?keywords={<span style="color:cyan;">keywords</span>}&amp;location={<span style="color:cyan;">location</span>}&amp;start={<span style="color:cyan;">start</span>}&#39;
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>url = f&#39;https://www.linkedin.com/jobs/search/?keywords={<span style="color:cyan;">keywords</span>}&amp;location={<span style="color:cyan;">location</span>}&amp;start={<span style="color:cyan;">start</span>}&#39;
 </code></pre>
         <p>There are three query parameters: <em>keywords</em>, <em>location</em> and <em>strat</em>.</p>
         <ul>
           <li>
-            <p><em>Keywords</em> and <em>location</em>: relate to the job title and location respectively, say a data
-              science job in Montreal, Canada.</p>
+            <p><em>Keywords</em> and <em>location</em>: relate to the job title and location respectively.</p>
           </li>
           <li>
             <p><em>strat</em>: refers to the page number. As there are 25 jobs per page, the values of
-              &lsquo;<em>start</em>&rsquo; are 25, 50, 75, and so on.</p>
+              <em>start</em> are 25, 50, 75, and so on.
+            </p>
           </li>
         </ul>
         <p>To view all job postings, it&rsquo;s necessary to scroll down to the bottom of the page.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>def <span style="color:cyan;">scroll_to_bottom</span>(driver,sleep_time=120):
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>def <span style="color:cyan;">scroll_to_bottom</span>(driver,sleep_time=120):
     last_height = driver.<span style="color:cyan;">execute_script</span></span>(&#39;return document.body.scrollHeight&#39;)
     while True:
     driver.<span style="color:cyan;">execute_script</span>(&#39;window.scrollTo(0, document.body.scrollHeight);&#39;)
@@ -381,13 +393,13 @@ Text analysis with Spacy" />
           <li>Parse the HTML content of the webpage using <a href="BeautifulSoup">BeautifulSoup</a> is the third step of
             the scraping process.</li>
         </ol>
-        <pre tabindex="0" style="overflow: hidden;"><code>soup = <span style="color:cyan;">BeautifulSoup</span>(driver.page_source, &#39;html.parser&#39;)
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>soup = <span style="color:cyan;">BeautifulSoup</span>(driver.page_source, &#39;html.parser&#39;)
 </code></pre>
         <p>Let&rsquo;s first scrape the number of jobs and the job IDs from the first page.</p>
         <p>These can be obtained by utilizing BeautifulSoup&rsquo;s <code>find()</code> and <code>find_all()</code>
           methods, along with the appropriate CSS tags and classes. For instance, the number of results can be parsed as
           follows:</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>div = soup.<span style="color:cyan;">find</span>(&#34;div&#34;,{&#34;class&#34;:&#34;jobs-search-results-list__subtitle&#34;})
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>div = soup.<span style="color:cyan;">find</span>(&#34;div&#34;,{&#34;class&#34;:&#34;jobs-search-results-list__subtitle&#34;})
 number_of_jobs = int(div.<span style="color:cyan;">find</span>(&#39;span&#39;).get_text().strip().split()[0])
 number_of_pages=math.<span style="color:cyan;">ceil</span>(number_of_jobs/25)
 </code></pre>
@@ -397,22 +409,23 @@ number_of_pages=math.<span style="color:cyan;">ceil</span>(number_of_jobs/25)
           src="https://gist.github.com/AlaGrine/3f59487d635e382576b8aac8457c5dd8.js"></script>
 
         <p>Now that we have extracted all of the Job IDs, we can save them to a CSV file.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>pd.DataFrame({&#34;Job_Id&#34;:List_Job_IDs}).<span style="color:cyan;">to_csv()</span>(&#39;../data/Job_Ids.csv&#39;,index=False)
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>pd.DataFrame({&#34;Job_Id&#34;:List_Job_IDs}).<span style="color:cyan;">to_csv()</span>(&#39;../data/Job_Ids.csv&#39;,index=False)
 </code></pre>
         <p>Finally, let&rsquo;s close the browser and shut down the ChromiumDriver executable.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>driver.<span style="color:cyan;">quit()</span>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>driver.<span style="color:cyan;">quit()</span>
 </code></pre>
         <h2 id="scraping-job-details">Scraping Job details</h2>
         <p>As explained <a href="https://www.scrapingdog.com/blog/scrape-linkedin-jobs/">here</a>, we will retrieve job
           details such as seniority level and job descriptions by sending a simple GET request from the
           <em>Requests</em> library to this URL:
         </p>
-        <pre tabindex="0" style="overflow: hidden;"><code>job_url=&#39;https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_Id}&#39;
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>job_url=&#39;https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_Id}&#39;
 </code></pre>
         <p>This is easier than using clicks from <em>Selenium</em>.</p>
-        <p>Note that I attempted to extract Job IDs using the guest URL
+        <p>Note that I attempted to extract job IDs using the guest URL
           <code>https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?</code> but achieved imprecise
-          results. Hence, in the previous section, I retrieved Job IDs utilizing Selenium.
+          results (some jobs are not related to data science). Hence, in the previous section, I leveraged Selenium to
+          retrieve job IDs.
         </p>
         <p>This is the code I used to obtain job specifications:
           <script type="application/javascript"
@@ -420,24 +433,34 @@ number_of_pages=math.<span style="color:cyan;">ceil</span>(number_of_jobs/25)
         </p>
         <p>Now that we&rsquo;ve gathered all the job listings, we can save the results to a JSON file and proceed to the
           second part of the project: text analysis with Spacy.</p>
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="text-analysis-with-spacy">Text analysis with Spacy</h1>
         <p>We need to install the trained English pipeline from <a
             href="https://spacy.io/models/en#en_core_web_lg">Spacy.io</a>,then follow with loading the Spacy model.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>python -m spacy download en_core_web_lg
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>python -m spacy download en_core_web_lg
 nlp = spacy.<span style="color:cyan;">load()</span>(&#34;en_core_web_lg&#34;)
 </code></pre>
         <p>The Spacy pipeline includes a tagger, a lemmatizer, a parser and an entity recognizer.</p>
         <p>We will add another component to this pipeline to highlight skills and keywords.
           These are retrieved from a jsonl file containg skill patterns.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>ruler = nlp.<span style="color:cyan;">add_pipe</span>(&#34;entity_ruler&#34;)
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>ruler = nlp.<span style="color:cyan;">add_pipe</span>(&#34;entity_ruler&#34;)
 ruler.<span style="color:cyan;">from_disk</span>(&#34;../data/Skill_patterns.jsonl&#34;)
 </code></pre>
+        <p>Must give credit to <a
+            href="https://github.com/kingabzpro/jobzilla_ai/blob/main/jz_skill_patterns.jsonl">kingabzpro</a> for the
+          Skill patterns json file, to which I have added a few other skills, such as Power BI and Streamlit.</p>
         <p>Some examples of skill patterns in the jsonl file are:</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>{&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;python&#34;}]}
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>{&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;python&#34;}]}
 {&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;machine&#34;}, {&#34;LOWER&#34;: &#34;learning&#34;}]}
 {&#34;label&#34;: &#34;SKILL&#34;, &#34;pattern&#34;: [{&#34;LOWER&#34;: &#34;natural&#34;}, {&#34;LOWER&#34;: &#34;language&#34;}, {&#34;LOWER&#34;: &#34;processing&#34;}]}
 </code></pre>
-        <p>Each dictionary represents one token.</p>
+        <p>As you can see, each dictionary represents a token. It is easier to update the skills in a txt file before
+          converting to to jsonl as follows:
+          <script type="application/javascript"
+            src="https://gist.github.com/AlaGrine/147c9c69e08ef283d59f51ae7ad87ec8.js"></script>
+        </p>
         <h2 id="skills">Skills</h2>
         <p>We have added a new feature, <em>skills</em>, to the jobs dataframe allowing us to obtain valuable insights
           into the job market and the top skills in-demand.</p>
@@ -447,20 +470,20 @@ ruler.<span style="color:cyan;">from_disk</span>(&#34;../data/Skill_patterns.jso
         <figure><img src="https://alagrine.github.io/images/P7/wordcloud.png" />
         </figure>
 
-        <p>As we can see, business emerges among the most frequent keywords in job descriptions for data science
+        <p>Clearly, business emerges among the most frequent keywords in job descriptions for data science
           positions, alongside Python, analytics, and machine learning.</p>
         <h2 id="entity-recognition">Entity Recognition</h2>
         <p>Using Spacy&rsquo;s entity recognition capabilities and <strong>displacy.render</strong>, we can display
           various entities, such as skills, ORGs and GEPs.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>displacy.<span style="color:cyan;">render</span>(nlp(job_txt_example), style=&#34;ent&#34;, jupyter=True)
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>displacy.<span style="color:cyan;">render</span>(nlp(job_txt_example), style=&#34;ent&#34;, jupyter=True)
 </code></pre>
         <figure><img src="https://alagrine.github.io/images/P7/displacy.png" />
         </figure>
 
-        <p>As we can see, some skills are mapped as ORG (such as Machine Learning and Computer Vision).</p>
-        <p>Since our goal is to match and highlight all skills, we can reload spacy model and <strong>disable the NER
-            entity.</strong></p>
-        <pre tabindex="0" style="overflow: hidden;"><code>nlp_without_NER = spacy.<span style="color:cyan;">load</span>(&#34;en_core_web_lg&#34;, disable = [&#39;ner&#39;])
+        <p>Some skills, such as machine learning and computer vision, are shown as ORG. Since our goal is to match and
+          highlight all skills, we can reload the Spacy model, <strong>disable the NER
+            entity</strong> and add the entity ruler.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>nlp_without_NER = spacy.<span style="color:cyan;">load</span>(&#34;en_core_web_lg&#34;, disable = [&#39;ner&#39;])
 
 ruler_without_NER = nlp_without_NER.<span style="color:cyan;">add_pipe</span>(&#34;entity_ruler&#34;)
 ruler_without_NER.<span style="color:cyan;">from_disk</span>(skill_pattern_path)
@@ -468,7 +491,7 @@ ruler_without_NER.<span style="color:cyan;">from_disk</span>(skill_pattern_path)
         <h2 id="the-best-matching-jobs">The best matching jobs</h2>
         <p>In this section, we assess your skills against the required skills.</p>
         <p>This can be calculated easily using this function.</p>
-        <pre tabindex="0" style="overflow: hidden;"><code>def <span style="color:cyan;">get_match_score</span>(job_skills, your_skills):
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>def <span style="color:cyan;">get_match_score</span>(job_skills, your_skills):
     score = 0
     for skill in job_skills:
         if skill in your_skills:
@@ -486,14 +509,16 @@ ruler_without_NER.<span style="color:cyan;">from_disk</span>(skill_pattern_path)
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/0b8c38509e07bbc773cbfaf148ca7868.js"></script>
 
-        <p>The matcher returns a list of (match_id, start, end) matching the span doc[start:end] of the selected job
+        <p>The matcher returns a list of (match_id, start, end) mapping the spans doc[start:end] of the selected job
           document.</p>
         <p>We can create two matchers: one for the skills required for the job that you have, and the other for the
           skills you lack.</p>
         <p>The results look like this:</p>
         <figure><img src="https://alagrine.github.io/images/P7/matcher_flask.png" />
         </figure>
-
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="flask-application">Flask application</h1>
         <p>Building a Flask application that integrates all the features described in the previous sections is the final
           part of the project.</p>
@@ -509,7 +534,9 @@ ruler_without_NER.<span style="color:cyan;">from_disk</span>(skill_pattern_path)
         <p>The best matching jobs are showcased within a Carousel that emphasises the matching scores.</p>
         <figure><img src="https://alagrine.github.io/images/P7/best_matching_jobs.png" />
         </figure>
-
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="conclusion">Conclusion</h1>
         <p>In this project, we have scraped job postings from LinkedIn using Selenium, Requests, and BeautifulSoup.</p>
         <p>We built a text analysis using Spacy. We added an entity ruler to the Sapcy pipeline to highlight the skills
