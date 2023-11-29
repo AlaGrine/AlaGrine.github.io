@@ -1,279 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>Recommendations with IBM | Ala Eddine GRINE</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="Build a recommendation system and a Flask application for users of the IBM Watson community.">
-    <meta name="generator" content="Hugo 0.118.2">
-    
-    
-    
-    
-      <meta name="robots" content="noindex, nofollow">
-    
 
-    
-<link rel="stylesheet" href="https://alagrine.github.io/ananke/css/main.min.css" >
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+  <!-- Math formulas -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 
 
+  <style type="text/css">
+    * {
+      scroll-behavior: smooth;
+    }
 
-    
-    
-    
-      
-<link rel="shortcut icon" href="https://alagrine.github.io/images/portfolio.png" type="image/x-icon" />
+    .scrollToTopBtn {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 10px;
+      background-color: #27ae60;
+      color: #fff;
+      border-radius: 25px;
+      border-radius: 30px solid #fff;
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+      /* keep it at the top of everything else */
+      z-index: 100;
+      /* hide with opacity */
+      opacity: 0;
+
+    }
+
+    .showBtn {
+      opacity: 1;
+    }
+
+    /* Rounded border */
+    hr.rounded {
+      margin-top: 4%;
+      margin-bottom: 3%;
+      border-top: 5px solid #bbb;
+      border-radius: 3px;
+    }
+
+    figure {
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    figcaption {
+      background-color: black;
+      color: white;
+      font-style: italic;
+      padding: 2px;
+      text-align: center;
+    }
+
+    .th1,
+    .td1 {
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: 5px 25px;
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Recommendations with IBM | Ala Eddine GRINE</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <meta name="description" content="Recommendation system for users of the IBM Watson community.">
+  <meta name="generator" content="Hugo 0.118.2">
 
 
-    
 
-    
-    
-    <meta property="og:title" content="Recommendations with IBM" />
-<meta property="og:description" content="Build a recommendation system and a Flask application for users of the IBM Watson community." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://alagrine.github.io/post/p3-recommendations-with-ibm/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2023-07-05T11:13:32-04:00" />
-<meta property="article:modified_time" content="2023-07-05T11:13:32-04:00" />
-<meta itemprop="name" content="Recommendations with IBM">
-<meta itemprop="description" content="Build a recommendation system and a Flask application for users of the IBM Watson community."><meta itemprop="datePublished" content="2023-07-05T11:13:32-04:00" />
-<meta itemprop="dateModified" content="2023-07-05T11:13:32-04:00" />
-<meta itemprop="wordCount" content="98">
-<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Recommendations with IBM"/>
-<meta name="twitter:description" content="Build a recommendation system and a Flask application for users of the IBM Watson community."/>
 
-	
-  </head>
+  <meta name="robots" content="noindex, nofollow">
 
-  <body class="ma0 avenir bg-near-white">
 
-    
-   
-  
 
-  
-  <header class="cover bg-top" style="background-image: url('https://alagrine.github.io/images/icons8-ibm-watson-240.svg');">
+  <link rel="stylesheet" href="https://alagrine.github.io/ananke/css/main.min.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://alagrine.github.io/images/portfolio.png" type="image/x-icon" />
+
+
+
+
+
+
+  <meta property="og:title" content="Recommendations with IBM" />
+  <meta property="og:description" content="Recommendation system for users of the IBM Watson community." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alagrine.github.io/post/p3-recommendations-with-ibm/" />
+  <meta property="article:section" content="post" />
+  <meta property="article:published_time" content="2023-07-05T11:13:32-04:00" />
+  <meta property="article:modified_time" content="2023-07-05T11:13:32-04:00" />
+  <meta itemprop="name" content="Recommendations with IBM">
+  <meta itemprop="description" content="Recommendation system for users of the IBM Watson community.">
+  <meta itemprop="datePublished" content="2023-07-05T11:13:32-04:00" />
+  <meta itemprop="dateModified" content="2023-07-05T11:13:32-04:00" />
+  <meta itemprop="wordCount" content="926">
+  <meta itemprop="keywords" content="" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Recommendations with IBM" />
+  <meta name="twitter:description" content="Recommendation system for users of the IBM Watson community." />
+
+
+</head>
+
+<body class="ma0 avenir bg-near-white">
+
+
+
+
+
+
+  <header class="cover bg-top"
+    style="background-image: url('https://alagrine.github.io/images/P3/Leonardo_RecSys.jpg');">
     <div class="bg-black-60">
       <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="https://alagrine.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
-      
-        Ala Eddine GRINE
-      
-    </a>
-    <div class="flex-l items-center">
-      
+        <div class="flex-l justify-between items-center center">
+          <a href="https://alagrine.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
 
-      
-        <ul class="pl0 mr3">
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="https://alagrine.github.io/about/" title="About page">
-              About
-            </a>
-          </li>
-          
-          <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white no-underline white-90" href="https://alagrine.github.io/post/" title="Projects page">
-              Projects
-            </a>
-          </li>
-          
-        </ul>
-      
-      
-<div class="ananke-socials">
-  
-    
-    <a href="https://github.com/AlaGrine" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener" class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener" class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="Medium link" aria-label="follow on Medium——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-</div>
+            Ala Eddine GRINE
 
-    </div>
-  </div>
-</nav>
+          </a>
+          <div class="flex-l items-center">
+
+
+
+            <ul class="pl0 mr3">
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/about/"
+                  title="About page">
+                  About
+                </a>
+              </li>
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/post/"
+                  title="Projects page">
+                  Projects
+                </a>
+              </li>
+
+            </ul>
+
+
+            <div class="ananke-socials">
+
+
+              <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+                class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+                class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+                class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+            </div>
+
+          </div>
+        </div>
+      </nav>
 
       <div class="tc-l pv6 ph3 ph4-ns">
-        
-          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Recommendations with IBM</div>
-          
-            <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
-              Build a recommendation system and a Flask application for users of the IBM Watson community.
-            </div>
-          
-        
+
+        <div class="f2 f1-l fw2 white-90 mb0 lh-title">Recommendations with IBM</div>
+
+        <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
+          Recommendation system for users of the IBM Watson community.
+        </div>
+
+
       </div>
     </div>
   </header>
 
 
 
-    <main class="pb7" role="main">
-      
-  
-  <article class="flex-l flex-wrap justify-between mw8 center ph3">
-    <header class="mt4 w-100">
-      <aside class="instapaper_ignoref b helvetica tracked">
-          
-        PROJECTS
+  <main class="pb7" role="main">
+
+
+    <article class="flex-l flex-wrap justify-between mw8 center ph3">
+      <header class="mt4 w-100">
+        <aside class="instapaper_ignoref b helvetica tracked">
+
+          PROJECTS
+        </aside>
+
+
+
+
+
+
+
+
+
+
+
+        <div id="sharing" class="mt3 ananke-socials">
+
+
+          <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p3-recommendations-with-ibm/&amp;title=Recommendations%20with%20IBM"
+            class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
+
+            <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+          </a>
+
+        </div>
+
+
+        <h1 class="f1 athelas mt3 mb1">Recommendations with IBM</h1>
+
+
+
+        <time class="f6 mv4 dib tracked" datetime="2023-07-05T11:13:32-04:00">July 5, 2023</time>
+
+
+
+
+      </header>
+      <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
+        <h1 id="project-overview">Project Overview:</h1>
+        <p>Recommendations are critical to driving revenue for business. They are being used to recommend everything
+          from movies to music to new destinations.</p>
+        <p>The aim of this project is to build a recommendation system for users of the <a
+            href="https://www.ibm.com/watson">IBM Watson community</a>.</p>
+        <p>A dataset of 5149 users, 714 articles and about 46K interactions is provided by <a
+            href="https://www.udacity.com/">Udacity</a>.</p>
+        <p>We will build an ensemble of recommendation algorithms, including rank-based, user-user based collaborative
+          filtering, content-based and SVD-based recs. We will then deploy the recSys in a Flask application.</p>
+        <h1 id="exploratory-data-analysis">Exploratory Data Analysis</h1>
+        <p>The dataset comes in the form of two csv files: the first for the user-article interaction, the second for
+          the article description.</p>
+        <figure><img src="https://alagrine.github.io/images/P3/df.png" />
+        </figure>
+
+        <p>I first replaced the email address with a user ID.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>def email_mapper():
+    coded_dict = dict()
+    cter = 1
+    email_encoded = []
+
+    for val in df[&#39;email&#39;]:
+        if val not in coded_dict:
+            coded_dict[val] = cter
+            cter+=1
+
+        email_encoded.<span style="color:cyan;">append</span>(coded_dict[val])
+    return email_encoded
+
+email_encoded = email_mapper()
+del df[&#39;email&#39;]
+df[&#39;user_id&#39;] = email_encoded
+</code></pre>
+        <p>I then removed all duplicate articles from the dataframe.</p>
+        <p>Finally, to understand the data, I look at the distribution of user-article interactions.</p>
+        <figure><img src="https://alagrine.github.io/images/P3/user_article_interactions.png" />
+        </figure>
+
+        <p>As you can see, 50% of individuals interact with 3 number of articles or fewer.</p>
+        <p>The maximum number of user-article interactions per user is 364.</p>
+        <h1 id="recommendation-system">Recommendation System:</h1>
+        <p>Now that the EDA has been performed and the data cleaned, we can build our recSys. This is an ensemble of
+          algorithms described below.</p>
+        <h2 id="rank-based-recommendations">Rank-Based Recommendations:</h2>
+        <p>To find the most popular articles, our RecSys simply uses the number of interactions. Since there are no
+          ratings for any of the articles, we can assume that the articles with the most interactions are the most
+          popular. These top ranked articles are then recommended to <strong>new</strong> users.</p>
+        <blockquote>
+          <p>The rank based recs is the simplest way to solve the <strong>cold start problem</strong>, i.e. no
+            information about the user&rsquo;s preferences.</p>
+        </blockquote>
+        <p>When you sign up to the app, you will see this list.</p>
+        <figure><img src="https://alagrine.github.io/images/P3/top_ranked.png" />
+        </figure>
+
+        <h2 id="knowloedge-based-recommendations">Knowloedge-Based Recommendations:</h2>
+        <p>Another way to deal with the <strong>cold start problem</strong> is to add filters to the web app so that
+          users can add their own preferences.</p>
+        <p>To build knowledge-based recommendations, the rank-based algorithm is simply applied to the filtered
+          articles.</p>
+        <figure><img src="https://alagrine.github.io/images/P3/Knowledge_recs.png" />
+        </figure>
+
+        <h2 id="user-user-based-collaborative-filtering">User-User Based Collaborative Filtering:</h2>
+        <p>Here we look at users who are similar to User <code>X</code> in terms of the articles they have read. The
+          top-ranked articles read by these similar users (and not read by User <code>X</code>) are then recommended to
+          User <code>X</code>.</p>
+        <blockquote>
+          <p>Building the user-user based collaborative filtering algorithm is a step forward in providing more
+            personalised recommendations for users.</p>
+        </blockquote>
+        <p>In our Flask application, this list of recs is called: <em>Users are viewing</em>.
+        <figure><img src="https://alagrine.github.io/images/P3/User_are_viewing.png" />
+        </figure>
+        </p>
+        <h2 id="content-based-recommendations">Content Based Recommendations:</h2>
+        <p>Another method we can use to make recommendations is to perform a ranking of the highest ranked articles
+          associated with some term. We might consider the content to be the doc_body, doc_description, or
+          doc_full_name.</p>
+        <p>For the sake of simplicity, I considered content to be the doc descriptions.</p>
+        <p>We start by tokenizing the article descriptions using <a
+            href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a>
+          from <em>Scikit-learn</em>.</p>
+        <p>We then compute the <strong>dot product</strong> to get an article-article <strong>matrix of
+            similarities</strong>.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code># 1. Convert doc_description to a matrix of TF-IDF features using `TfidfVectorizer`
+
+articles_description = df_article_recap[&#39;doc_description&#39;]
+tfidf = <span style="color:cyan;">TfidfVectorizer</span>(tokenizer=tokenize)
+articles_vect = tfidf.fit_transform(articles_description)
+
+# 2. Convert the sparse matrix to a DataFrame
+articles_vect_df = pd.DataFrame.sparse.<span style="color:cyan;">from_spmatrix</span>(articles_vect)
+
+# 3. Take the dot product to obtain an article article matrix of similarities
+dot_prod_articles = articles_vect_df.<span style="color:cyan;">dot</span>(np.transpose(articles_vect_df))
+</code></pre>
+        <p>Finally, we sort by similarity and number of interactions to get the most similar articles.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>def get_similar_articles_df(article_ids,df_article_recap=df_article_recap,dot_prod_articles=dot_prod_articles):
+    df_similar_articles = pd.<span style="color:cyan;">DataFrame</span>(data={&#39;article_id&#39;: [0],
+                                            &#39;similarity&#39;: [0],
+                                            &#39;num_interactions&#39;: [0],
+                                            })
+    for article_id in article_ids:
+        try :
+            # 1. Find the row of each article
+            article_idx = np.<span style="color:cyan;">where</span>(df_article_recap[&#39;article_id&#39;]== article_id)[0][0]
+
+            # 2. Search article_idx in dot_prod_articles matrix
+            dot_idx = dot_prod_articles[article_idx]    
+
+            # 3. convert dot_idx to dataframe
+            dot_idx_df = pd.<span style="color:cyan;">DataFrame</span>(dot_idx.reset_index(name=&#39;similarity&#39;))
+
+            # 4. Merge dot_idx_df with article_interactions:
+            dot_idx_df = dot_idx_df.<span style="color:cyan;">merge</span>(df_article_recap,right_index=True,left_index=True)
+
+            # 5. Round similarity to 2 decimal places.
+            # Note: with more than 2 decimal places, num_intercations have no chance of being used.  
+            dot_idx_df[&#39;similarity&#39;] = dot_idx_df[&#39;similarity&#39;].round(2)
+
+            # 6. Order by similarty then occurences
+            similar_articles = dot_idx_df.<span style="color:cyan;">sort_values</span>(by=[&#39;similarity&#39;, &#39;num_interactions&#39;], ascending=False)
+            similar_articles = similar_articles[[&#39;article_id&#39;,&#39;similarity&#39;, &#39;num_interactions&#39;]]
+
+            # 7. concat similar_articles with df_similar_articles
+            df_similar_articles = pd.<span style="color:cyan;">concat</span>([df_similar_articles,similar_articles])
+
+        except:
+            pass
+
+    # 8. Sort by similarity and occurences
+    df_similar_articles = df_similar_articles.<span style="color:cyan;">sort_values</span>(by=[&#39;similarity&#39;, &#39;num_interactions&#39;], ascending=False)  
+
+    # 9. Drop duplicates (keep the highest similarity)
+    df_similar_articles = df_similar_articles.<span style="color:cyan;">drop_duplicates</span>(subset=&#39;article_id&#39;, keep=&#39;first&#39;)
+
+    # 10. Drop article_ids (Articles already read)
+    df_similar_articles = df_similar_articles[~(df_similar_articles.article_id.isin(article_ids))]
+
+    return df_similar_articles  
+</code></pre>
+        <p>In our Flask application, the output of the content-based algorithm is called: <em>Because you have
+            read</em>.</p>
+        <figure><img src="https://alagrine.github.io/images/P3/Content_recs.png" />
+        </figure>
+
+        <h2 id="svd-based-recommendations">SVD Based Recommendations:</h2>
+        <p>Here we build a <strong>factorization</strong> of the user-item matrix.</p>
+        <p>let A be our user-item matrix, we can write the decomposition of this matrix as follows.</p>
+        <p>$$ A = U S V^{T} $$</p>
+        <p>where:</p>
+        <ul>
+          <li>U: is a matrix indicating how users feel about the latent features.</li>
+          <li>S : is a matrix that provides weights in descending order of how important each latent feature is for
+            reconstructing the original user-item matrix.</li>
+          <li>\(V^{T}\): is a matrix indicating how items (in this case articles) relate to each latent feature.</li>
+        </ul>
+        <p><strong>SVD</strong> (<em><strong>S</strong>ingular <strong>V</strong>alue
+            <strong>D</strong>ecomposition</em>) from <a
+            href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html">numpy</a> can be used here
+          because there are no null values in our user-item matrix.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>U, S, V = np.<span style="color:cyan;">linalg.svd</span>(user_item_matrix)
+</code></pre>
+        <blockquote>
+          <p>We can use the V-matrix to calculate the cosine similarity of articles.</p>
+          <p>The articles that are most similar to the ones the user has read are returned as recommendations.</p>
+        </blockquote>
+        <p>The code for making a recommendation using SVD is shown in the snippet below.
+          <script type="application/javascript"
+            src="https://gist.github.com/AlaGrine/2c3cb3365d78ac7250bb95a0c37fee11.js"></script>
+        </p>
+        <h1 id="conclusion">Conclusion</h1>
+        <p>In this project, we have followed different approaches to recommendation, from rank-based to user-based
+          collaborative filtering to content-based and SVD-based recommendations. There are even more advanced
+          techniques. We could use embeddings like <a
+            href="https://medium.com/airbnb-engineering/listing-embeddings-for-similar-listing-recommendations-and-real-time-personalization-in-search-601172f7603e">AirBnb</a>
+          does and use deep learning.</p>
+        <br>
+        <p><a href="https://github.com/AlaGrine/udacity-recommendations-with-IBM">Link to GitHub repository</a></p>
+
+        <span class="badge badge-pill badge-success">Recommendation System</span>
+        <span class="badge badge-pill badge-success">SVD</span>
+        <span class="badge badge-pill badge-success">Flask</span>
+
+        <ul class="pa0">
+
+        </ul>
+        <div class="mt6 instapaper_ignoref">
+
+
+        </div>
+      </div>
+
+      <aside class="w-30-l mt6-l">
+
+
+
+
       </aside>
-      
 
+    </article>
 
-
-
-
-
-
-
-
-
-  <div id="sharing" class="mt3 ananke-socials">
-    
-      
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p3-recommendations-with-ibm/&amp;title=Recommendations%20with%20IBM" class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
-        
-        <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-        
+  </main>
+  <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+    <div class="flex justify-between">
+      <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/">
+        &copy; Ala Eddine GRINE 2023
       </a>
-    
-  </div>
+      <div>
+        <div class="ananke-socials">
 
 
-      <h1 class="f1 athelas mt3 mb1">Recommendations with IBM</h1>
-      
-      
-      
-      <time class="f6 mv4 dib tracked" datetime="2023-07-05T11:13:32-04:00">July 5, 2023</time>
-      
+          <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+            class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
 
-      
-      
-    </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>This project is part of <a href="https://www.udacity.com/">Udacity</a>&rsquo;s Data Science Nanodegree Program in collaboration with <a href="https://eu-de.dataplatform.cloud.ibm.com/">IBM</a>. The aim of this project is to build a recommendation system for users of the IBM Watson community.</p>
-<p>A dataset of 5149 users, 714 articles and about 46K interactions is used to develop this RecSys.</p>
-<p>The project is divided into the following sections:</p>
-<ul>
-<li>Build an ETL pipeline to extract, clean and load the data to a SQLite database.</li>
-<li>Build an ensemble of recommendation algorithms (including rank-based, user-user based collaborative filtering, content-based and SVD-based recs).</li>
-<li>Run a WEB application to display these recommendations.</li>
-</ul>
-<figure><img src="https://alagrine.github.io/images/P3-IBM_recSys.png"/>
-</figure>
+            <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+              </svg>
+            </span>
 
-<p><a href="https://github.com/AlaGrine/udacity-recommendations-with-IBM">GitHub Repository</a></p>
-<ul class="pa0">
-  
-</ul>
-<div class="mt6 instapaper_ignoref">
-      
-      
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+            class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+            class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+        </div>
       </div>
     </div>
+  </footer>
 
-    <aside class="w-30-l mt6-l">
+  <!-- Add ScrollToTop button; only visible when we scroll up -->
+  <div id="scrollToTopBtn" class="scrollToTopBtn"> <i class="fas fa-arrow-up"></i> Back to
+    top</div>
+
+  <script>
+
+    window.onscroll = function () {
+      if (pageYOffset >= 100) {
+        document.getElementById('scrollToTopBtn').style.visibility = "visible";
+      } else {
+        document.getElementById('scrollToTopBtn').style.visibility = "hidden";
+      }
+    };
+    var scrollToTopBtn = document.querySelector(".scrollToTopBtn");
+    var rootElement = document.documentElement;
+
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    function handleScroll() {
+      var scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTopPosition > lastScrollTop) {
+        // Hide button
+        scrollToTopBtn.classList.remove("showBtn");
+      } else if (scrollTopPosition < lastScrollTop) {
+        // Show button
+        scrollToTopBtn.classList.add("showBtn");
+      }
+      lastScrollTop = scrollTopPosition <= 0 ? 0 : scrollTopPosition;
+    }
+
+    function scrollToTop() {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      handleScroll();
+    }
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    document.addEventListener("scroll", handleScroll);
+  </script>
 
 
+</body>
 
-
-</aside>
-
-  </article>
-
-    </main>
-    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/" >
-    &copy;  Ala Eddine GRINE 2023 
-  </a>
-    <div>
-<div class="ananke-socials">
-  
-    
-    <a href="https://github.com/AlaGrine" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener" class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <path d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-    
-    <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener" class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="Medium link" aria-label="follow on Medium——Opens in a new window">
-      
-        <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span>
-      
-<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
-<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
-</svg>
-</span></a>
-  
-</div>
-</div>
-  </div>
-</footer>
-
-  </body>
 </html>
