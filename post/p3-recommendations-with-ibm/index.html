@@ -237,7 +237,7 @@
         <div class="f2 f1-l fw2 white-90 mb0 lh-title">Recommendations with IBM</div>
 
         <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
-          Recommendation system for users of the IBM Watson community.
+          RecSys deployed in a Flask application.
         </div>
 
 
@@ -306,6 +306,10 @@
             href="https://www.udacity.com/">Udacity</a>.</p>
         <p>We will build an ensemble of recommendation algorithms, including rank-based, user-user based collaborative
           filtering, content-based and SVD-based recs. We will then deploy the recSys in a Flask application.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="exploratory-data-analysis">Exploratory Data Analysis</h1>
         <p>The dataset comes in the form of two csv files: the first for the user-article interaction, the second for
           the article description.</p>
@@ -337,9 +341,14 @@ df[&#39;user_id&#39;] = email_encoded
 
         <p>As you can see, 50% of individuals interact with 3 number of articles or fewer.</p>
         <p>The maximum number of user-article interactions per user is 364.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="recommendation-system">Recommendation System:</h1>
         <p>Now that the EDA has been performed and the data cleaned, we can build our recSys. This is an ensemble of
           algorithms described below.</p>
+        <br>
         <h2 id="rank-based-recommendations">Rank-Based Recommendations:</h2>
         <p>To find the most popular articles, our RecSys simply uses the number of interactions. Since there are no
           ratings for any of the articles, we can assume that the articles with the most interactions are the most
@@ -351,7 +360,7 @@ df[&#39;user_id&#39;] = email_encoded
         <p>When you sign up to the app, you will see this list.</p>
         <figure><img src="https://alagrine.github.io/images/P3/top_ranked.png" />
         </figure>
-
+        <br>
         <h2 id="knowloedge-based-recommendations">Knowloedge-Based Recommendations:</h2>
         <p>Another way to deal with the <strong>cold start problem</strong> is to add filters to the web app so that
           users can add their own preferences.</p>
@@ -360,6 +369,7 @@ df[&#39;user_id&#39;] = email_encoded
         <figure><img src="https://alagrine.github.io/images/P3/Knowledge_recs.png" />
         </figure>
 
+        <br>
         <h2 id="user-user-based-collaborative-filtering">User-User Based Collaborative Filtering:</h2>
         <p>Here we look at users who are similar to User <code>X</code> in terms of the articles they have read. The
           top-ranked articles read by these similar users (and not read by User <code>X</code>) are then recommended to
@@ -372,6 +382,8 @@ df[&#39;user_id&#39;] = email_encoded
         <figure><img src="https://alagrine.github.io/images/P3/User_are_viewing.png" />
         </figure>
         </p>
+
+        <br>
         <h2 id="content-based-recommendations">Content Based Recommendations:</h2>
         <p>Another method we can use to make recommendations is to perform a ranking of the highest ranked articles
           associated with some term. We might consider the content to be the doc_body, doc_description, or
@@ -444,6 +456,7 @@ dot_prod_articles = articles_vect_df.<span style="color:cyan;">dot</span>(np.tra
         <figure><img src="https://alagrine.github.io/images/P3/Content_recs.png" />
         </figure>
 
+        <br>
         <h2 id="svd-based-recommendations">SVD Based Recommendations:</h2>
         <p>Here we build a <strong>factorization</strong> of the user-item matrix.</p>
         <p>let A be our user-item matrix, we can write the decomposition of this matrix as follows.</p>
@@ -469,6 +482,10 @@ dot_prod_articles = articles_vect_df.<span style="color:cyan;">dot</span>(np.tra
           <script type="application/javascript"
             src="https://gist.github.com/AlaGrine/2c3cb3365d78ac7250bb95a0c37fee11.js"></script>
         </p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="conclusion">Conclusion</h1>
         <p>In this project, we have followed different approaches to recommendation, from rank-based to user-based
           collaborative filtering to content-based and SVD-based recommendations. There are even more advanced
