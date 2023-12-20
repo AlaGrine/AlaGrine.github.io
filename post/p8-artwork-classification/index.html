@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+  <!-- Math formulas -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+
+  <style type="text/css">
+    * {
+      scroll-behavior: smooth;
+    }
+
+    .scrollToTopBtn {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 10px;
+      background-color: #27ae60;
+      color: #fff;
+      border-radius: 25px;
+      border-radius: 30px solid #fff;
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+      /* keep it at the top of everything else */
+      z-index: 100;
+      /* hide with opacity */
+      opacity: 0;
+
+    }
+
+    .showBtn {
+      opacity: 1;
+    }
+
+    /* Rounded border */
+    hr.rounded {
+      margin-top: 4%;
+      margin-bottom: 3%;
+      border-top: 5px solid #bbb;
+      border-radius: 3px;
+    }
+
+    figure {
+      /* display: block; */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    figcaption {
+      background-color: black;
+      color: white;
+      font-style: italic;
+      padding: 2px;
+      text-align: center;
+    }
+
+    .th1,
+    .td1 {
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: 5px 25px;
+    }
+  </style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Artwork Classification in PyTorch | Ala Eddine GRINE</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <meta name="description" content="Image classification in PyTorch using Convolutional and Transformer models">
+  <meta name="generator" content="Hugo 0.118.2">
+
+
+
+
+  <meta name="robots" content="noindex, nofollow">
+
+
+
+  <link rel="stylesheet" href="https://alagrine.github.io/ananke/css/main.min.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://alagrine.github.io/images/portfolio.png" type="image/x-icon" />
+
+
+
+
+
+
+  <meta property="og:title" content="Artwork Classification in PyTorch" />
+  <meta property="og:description"
+    content="Image classification in PyTorch using Convolutional and Transformer models" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alagrine.github.io/post/p8-artwork-classification/" />
+  <meta property="article:section" content="post" />
+  <meta property="article:published_time" content="2023-12-19T01:14:48-04:00" />
+  <meta property="article:modified_time" content="2023-12-19T01:14:48-04:00" />
+  <meta itemprop="name" content="Artwork Classification in PyTorch">
+  <meta itemprop="description" content="Image classification in PyTorch using Convolutional and Transformer models">
+  <meta itemprop="datePublished" content="2023-12-19T01:14:48-04:00" />
+  <meta itemprop="dateModified" content="2023-12-19T01:14:48-04:00" />
+  <meta itemprop="wordCount" content="1369">
+  <meta itemprop="keywords" content="" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Artwork Classification in PyTorch" />
+  <meta name="twitter:description"
+    content="Image classification in PyTorch using Convolutional and Transformer models" />
+
+
+</head>
+
+<body class="ma0 avenir bg-near-white">
+
+
+
+
+
+
+  <header class="cover bg-top" style="background-image: url('https://alagrine.github.io/images/P8/fig_Artbench.png');">
+    <div class="bg-black-60">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+        <div class="flex-l justify-between items-center center">
+          <a href="https://alagrine.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+
+            Ala Eddine GRINE
+
+          </a>
+          <div class="flex-l items-center">
+
+
+
+            <ul class="pl0 mr3">
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/about/"
+                  title="About page">
+                  About
+                </a>
+              </li>
+
+              <li class="list f5 f4-ns fw4 dib pr3">
+                <a class="hover-white no-underline white-90" href="https://alagrine.github.io/post/"
+                  title="Projects page">
+                  Projects
+                </a>
+              </li>
+
+            </ul>
+
+
+            <div class="ananke-socials">
+
+
+              <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+                class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+                class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+
+              <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+                class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+                title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+                <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                    xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span>
+
+                <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                    viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <path
+                      d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                      style="fill-rule:evenodd;clip-rule:evenodd;" />
+                  </svg>
+                </span></a>
+
+            </div>
+
+          </div>
+        </div>
+      </nav>
+
+      <div class="tc-l pv6 ph3 ph4-ns">
+
+        <div class="f2 f1-l fw2 white-90 mb0 lh-title">Artwork Classification in PyTorch</div>
+
+        <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
+          Image classification in PyTorch using Convolutional and Transformer models
+        </div>
+
+
+      </div>
+    </div>
+  </header>
+
+
+
+  <main class="pb7" role="main">
+
+
+    <article class="flex-l flex-wrap justify-between mw8 center ph3">
+      <header class="mt4 w-100">
+        <aside class="instapaper_ignoref b helvetica tracked">
+
+          PROJECTS
+        </aside>
+
+
+
+
+
+
+
+
+
+
+
+        <div id="sharing" class="mt3 ananke-socials">
+
+
+          <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alagrine.github.io/post/p8-artwork-classification/&amp;title=Artwork%20Classification%20in%20PyTorch"
+            class="ananke-social-link linkedin no-underline" aria-label="share on LinkedIn">
+
+            <span class="icon"> <svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+          </a>
+
+        </div>
+
+
+        <h1 class="f1 athelas mt3 mb1">Artwork Classification in PyTorch</h1>
+
+
+
+        <time class="f6 mv4 dib tracked" datetime="2023-12-19T01:14:48-04:00">December 19, 2023</time>
+
+
+
+
+      </header>
+      <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100">
+        <h1 id="project-overview">Project Overview:</h1>
+        <p>In this project, we will classify artworks using the <a
+            href="https://github.com/liaopeiyuan/artbench">artbench</a> dataset. The dataset includes 60,000 images of
+          artworks from 10 different artistic styles, including paintings, murals, and sculptures from the 14th to the
+          21st century. Each style has 5,000 training images and 1,000 test images.</p>
+        <p>We will use PyTorch to predict classes, employing <strong>Convolutional</strong> and
+          <strong>Transformer</strong> models. Specifically, we will
+          leverage the <a
+            href="https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_b2.html#torchvision.models.efficientnet_b2">EfficientNet-B2</a>
+          and <a
+            href="https://pytorch.org/vision/stable/models/generated/torchvision.models.vit_b_16.html?highlight=vit#torchvision.models.vit_b_16">ViT-B16</a>
+          models.
+        </p>
+        <p>To speed up our model training, we will use two Kaggle GPU T4 accelerators. Another alternative could be
+          Google Colab.</p>
+        <p>Finally, we will create a <a href="https://www.gradio.app/">Gradio</a> demo and deploy the app to <a
+            href="https://huggingface.co/spaces">HuggingFace Spaces</a>.</p>
+        <h1 id="getting-data">Getting data</h1>
+        <p>There are three versions of the <em>artbench</em> dataset, each with a different resolution: 32x32, 256x256,
+          and the original.</p>
+        <p>We will download the 256x256 ImageFolder with train-test split from <a
+            href="https://github.com/liaopeiyuan/artbench">here</a>.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code># download the artbench dataset
+import wget
+wget.<span style="color:cyan;">download</span>(url=&#34;https://artbench.eecs.berkeley.edu/files/artbench-10-imagefolder-split.tar&#34;,
+              out = FLAGS[&#39;datadir&#39;])
+
+# Uncompress the tar file
+import tarfile
+file = tarfile.<span style="color:cyan;">open</span>(data_path / &#34;artbench-10-imagefolder-split.tar&#34;)
+file.<span style="color:cyan;">extractall</span>(data_path)
+file.<span style="color:cyan;">close</span>()  
+</code></pre>
+        <h1 id="data-preparation">Data preparation</h1>
+        <p>In this section we will go through transforming images with <em>torchvision.transforms</em>, loading image
+          data and transforming loaded images into DataLoaders.</p>
+        <h2 id="transforming-data-with-torchvisiontransforms">Transforming data with torchvision.transforms</h2>
+        <p>Here, we will be <a href="https://pytorch.org/vision/stable/transforms.html">transforming and augmenting
+            images</a>.</p>
+        <p>The purpose of data augmentation is to artificially increase the diversity of the training dataset as shown
+          below.</p>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_data_augmentation.png" />
+        </figure>
+
+        <p>We will use <a
+            href="https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html">transforms.TrivialAugmentWide()</a>
+          an automatic augmentation method.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>data_transform = transforms.<span style="color:cyan;">Compose()</span>([
+transforms.<span style="color:cyan;">Resize</span>(size=(FLAGS[&#39;IMAGE_SIZE&#39;], FLAGS[&#39;IMAGE_SIZE&#39;])),
+transforms.<span style="color:cyan;">TrivialAugmentWide</span>(num_magnitude_bins=31), # Data Augmentation
+transforms.<span style="color:cyan;">ToTensor</span>()
+])
+</code></pre>
+        <h2 id="loading-images-using-imagefolder">Loading images using ImageFolder</h2>
+        <p>The <a
+            href="https://pytorch.org/vision/stable/generated/torchvision.datasets.ImageFolder.html">torchvision.datasets.ImageFolder</a>
+          class can be used to convert image data into a Dataset. The images will be in the form of a tensor with shape
+          [3,224,224], and the labels will be integers.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>from torchvision import datasets
+
+train_data = datasets.<span style="color:cyan;">ImageFolder</span>(root=image_path / &#34;train&#34;, transform=data_transform)
+test_data = datasets.<span style="color:cyan;">ImageFolder</span>(root=image_path / &#34;test&#34;, transform=data_transform)
+</code></pre>
+        <h2 id="turning-loaded-images-to-dataloaders">Turning loaded images to DataLoaders</h2>
+        <p>We can use <a
+            href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader">torch.utils.data.DataLoader</a>
+          to convert our Dataset into a Python iterable, which supports automatic batching, shuffling, and memory
+          pinning.</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>train_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data,
+                              batch_size=FLAGS[&#39;batch_size&#39;],
+                              num_workers=FLAGS[&#39;num_workers&#39;],
+                              shuffle=True)
+test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data,
+                            batch_size=FLAGS[&#39;batch_size&#39;],
+                             num_workers=FLAGS[&#39;num_workers&#39;],
+                             shuffle=False)
+</code></pre>
+        <p>So far, the artbench images have been transformed into tensors suitable for use by computer vision models.
+        </p>
+        <p>We will now create several models to predict artwork classes, beginning with a simple TinyVGG architecture.
+        </p>
+        <h1 id="tinyvgg">TinyVGG</h1>
+        <p>Here, we create a <em>Convolutional Neural Network</em> (CNN) by replicating the TinyVGG model from the <a
+            href="https://poloclub.github.io/cnn-explainer/">CNN Explainer</a> website.</p>
+        <p>The TinyVGG model consists of 4 convolutional layers, each containing 10 neurons and 3 learned kernels. After
+          each Conv2d layer, a ReLU activation is applied to introduce non-linearity.</p>
+        <p>To prevent overfitting, Max-Pooling is utilized to reduce the number of parameters.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/2fe2e11d9bc22afd96ea0beae3bc3104.js"></script>
+
+        <h2 id="create-train-and-test-loop-functions">Create train and test loop functions</h2>
+        <p>Let&rsquo;s create three functions to train and evaluate our models: a train loop, a test loop, and a
+          function to combine them.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/e5f1edc766ecd64c54e7e75a95f35ccc.js"></script>
+
+        <h2 id="evaluate-the-tinyvgg-model">Evaluate the TinyVGG model</h2>
+        <p>Training the TinyVGG for 5 epohs on 20% of the dataset yields the following results.</p>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_Tiny_VGG.jpg" />
+        </figure>
+
+        <p>The TinyVGG model performed poorly with an accuracy of 22.6%, but this is better than guessing (if our model
+          were to guess, the accuracy would be 10%).</p>
+        <p>We could try to train the model for longer and see what happens.</p>
+        <h1 id="convolutional-model---efficientnet_b2-feature-extraction">Convolutional model - EfficientNet_B2: Feature
+          Extraction</h1>
+        <p>We will leverage the <a
+            href="https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_b2.html#torchvision.models.efficientnet_b2">EfficientNet-B2</a>
+          pre-trained on ImageNet and use its underlying learned representations to classify artwork images.</p>
+        <p>For feature extraction, we freeze all layers of the model and adjust the output layers to have 10 classes
+          instead of the 1000 classes of the ImageNet dataset. We then train the model for 5 epochs on 20% of the data.
+        </p>
+        <p>The snippet below displays the code for creating an EfficientNet_B2 feature extractor.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/7236014a7d4c5483b8f7f7133cd3ebce.js"></script>
+
+        <p>Before training the model, we need to create new Dataloaders using the EfficientNet_B2 transforms.</p>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_Efficient_Net_B2_20percent.jpg" />
+        </figure>
+
+        <p>The EfficientNet_B2 feature extractor achieved over 46% accuracy. This is much better than TinyVGG, although
+          we only used 20% of the data to train the model. This goes to show the power of Transfer Learning.</p>
+        <p>As shown in the loss curves, it looks like the metrics (loss and accuracy) would improve if we continued
+          training for more epochs. But we&rsquo;re going to fine-tune the transfer learning.</p>
+        <h1 id="efficientnet_b2-fine-tuning">EfficientNet_B2: Fine-tuning</h1>
+        <p>To fine-tune the EfficientNet_B2, we will unfreeze all layers and train the model for a few more epochs. The
+          following steps will be taken:</p>
+        <ol>
+          <li>Create a new instance of EfficientNet_B2 with all its layers trainable.</li>
+          <li>Load the state_dict of our saved feature extractor model. This will update the new instance of our model
+            with trained weights.</li>
+          <li>Train the model for an additional 5 epochs on the full dataset, as fine-tuning a model usually works
+            better with more data.</li>
+        </ol>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code># 1. Create a new instance of EfficientNet_B2 with all its layers trainable
+model_EfficientNet_B2,effnetb2_transforms = create_effnetb2_model(num_classes=10,
+                                                                  is_TrivialAugmentWide = True,
+                                                                  freeze_layers=False)
+
+# 2. Load the state_dict of our saved feature extractor model
+MODEL_SAVE_PATH = PATH_models / &#34;EfficientNet_B2_20percent.pth&#34;
+model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state_dict(torch.<span style="color:cyan;">load</span>(f=MODEL_SAVE_PATH))
+</code></pre>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_EfficientNet_B2_FT.jpg" />
+        </figure>
+
+        <p>Our model&rsquo;s accuracy on the test dataset has increased to <strong>67%</strong> after fine-tuning with
+          all available data. Training for a longer period could further improve accuracy.</p>
+        <p>The highest accuracy is observed for ukiyo-e and surrealism, while the lowest accuracy is observed for
+          realism, with approximately 50%.</p>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_effNet_confusionMatrix.jpg" />
+        </figure>
+
+        <h1 id="transformer-model---vit_b16">Transformer model - ViT_B16</h1>
+        <p>While a convolutional neural network (CNN) uses convolutions as learning layers, a Transformer architecture
+          uses <a href="https://arxiv.org/abs/1706.03762">attention mechanism</a>.</p>
+        <p>Transformers is a state-of-the-art architecture originally designed to work on one-dimensional (1D) text
+          sequences.
+          The Vision Transformer <a href="https://arxiv.org/abs/2010.11929">ViT</a> architecture is designed to adapt
+          the original Transformer architecture to vision use cases.</p>
+        <p>To gain a better understanding of the Transformer architecture, I have replicated the <a
+            href="https://arxiv.org/abs/2010.11929">ViT paper</a>.</p>
+        <p><a
+            href="https://github.com/AlaGrine/Artwork_classification_in_PyTorch/blob/main/Create_ViT_from_scratch.ipynb">here</a>
+          is the code to build the ViT model from scratch using PyTorch.</p>
+        <p>Instead of training the ViT model from scratch, let&rsquo;s use transfer learning and use the pre-trained <a
+            href="https://pytorch.org/vision/stable/models/generated/torchvision.models.vit_b_16.html?highlight=vit#torchvision.models.vit_b_16">ViT-B16</a>
+          available on torchvision.models.</p>
+        <p>The snippet below shows the code to create a ViT_B16 model in PyTorch.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/421a6fad2da3151ff6f24a39b9876dcf.js"></script>
+
+        <p>As with EfficientNet, we begin by using a feature extractor on 20% of the data, followed by fine-tuning the
+          model for 5 epochs on the entire dataset.</p>
+        <h1 id="compare-model-results">Compare model results</h1>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_inference-speed-vs-accuracy.jpg" />
+        </figure>
+
+        <p>Our EfficientNet_B2 outperforms the ViT model in all performance metrics. It achieves the highest accuracy,
+          lowest loss, smallest size, and shortest prediction time per image.</p>
+        <p>In the next section we will create and diploy a Gradio demo. The EfficientNet_B2 will be our ML model.</p>
+        <h1 id="create-and-deploy-a-gradio-application">Create and deploy a Gradio application</h1>
+        <p><a href="https://www.gradio.app/">Gradio</a> provides a very useful <strong>Interface</strong> class to
+          easily create a web-based demo around a machine learning model, desired input and output components.</p>
+        <p>For our ArtWork classifier, our ML model is EfficienNet_B2, our inputs are images of artworks, and our
+          outputs are their classes (Baroque, Realism, Impressionism, &hellip;).</p>
+        <p>We will upload our Gradio app to <a href="https://huggingface.co/spaces">Hugging Face Spaces</a>, a resource
+          widely used by the machine learning community.</p>
+        <h2 id="create-a-deployable-gradio-demo">Create a deployable Gradio demo</h2>
+        <p>The structure of the deployable application is the following:</p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code> gradio_demo/
+    ├── EfficientNet_B2_FT.pth
+    ├── app.py
+    ├── examples/
+    │   ├── example_1.jpg
+    │   ├── example_2.jpg
+    │   └── example_3.jpg
+    ├── model.py
+    └── requirements.txt
+</code></pre>
+        <p>Where:</p>
+        <ul>
+          <li><code>EfficientNet_B2_FT.pth</code> is our trained PyTorch model file.</li>
+          <li><code>app.py</code> contains our Gradio app.</li>
+          <li><code>examples/</code> contains example images to use with our Gradio app.</li>
+          <li><code>model.py</code> contains the &ldquo;<em>create_effnetb2_model</em>&rdquo; function that we created
+            earlier.</li>
+          <li><code>requirements.txt</code> contains the dependencies to run our app such as <code>torch</code>,
+            <code>torchvision</code> and <code>gradio</code>.
+          </li>
+        </ul>
+        <p>To create the main file (app.py) of the Gradio demo, we can use the following code:</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/8e973f87f55a2d17a9bd1802c6f2f066.js"></script>
+
+        <h2 id="deploy-the-gradio-app-to-huggingface-spaces">Deploy the Gradio app to HuggingFace Spaces</h2>
+        <p>To deploy the Gradio app to HuggingFace Spaces, we will follow the following steps:</p>
+        <ol>
+          <li>
+            <p>Create a new space (ie. code repository). Space name = [SPACE_NAME].</p>
+          </li>
+          <li>
+            <p>Select Gradio as the Space SDK and CPU basic (free) as Space hardware.</p>
+          </li>
+          <li>
+            <p>Clone the repo locally: <code>git clone https://huggingface.co/spaces/[USERNAME]/[SPACE_NAME]</code></p>
+          </li>
+          <li>
+            <p>Copy the contents of ArtClassifier_demo folder to the clonded repo folder.</p>
+          </li>
+          <li>
+            <p>Passwords are no longer accepted as a way to authenticate command-line Git operations. We will use a
+              personal access token as explained
+              <a href="https://huggingface.co/blog/password-git-deprecation">here</a>.
+            </p>
+            <p>
+              <code>git remote set-url origin https://[USERNAME]:[TOKEN]@huggingface.co/spaces/[USERNAME]/[SPACE_NAME]</code>
+            </p>
+          </li>
+          <li>
+            <p><code>git add .</code></p>
+          </li>
+          <li>
+            <p><code>git commit -m &quot;first commit&quot;</code></p>
+          </li>
+          <li>
+            <p><code>git push</code></p>
+          </li>
+        </ol>
+        <p>The Gradio demo can be embedded in a notebook as an <a
+            href="https://gradio.app/sharing_your_app/#embedding-with-iframes">iframe</a> using <a
+            href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.IFrame">IPython.display.IFrame</a>
+          and a link to our space in the format
+          <code>https://hf.space/embed/[USERNAME]/[SPACE_NAME]</code>
+        </p>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>from IPython.display import IFrame
+IFrame(src=&#34;https://hf.space/embed/AlaGrine/Artwork_classifier&#34;, width=900, height=750)
+</code></pre>
+        <p>You can find the app <a href="https://huggingface.co/spaces/AlaGrine/Artwork_classifier">here</a>.</p>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_gradio_demo.png" />
+        </figure>
+
+        <h1 id="conclusion">Conclusion</h1>
+        <p>In this project, we classified artworks using the artbench dataset and built various models, including
+          convolutional and transformer-based ones. We fine-tuned the EfficientNet_B2 and ViT_B16 models, which
+          significantly improved performance, achieving 67% accuracy.</p>
+        <p>Finally, we created a Gradio demo and deployed the app to HuggingFace Spaces.</p>
+        <p><a href="https://huggingface.co/spaces/AlaGrine/Artwork_classifier">Link to Gradio app on HuggingFace
+            Spaces</a>.</p>
+        <p><a href="https://github.com/AlaGrine/Artwork_classification_in_PyTorch">Link to GitHub repository</a></p>
+
+
+        <span class="badge badge-pill badge-success">PyTorch</span>
+        <span class="badge badge-pill badge-success">Vision Transformer</span>
+        <span class="badge badge-pill badge-success">CNN EfficientNet</span>
+        <span class="badge badge-pill badge-success">Gradio demo</span>
+
+
+        <ul class="pa0">
+
+        </ul>
+        <div class="mt6 instapaper_ignoref">
+
+
+        </div>
+      </div>
+
+      <aside class="w-30-l mt6-l">
+
+
+
+
+      </aside>
+
+    </article>
+
+  </main>
+  <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+    <div class="flex justify-between">
+      <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://alagrine.github.io/">
+        &copy; Ala Eddine GRINE 2023
+      </a>
+      <div>
+        <div class="ananke-socials">
+
+
+          <a href="https://github.com/AlaGrine" target="_blank" rel="noopener"
+            class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://www.linkedin.com/in/ala-eddine-grine" target="_blank" rel="noopener"
+            class="linkedin ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="LinkedIn link" aria-label="follow on LinkedIn——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 65 65;" version="1.1" viewBox="0 0 65 65"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M50.837,48.137V36.425c0-6.275-3.35-9.195-7.816-9.195  c-3.604,0-5.219,1.983-6.119,3.374V27.71h-6.79c0.09,1.917,0,20.427,0,20.427h6.79V36.729c0-0.609,0.044-1.219,0.224-1.655  c0.49-1.22,1.607-2.483,3.482-2.483c2.458,0,3.44,1.873,3.44,4.618v10.929H50.837z M22.959,24.922c2.367,0,3.842-1.57,3.842-3.531  c-0.044-2.003-1.475-3.528-3.797-3.528s-3.841,1.524-3.841,3.528c0,1.961,1.474,3.531,3.753,3.531H22.959z M34,64  C17.432,64,4,50.568,4,34C4,17.431,17.432,4,34,4s30,13.431,30,30C64,50.568,50.568,64,34,64z M26.354,48.137V27.71h-6.789v20.427  H26.354z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+
+          <a href="https://medium.com/@alaeddine.grine" target="_blank" rel="noopener"
+            class="medium ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1"
+            title="Medium link" aria-label="follow on Medium——Opens in a new window">
+
+            <span class="icon"><svg style="enable-background:new 0 0 170 170;" version="1.1" viewBox="0 0 170 170"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span>
+
+            <span class="new-window"><svg height="8px" style="enable-background:new 0 0 1000 1000;" version="1.1"
+                viewBox="0 0 1000 1000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <path
+                  d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z"
+                  style="fill-rule:evenodd;clip-rule:evenodd;" />
+              </svg>
+            </span></a>
+
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Add ScrollToTop button; only visible when we scroll up -->
+  <div id="scrollToTopBtn" class="scrollToTopBtn"> <i class="fas fa-arrow-up"></i> Back to
+    top</div>
+
+  <script>
+
+    window.onscroll = function () {
+      if (pageYOffset >= 100) {
+        document.getElementById('scrollToTopBtn').style.visibility = "visible";
+      } else {
+        document.getElementById('scrollToTopBtn').style.visibility = "hidden";
+      }
+    };
+    var scrollToTopBtn = document.querySelector(".scrollToTopBtn");
+    var rootElement = document.documentElement;
+
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    function handleScroll() {
+      var scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTopPosition > lastScrollTop) {
+        // Hide button
+        scrollToTopBtn.classList.remove("showBtn");
+      } else if (scrollTopPosition < lastScrollTop) {
+        // Show button
+        scrollToTopBtn.classList.add("showBtn");
+      }
+      lastScrollTop = scrollTopPosition <= 0 ? 0 : scrollTopPosition;
+    }
+
+    function scrollToTop() {
+      rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      handleScroll();
+    }
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    document.addEventListener("scroll", handleScroll);
+  </script>
+
+
+</body>
+
+</html>
