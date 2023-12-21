@@ -317,6 +317,11 @@
           Google Colab.</p>
         <p>Finally, we will create a <a href="https://www.gradio.app/">Gradio</a> demo and deploy the app to <a
             href="https://huggingface.co/spaces">HuggingFace Spaces</a>.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+
         <h1 id="getting-data">Getting data</h1>
         <p>There are three versions of the <em>artbench</em> dataset, each with a different resolution: 32x32, 256x256,
           and the original.</p>
@@ -333,6 +338,10 @@ file = tarfile.<span style="color:cyan;">open</span>(data_path / &#34;artbench-1
 file.<span style="color:cyan;">extractall</span>(data_path)
 file.<span style="color:cyan;">close</span>()  
 </code></pre>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="data-preparation">Data preparation</h1>
         <p>In this section we will go through transforming images with <em>torchvision.transforms</em>, loading image
           data and transforming loaded images into DataLoaders.</p>
@@ -373,7 +382,7 @@ test_data = datasets.<span style="color:cyan;">ImageFolder</span>(root=image_pat
                               num_workers=FLAGS[&#39;num_workers&#39;],
                               shuffle=True)
 test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data,
-                            batch_size=FLAGS[&#39;batch_size&#39;],
+                             batch_size=FLAGS[&#39;batch_size&#39;],
                              num_workers=FLAGS[&#39;num_workers&#39;],
                              shuffle=False)
 </code></pre>
@@ -381,6 +390,10 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
         </p>
         <p>We will now create several models to predict artwork classes, beginning with a simple TinyVGG architecture.
         </p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="tinyvgg">TinyVGG</h1>
         <p>Here, we create a <em>Convolutional Neural Network</em> (CNN) by replicating the TinyVGG model from the <a
             href="https://poloclub.github.io/cnn-explainer/">CNN Explainer</a> website.</p>
@@ -404,7 +417,10 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
         <p>The TinyVGG model performed poorly with an accuracy of 22.6%, but this is better than guessing (if our model
           were to guess, the accuracy would be 10%).</p>
         <p>We could try to train the model for longer and see what happens.</p>
-        <h1 id="convolutional-model---efficientnet_b2-feature-extraction">Convolutional model - EfficientNet_B2: Feature
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
+        <h1 id="convolutional-model---efficientnet_b2-feature-extraction">Convolutional model: EfficientNet_B2 - Feature
           Extraction</h1>
         <p>We will leverage the <a
             href="https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_b2.html#torchvision.models.efficientnet_b2">EfficientNet-B2</a>
@@ -424,6 +440,10 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
           we only used 20% of the data to train the model. This goes to show the power of Transfer Learning.</p>
         <p>As shown in the loss curves, it looks like the metrics (loss and accuracy) would improve if we continued
           training for more epochs. But we&rsquo;re going to fine-tune the transfer learning.</p>
+
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="efficientnet_b2-fine-tuning">EfficientNet_B2: Fine-tuning</h1>
         <p>To fine-tune the EfficientNet_B2, we will unfreeze all layers and train the model for a few more epochs. The
           following steps will be taken:</p>
@@ -453,6 +473,9 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
         <figure><img src="https://alagrine.github.io/images/P8/fig_effNet_confusionMatrix.jpg" />
         </figure>
 
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="transformer-model---vit_b16">Transformer model - ViT_B16</h1>
         <p>While a convolutional neural network (CNN) uses convolutions as learning layers, a Transformer architecture
           uses <a href="https://arxiv.org/abs/1706.03762">attention mechanism</a>.</p>
@@ -474,6 +497,9 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
 
         <p>As with EfficientNet, we begin by using a feature extractor on 20% of the data, followed by fine-tuning the
           model for 5 epochs on the entire dataset.</p>
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="compare-model-results">Compare model results</h1>
         <figure><img src="https://alagrine.github.io/images/P8/fig_inference-speed-vs-accuracy.jpg" />
         </figure>
@@ -481,6 +507,9 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
         <p>Our EfficientNet_B2 outperforms the ViT model in all performance metrics. It achieves the highest accuracy,
           lowest loss, smallest size, and shortest prediction time per image.</p>
         <p>In the next section we will create and diploy a Gradio demo. The EfficientNet_B2 will be our ML model.</p>
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="create-and-deploy-a-gradio-application">Create and deploy a Gradio application</h1>
         <p><a href="https://www.gradio.app/">Gradio</a> provides a very useful <strong>Interface</strong> class to
           easily create a web-based demo around a machine learning model, desired input and output components.</p>
@@ -507,8 +536,8 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
           <li><code>examples/</code> contains example images to use with our Gradio app.</li>
           <li><code>model.py</code> contains the &ldquo;<em>create_effnetb2_model</em>&rdquo; function that we created
             earlier.</li>
-          <li><code>requirements.txt</code> contains the dependencies to run our app such as <code>torch</code>,
-            <code>torchvision</code> and <code>gradio</code>.
+          <li><code>requirements.txt</code> contains the dependencies to run our app such as <em>torch<em>,
+                <em>torchvision</em> and <em>gradio</em>.
           </li>
         </ul>
         <p>To create the main file (app.py) of the Gradio demo, we can use the following code:</p>
@@ -553,7 +582,7 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
             href="https://gradio.app/sharing_your_app/#embedding-with-iframes">iframe</a> using <a
             href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.IFrame">IPython.display.IFrame</a>
           and a link to our space in the format
-          <code>https://hf.space/embed/[USERNAME]/[SPACE_NAME]</code>
+          <em>https://hf.space/embed/[USERNAME]/[SPACE_NAME]</em>
         </p>
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>from IPython.display import IFrame
 IFrame(src=&#34;https://hf.space/embed/AlaGrine/Artwork_classifier&#34;, width=900, height=750)
@@ -562,11 +591,15 @@ IFrame(src=&#34;https://hf.space/embed/AlaGrine/Artwork_classifier&#34;, width=9
         <figure><img src="https://alagrine.github.io/images/P8/fig_gradio_demo.png" />
         </figure>
 
+        <div class="mb-4">
+          <hr class="rounded">
+        </div>
         <h1 id="conclusion">Conclusion</h1>
         <p>In this project, we classified artworks using the artbench dataset and built various models, including
           convolutional and transformer-based ones. We fine-tuned the EfficientNet_B2 and ViT_B16 models, which
           significantly improved performance, achieving 67% accuracy.</p>
         <p>Finally, we created a Gradio demo and deployed the app to HuggingFace Spaces.</p>
+        <br>
         <p><a href="https://huggingface.co/spaces/AlaGrine/Artwork_classifier">Link to Gradio app on HuggingFace
             Spaces</a>.</p>
         <p><a href="https://github.com/AlaGrine/Artwork_classification_in_PyTorch">Link to GitHub repository</a></p>
@@ -574,7 +607,7 @@ IFrame(src=&#34;https://hf.space/embed/AlaGrine/Artwork_classifier&#34;, width=9
 
         <span class="badge badge-pill badge-success">PyTorch</span>
         <span class="badge badge-pill badge-success">Vision Transformer</span>
-        <span class="badge badge-pill badge-success">CNN EfficientNet</span>
+        <span class="badge badge-pill badge-success">EfficientNet</span>
         <span class="badge badge-pill badge-success">Gradio demo</span>
 
 
