@@ -6,7 +6,18 @@
     <description>Recent content in Data Science Portfolio on Ala Eddine GRINE</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 27 Nov 2023 01:14:48 -0400</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Dec 2023 01:14:48 -0400</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Artwork Classification in PyTorch</title>
+      <link>https://alagrine.github.io/post/p8-artwork-classification/</link>
+      <pubDate>Tue, 19 Dec 2023 01:14:48 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p8-artwork-classification/</guid>
+      <description>Project Overview: In this project, we will classify artworks using the artbench dataset. The dataset includes 60,000 images of artworks from 10 different artistic styles, including paintings, murals, and sculptures from the 14th to the 21st century. Each style has 5,000 training images and 1,000 test images.
+We will use PyTorch to predict classes, employing Convolutional and Transformer models. Specifically, we will leverage the EfficientNet-B2 and ViT-B16 models.
+To speed up our model training, we will use two Kaggle GPU T4 accelerators.</description>
+    </item>
+    
     <item>
       <title>LinkedIn Job Scraper and Matcher</title>
       <link>https://alagrine.github.io/post/p7-linkedin_scraper_matcher/</link>
@@ -57,10 +68,10 @@ For this project, Udacity provided a 12GB dataset of customer activity from Spar
       <pubDate>Wed, 05 Jul 2023 11:13:32 -0400</pubDate>
       
       <guid>https://alagrine.github.io/post/p3-recommendations-with-ibm/</guid>
-      <description>This project is part of Udacity&amp;rsquo;s Data Science Nanodegree Program in collaboration with IBM. The aim of this project is to build a recommendation system for users of the IBM Watson community.
-A dataset of 5149 users, 714 articles and about 46K interactions is used to develop this RecSys.
-The project is divided into the following sections:
-Build an ETL pipeline to extract, clean and load the data to a SQLite database.</description>
+      <description>Project Overview: Recommendations are critical to driving revenue for business. They are being used to recommend everything from movies to music to new destinations.
+The aim of this project is to build a recommendation system for users of the IBM Watson community.
+A dataset of 5149 users, 714 articles and about 46K interactions is provided by Udacity.
+We will build an ensemble of recommendation algorithms, including rank-based, user-user based collaborative filtering, content-based and SVD-based recs.</description>
     </item>
     
     <item>

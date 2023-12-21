@@ -2,8 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://alagrine.github.io/post/p8-artwork-classification/</loc>
+    <lastmod>2023-12-19T01:14:48-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url><url>
     <loc>https://alagrine.github.io/</loc>
-    <lastmod>2023-10-20T11:14:48-04:00</lastmod>
+    <lastmod>2023-12-19T01:14:48-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url><url>
+    <loc>https://alagrine.github.io/post/p7-linkedin_scraper_matcher/</loc>
+    <lastmod>2023-11-27T01:14:48-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url><url>
