@@ -327,12 +327,12 @@
           and the original.</p>
         <p>We will download the 256x256 ImageFolder with train-test split from <a
             href="https://github.com/liaopeiyuan/artbench">here</a>.</p>
-        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code><span style="color:coral;"># download the artbench dataset</span>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code><span style="color:greenyellow;"># download the artbench dataset</span>
 import wget
 wget.<span style="color:cyan;">download</span>(url=&#34;https://artbench.eecs.berkeley.edu/files/artbench-10-imagefolder-split.tar&#34;,
               out = FLAGS[&#39;datadir&#39;])
 
-<span style="color:coral;"># Uncompress the tar file</span>
+<span style="color:greenyellow;"># Uncompress the tar file</span>
 import tarfile
 file = tarfile.<span style="color:cyan;">open</span>(data_path / &#34;artbench-10-imagefolder-split.tar&#34;)
 file.<span style="color:cyan;">extractall</span>(data_path)
@@ -363,7 +363,7 @@ file.<span style="color:cyan;">close</span>()
 
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>data_transform = transforms.<span style="color:cyan;">Compose()</span>([
 transforms.<span style="color:cyan;">Resize</span>(size=(FLAGS[&#39;IMAGE_SIZE&#39;], FLAGS[&#39;IMAGE_SIZE&#39;])),
-transforms.<span style="color:cyan;">TrivialAugmentWide</span>(num_magnitude_bins=8), <span style="color:coral;"># Data Augmentation</span>
+transforms.<span style="color:cyan;">TrivialAugmentWide</span>(num_magnitude_bins=8), <span style="color:greenyellow;"># Data Augmentation</span>
 transforms.<span style="color:cyan;">ToTensor</span>()
 ])
 </code></pre>
@@ -431,8 +431,8 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
         <p>To speed up training, we will use a GPU. Therefore, we need to define the device we will put our model on:
         </p>
 
-        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>device = "<span style="color:greenyellow;">cuda</span>" if torch.cuda.<span style="color:cyan;">is_available()</span> else "<span style="color:greenyellow;">cpu</span>"
-model_0 = TinyVGG(input_shape=3, <span style="color:coral;"># number of color channels</span> 
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>device = "<span style="color:coral;">cuda</span>" if torch.cuda.<span style="color:cyan;">is_available()</span> else "<span style="color:coral;">cpu</span>"
+model_0 = TinyVGG(input_shape=3, <span style="color:greenyellow;"># number of color channels</span> 
                   hidden_units=10,
                   output_shape=len(train_data.classes))
 model_0.<span style="color:cyan;">to(device)</span>
@@ -526,16 +526,16 @@ model_0.<span style="color:cyan;">to(device)</span>
             better with more data. To ensure that the model retains its previously learned features without significant
             alterations, we will use a smaller learning rate. The initial learning rate will be divided by 10.</li>
         </ol>
-        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code><span style="color:coral;"># 1. Create a new instance of EfficientNet_B2 with all its layers trainable</span>
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code><span style="color:greenyellow;"># 1. Create a new instance of EfficientNet_B2 with all its layers trainable</span>
 model_EfficientNet_B2,effnetb2_transforms = create_effnetb2_model(num_classes=10,
                                                                   is_TrivialAugmentWide = True,
                                                                   freeze_layers=False)
 
-<span style="color:coral;"># 2. Load the state_dict of our saved feature extractor model</span>
+<span style="color:greenyellow;"># 2. Load the state_dict of our saved feature extractor model</span>
 MODEL_SAVE_PATH = PATH_models / &#34;EfficientNet_B2_20percent.pth&#34;
 model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state_dict(torch.<span style="color:cyan;">load</span>(f=MODEL_SAVE_PATH))
 
-<span style="color:coral;"># 3. Fine-tune the model</span>
+<span style="color:greenyellow;"># 3. Fine-tune the model</span>
 results_EfficientNet_B2_FT = train_and_evaluate(model=model_EfficientNet_B2,
                                                 train_dataloader=train_DataLoader,
                                                 test_dataloader=test_DataLoader,
