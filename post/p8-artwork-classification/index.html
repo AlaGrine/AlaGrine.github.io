@@ -307,14 +307,14 @@
           21st century. Each style has 5,000 training images and 1,000 test images.</p>
         <p>We will use PyTorch to predict classes, employing <strong>Convolutional</strong> and
           <strong>Transformer</strong> models. Specifically, we will
-          leverage the <a
+          leverage and fine-tune the <a
             href="https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_b2.html#torchvision.models.efficientnet_b2">EfficientNet-B2</a>
           and <a
             href="https://pytorch.org/vision/stable/models/generated/torchvision.models.vit_b_16.html?highlight=vit#torchvision.models.vit_b_16">ViT-B16</a>
-          models.
+          pre-trained models.
         </p>
-        <p>To speed up our model training, we will use two Kaggle GPU T4 accelerators. Another alternative could be
-          Google Colab.</p>
+        <p>To speed up our model training, we will use two free Kaggle GPU T4 accelerators. Free GPUs are also available
+          on Google Colab.</p>
         <p>Finally, we will create a <a href="https://www.gradio.app/">Gradio</a> demo and deploy the app to <a
             href="https://huggingface.co/spaces">HuggingFace Spaces</a>.</p>
 
@@ -327,12 +327,12 @@
           and the original.</p>
         <p>We will download the 256x256 ImageFolder with train-test split from <a
             href="https://github.com/liaopeiyuan/artbench">here</a>.</p>
-        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code># download the artbench dataset
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code><span style="color:coral;"># download the artbench dataset</span>
 import wget
 wget.<span style="color:cyan;">download</span>(url=&#34;https://artbench.eecs.berkeley.edu/files/artbench-10-imagefolder-split.tar&#34;,
               out = FLAGS[&#39;datadir&#39;])
 
-# Uncompress the tar file
+<span style="color:coral;"># Uncompress the tar file</span>
 import tarfile
 file = tarfile.<span style="color:cyan;">open</span>(data_path / &#34;artbench-10-imagefolder-split.tar&#34;)
 file.<span style="color:cyan;">extractall</span>(data_path)
@@ -343,39 +343,60 @@ file.<span style="color:cyan;">close</span>()
           <hr class="rounded">
         </div>
         <h1 id="data-preparation">Data preparation</h1>
-        <p>In this section we will go through transforming images with <em>torchvision.transforms</em>, loading image
-          data and transforming loaded images into DataLoaders.</p>
+        <p>This section covers the transformation of images using <em>torchvision.transforms</em>, loading image data,
+          and
+          transforming loaded images into DataLoaders.</p>
         <h2 id="transforming-data-with-torchvisiontransforms">Transforming data with torchvision.transforms</h2>
-        <p>Here, we will be <a href="https://pytorch.org/vision/stable/transforms.html">transforming and augmenting
-            images</a>.</p>
-        <p>The purpose of data augmentation is to artificially increase the diversity of the training dataset as shown
-          below.</p>
-        <figure><img src="https://alagrine.github.io/images/P8/fig_data_augmentation.png" />
-        </figure>
+        <p>The <em>torchvision.transforms</em> module is used here to <a
+            href="https://pytorch.org/vision/stable/transforms.html">transform and augment images</a>. A series of
+          transforms is
+          created using the <em>transforms.Compose</em> method.</p>
+        <p>The images are resized using <em>transforms.Resize()</em> and converted to tensor and scaled between 0
+          and 1
+          using <em>transforms.ToTensor()</em>.</p>
+        <p>To prevent overfitting, we will use <a
+            href="https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html">transforms.TrivialAugmentWide()</a>.
+          This is an automatic augmentation method
+          that transforms an image using a random transform from a given list with a random strength number between 0
+          and 31. We have found that a strength of 8 provides better accuracy and loss than higher magnitudes.</p>
 
-        <p>We will use <a
-            href="https://pytorch.org/vision/main/generated/torchvision.transforms.TrivialAugmentWide.html">transforms.TrivialAugmentWide()</a>
-          an automatic augmentation method.</p>
+
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>data_transform = transforms.<span style="color:cyan;">Compose()</span>([
 transforms.<span style="color:cyan;">Resize</span>(size=(FLAGS[&#39;IMAGE_SIZE&#39;], FLAGS[&#39;IMAGE_SIZE&#39;])),
-transforms.<span style="color:cyan;">TrivialAugmentWide</span>(num_magnitude_bins=31), # Data Augmentation
+transforms.<span style="color:cyan;">TrivialAugmentWide</span>(num_magnitude_bins=8), <span style="color:coral;"># Data Augmentation</span>
 transforms.<span style="color:cyan;">ToTensor</span>()
 ])
 </code></pre>
+
+        <p>In this example, we pass an image through the transform pipeline to obtain the following transformed output:
+        </p>
+
+        <figure><img src="https://alagrine.github.io/images/P8/fig_data_augmentation.png" />
+        </figure>
+
+        <p>This will increase the diversity of the training data and prevent overfitting.</p>
+        <br>
         <h2 id="loading-images-using-imagefolder">Loading images using ImageFolder</h2>
         <p>The <a
             href="https://pytorch.org/vision/stable/generated/torchvision.datasets.ImageFolder.html">torchvision.datasets.ImageFolder</a>
-          class can be used to convert image data into a Dataset. The images will be in the form of a tensor with shape
+          class is used to convert image data into a Dataset.
+          The <em>transform</em> argument should be used to pass the transform pipeline, while the <em>root</em>
+          argument should contain
+          the path of the target image directory.</p>
+
+        <p>The images will be in the form of a tensor with shape
           [3,224,224], and the labels will be integers.</p>
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>from torchvision import datasets
 
 train_data = datasets.<span style="color:cyan;">ImageFolder</span>(root=image_path / &#34;train&#34;, transform=data_transform)
 test_data = datasets.<span style="color:cyan;">ImageFolder</span>(root=image_path / &#34;test&#34;, transform=data_transform)
 </code></pre>
+        <br>
         <h2 id="turning-loaded-images-to-dataloaders">Turning loaded images to DataLoaders</h2>
-        <p>We can use <a
-            href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader">torch.utils.data.DataLoader</a>
-          to convert our Dataset into a Python iterable, which supports automatic batching, shuffling, and memory
+        <p>The last step in preparing the data is to convert our Dataset into a DataLoader using <a
+            href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader">torch.utils.data.DataLoader()</a>.
+          This returns a Python
+          iterable that we will use to iterate over batches. This method also supports automatic shuffling, and memory
           pinning.</p>
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>train_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data,
                               batch_size=FLAGS[&#39;batch_size&#39;],
@@ -388,35 +409,79 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
 </code></pre>
         <p>So far, the artbench images have been transformed into tensors suitable for use by computer vision models.
         </p>
-        <p>We will now create several models to predict artwork classes, beginning with a simple TinyVGG architecture.
+        <p>We will now create several models to predict artwork classes, starting with a simple <em>TinyVGG</em>
+          architecture.
         </p>
 
         <div class="mb-4">
           <hr class="rounded">
         </div>
         <h1 id="tinyvgg">TinyVGG</h1>
-        <p>Here, we create a <em>Convolutional Neural Network</em> (CNN) by replicating the TinyVGG model from the <a
-            href="https://poloclub.github.io/cnn-explainer/">CNN Explainer</a> website.</p>
-        <p>The TinyVGG model consists of 4 convolutional layers, each containing 10 neurons and 3 learned kernels. After
-          each Conv2d layer, a ReLU activation is applied to introduce non-linearity.</p>
-        <p>To prevent overfitting, Max-Pooling is utilized to reduce the number of parameters.</p>
+        <p>Here, we replicate the TinyVGG model from the <a href="https://poloclub.github.io/cnn-explainer/">CNN
+            Explainer</a> website to create a <em>Convolutional Neural Network</em> (CNN).</p>
+        <p>The TinyVGG model comprises 4 convolutional layers, each with 10 neurons and three learned kernels. A
+          <em>ReLU</em>
+          activation is applied
+          after each Conv2d layer to introduce non-linearity.
+        </p>
+        <p>To reduce the number of parameters and prevent overfitting, <em>Max-Pooling</em> is used.</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/2fe2e11d9bc22afd96ea0beae3bc3104.js"></script>
 
-        <h2 id="create-train-and-test-loop-functions">Create train and test loop functions</h2>
-        <p>Let&rsquo;s create three functions to train and evaluate our models: a train loop, a test loop, and a
-          function to combine them.</p>
-        <script type="application/javascript"
-          src="https://gist.github.com/AlaGrine/e5f1edc766ecd64c54e7e75a95f35ccc.js"></script>
+        <p>To speed up training, we will use a GPU. Therefore, we need to define the device we will put our model on:
+        </p>
 
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>device = "<span style="color:greenyellow;">cuda</span>" if torch.cuda.<span style="color:cyan;">is_available()</span> else "<span style="color:greenyellow;">cpu</span>"
+model_0 = TinyVGG(input_shape=3, <span style="color:coral;"># number of color channels</span> 
+                  hidden_units=10,
+                  output_shape=len(train_data.classes))
+model_0.<span style="color:cyan;">to(device)</span>
+</code></pre>
+        <br>
+        <h2 id="create-train-and-test-loop-functions">Create train and test loop functions</h2>
+        <p>Let&rsquo;s create three functions to train and evaluate our models. These functions will include a train
+          step,
+          a test step, and a function to combine them and create a train and test loop.</p>
+
+        <h3 id="train_step_function">Train step function</h3>
+
+        <p>First, we activate the training mode of the model with the command <em> model.train()</em>. Next, we
+          iterate through
+          the batches in the train_DataLoader, transferring the data to the target device, calculating and
+          accumulating the loss and accuracy, and performing the gradient descent. Finally, once we have accumulated all
+          the batches, we adjust the metrics to
+          obtain the average loss and accuracy per
+          batch. </p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/49a9dc832cd4f0f4edf9d94c2f40711f.js"></script>
+
+        <h3 id="test_step_function">Test step function</h3>
+        <p>Here, we activate the model's eval mode by using the command <em>model.eval()</em> and use the
+          <em>torch.inference_mode()</em> context manager.
+        </p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/142bcbf2b701b9f0e50722b7a9ccc0f9.js"></script>
+        <p>As you can see, the core of the test step looks very similar to the training step. The main difference is
+          that we're not running gradient descent.</p>
+
+        <h3 id="train_test_loop">Train and test loop</h3>
+        <p> To bring everything together, we create a function for the train and test loop and add a progress bar for
+          the number of epochs using the <em>tqdm</em> library.</p>
+        <p>We will use <em>CrossEntropyLoss</em> as the loss function and <em>Adam</em> as the optimizer. The learning
+          rate for the Adam
+          optimizer is set to 0.001 by default.</p>
+        <script type="application/javascript"
+          src="https://gist.github.com/AlaGrine/3e4f08f1b3704a2bd2e974dd1c90ed0c.js"></script>
+
+        <br>
         <h2 id="evaluate-the-tinyvgg-model">Evaluate the TinyVGG model</h2>
-        <p>Training the TinyVGG for 5 epohs on 20% of the dataset yields the following results.</p>
+        <p>Training the TinyVGG for 5 epohs yields the following results.</p>
         <figure><img src="https://alagrine.github.io/images/P8/fig_Tiny_VGG.jpg" />
         </figure>
 
-        <p>The TinyVGG model performed poorly with an accuracy of 22.6%, but this is better than guessing (if our model
-          were to guess, the accuracy would be 10%).</p>
-        <p>We could try to train the model for longer and see what happens.</p>
+        <p>The accuracy of the TinyVGG model was 30.8%, which is still better than guessing, which would be an accuracy
+          of 10%.</p>
+        <p>It may be worth considering training the model for a longer period to see if there is any improvement.</p>
         <div class="mb-4">
           <hr class="rounded">
         </div>
@@ -424,22 +489,27 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
           Extraction</h1>
         <p>We will leverage the <a
             href="https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_b2.html#torchvision.models.efficientnet_b2">EfficientNet-B2</a>
-          pre-trained on ImageNet and use its underlying learned representations to classify artwork images.</p>
-        <p>For feature extraction, we freeze all layers of the model and adjust the output layers to have 10 classes
-          instead of the 1000 classes of the ImageNet dataset. We then train the model for 5 epochs on 20% of the data.
+          pre-trained on <em>ImageNet</em> and use its underlying learned representations to classify artwork images.
         </p>
-        <p>The snippet below displays the code for creating an EfficientNet_B2 feature extractor.</p>
+        <p>For feature extraction, we freeze all layers of the model and adjust the output layers to have 10 classes
+          instead of the 1000 classes of the <em>ImageNet</em> dataset. We then train the model for 5 epochs on 20% of
+          the data.
+        </p>
+        <p>The snippet below displays the code for creating an <em>EfficientNet_B2</em> feature extractor.</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/7236014a7d4c5483b8f7f7133cd3ebce.js"></script>
 
-        <p>Before training the model, we need to create new Dataloaders using the EfficientNet_B2 transforms.</p>
+        <p>Before training the model, we need to create new Dataloaders using the <em>EfficientNet_B2</em> transforms.
+        </p>
         <figure><img src="https://alagrine.github.io/images/P8/fig_Efficient_Net_B2_20percent.jpg" />
         </figure>
 
-        <p>The EfficientNet_B2 feature extractor achieved over 46% accuracy. This is much better than TinyVGG, although
-          we only used 20% of the data to train the model. This goes to show the power of Transfer Learning.</p>
-        <p>As shown in the loss curves, it looks like the metrics (loss and accuracy) would improve if we continued
-          training for more epochs. But we&rsquo;re going to fine-tune the transfer learning.</p>
+        <p>The <em>EfficientNet_B2</em> feature extractor achieved an accuracy of over 46%, surpassing that of
+          <em>TinyVGG</em>, despite
+          using only 20% of the data for training. This demonstrates the effectiveness of Transfer Learning.
+        </p>
+        <p>The loss curves suggest that the metrics (loss and accuracy) would further improve with additional epochs of
+          training. However, we will <em>fine-tune</em> the feature extraction model.</p>
 
         <div class="mb-4">
           <hr class="rounded">
@@ -448,28 +518,38 @@ test_DataLoader = <span style="color:cyan;">DataLoader</span>(dataset=train_data
         <p>To fine-tune the EfficientNet_B2, we will unfreeze all layers and train the model for a few more epochs. The
           following steps will be taken:</p>
         <ol>
-          <li>Create a new instance of EfficientNet_B2 with all its layers trainable.</li>
-          <li>Load the state_dict of our saved feature extractor model. This will update the new instance of our model
+          <li>Create a new instance of <eme>EfficientNet_B2</eme> with all its layers trainable.</li>
+          <li>Load the <em>state_dict</em> of our saved feature extractor model. This will update the new instance of
+            our model
             with trained weights.</li>
           <li>Train the model for an additional 5 epochs on the full dataset, as fine-tuning a model usually works
-            better with more data.</li>
+            better with more data. To ensure that the model retains its previously learned features without significant
+            alterations, we will use a smaller learning rate. The initial learning rate will be divided by 10.</li>
         </ol>
-        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code># 1. Create a new instance of EfficientNet_B2 with all its layers trainable
+        <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code><span style="color:coral;"># 1. Create a new instance of EfficientNet_B2 with all its layers trainable</span>
 model_EfficientNet_B2,effnetb2_transforms = create_effnetb2_model(num_classes=10,
                                                                   is_TrivialAugmentWide = True,
                                                                   freeze_layers=False)
 
-# 2. Load the state_dict of our saved feature extractor model
+<span style="color:coral;"># 2. Load the state_dict of our saved feature extractor model</span>
 MODEL_SAVE_PATH = PATH_models / &#34;EfficientNet_B2_20percent.pth&#34;
 model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state_dict(torch.<span style="color:cyan;">load</span>(f=MODEL_SAVE_PATH))
+
+<span style="color:coral;"># 3. Fine-tune the model</span>
+results_EfficientNet_B2_FT = train_and_evaluate(model=model_EfficientNet_B2,
+                                                train_dataloader=train_DataLoader,
+                                                test_dataloader=test_DataLoader,
+                                                epochs=5,
+                                                learning_rate=<span style="color:cyan;">0.0001</span>)<span style="color:coral;"> # Divide the learning rate by 10.</span>
 </code></pre>
         <figure><img src="https://alagrine.github.io/images/P8/fig_EfficientNet_B2_FT.jpg" />
         </figure>
 
         <p>Our model&rsquo;s accuracy on the test dataset has increased to <strong>67%</strong> after fine-tuning with
           all available data. Training for a longer period could further improve accuracy.</p>
-        <p>The highest accuracy is observed for ukiyo-e and surrealism, while the lowest accuracy is observed for
-          realism, with approximately 50%.</p>
+        <p>The accuracy of <em>ukiyo-e</em> is the highest at 99%, while <em>realism</em> has the lowest accuracy at
+          approximately 50%.
+          The correlation matrix is shown below:</p>
         <figure><img src="https://alagrine.github.io/images/P8/fig_effNet_confusionMatrix.jpg" />
         </figure>
 
@@ -477,26 +557,35 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
           <hr class="rounded">
         </div>
         <h1 id="transformer-model---vit_b16">Transformer model - ViT_B16</h1>
-        <p>While a convolutional neural network (CNN) uses convolutions as learning layers, a Transformer architecture
-          uses <a href="https://arxiv.org/abs/1706.03762">attention mechanism</a>.</p>
-        <p>Transformers is a state-of-the-art architecture originally designed to work on one-dimensional (1D) text
-          sequences.
-          The Vision Transformer <a href="https://arxiv.org/abs/2010.11929">ViT</a> architecture is designed to adapt
-          the original Transformer architecture to vision use cases.</p>
-        <p>To gain a better understanding of the Transformer architecture, I have replicated the <a
-            href="https://arxiv.org/abs/2010.11929">ViT paper</a>.</p>
-        <p><a
-            href="https://github.com/AlaGrine/Artwork_classification_in_PyTorch/blob/main/Create_ViT_from_scratch.ipynb">here</a>
+        <p><em>Transformers</em> is a state-of-the-art architecture originally designed to work on one-dimensional (1D)
+          text sequences. The Vision Transformer <a href="https://arxiv.org/abs/2010.11929">ViT</a> architecture is
+          designed to adapt the original Transformer architecture to vision use cases. While a convolutional neural
+          network (CNN) uses convolutions as learning layers, a Transformer architecture
+          uses <a href="https://arxiv.org/abs/1706.03762"> attention layers</a>.</p>
+        <p>I replicated the <a href="https://arxiv.org/abs/2010.11929">ViT paper</a> to enhance comprehension
+          of the Transformer architecture. <a
+            href="https://github.com/AlaGrine/Artwork_classification_in_PyTorch/blob/main/Create_ViT_from_scratch.ipynb">Here</a>
           is the code to build the ViT model from scratch using PyTorch.</p>
-        <p>Instead of training the ViT model from scratch, let&rsquo;s use transfer learning and use the pre-trained <a
+        <p>
+          To avoid training the ViT model from scratch, let's utilize transfer learning and leverage the pre-trained <a
             href="https://pytorch.org/vision/stable/models/generated/torchvision.models.vit_b_16.html?highlight=vit#torchvision.models.vit_b_16">ViT-B16</a>
-          available on torchvision.models.</p>
-        <p>The snippet below shows the code to create a ViT_B16 model in PyTorch.</p>
+          available on torchvision.models.
+        </p>
+        <p>The code snippet below shows how to create a <em>ViT_B16</em> model in PyTorch. The
+          <em>ViT transforms</em> are also returned, to which we add <em>TrivialAugmentWide()</em> for data
+          augmentation.
+        </p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/421a6fad2da3151ff6f24a39b9876dcf.js"></script>
 
-        <p>As with EfficientNet, we begin by using a feature extractor on 20% of the data, followed by fine-tuning the
-          model for 5 epochs on the entire dataset.</p>
+        <p>Like <em>EfficientNet</em>, we start by applying a feature extractor to 20% of the data. Then, we fine-tune
+          the model
+          for 5 epochs on the entire dataset. Additionally, we must generate new DataLoaders using the <em>Vit_B16</em>
+          transforms.
+        </p>
+        <figure><img src="https://alagrine.github.io/images/P8/fig_ViT_B16_FT.jpg" />
+        </figure>
+
         <div class="mb-4">
           <hr class="rounded">
         </div>
@@ -504,9 +593,11 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
         <figure><img src="https://alagrine.github.io/images/P8/fig_inference-speed-vs-accuracy.jpg" />
         </figure>
 
-        <p>Our EfficientNet_B2 outperforms the ViT model in all performance metrics. It achieves the highest accuracy,
+        <p>Our <em>EfficientNet_B2</em> outperforms the <em>ViT_B16</em> model in all performance metrics. It achieves
+          the highest accuracy,
           lowest loss, smallest size, and shortest prediction time per image.</p>
-        <p>In the next section we will create and diploy a Gradio demo. The EfficientNet_B2 will be our ML model.</p>
+        <p>In the next section we will create and diploy a <em>Gradio</em> demo. The <em>EfficientNet_B2</em> will be
+          our ML model.</p>
         <div class="mb-4">
           <hr class="rounded">
         </div>
@@ -534,16 +625,16 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
           <li><code>EfficientNet_B2_FT.pth</code> is our trained PyTorch model file.</li>
           <li><code>app.py</code> contains our Gradio app.</li>
           <li><code>examples/</code> contains example images to use with our Gradio app.</li>
-          <li><code>model.py</code> contains the &ldquo;<em>create_effnetb2_model</em>&rdquo; function that we created
+          <li><code>model.py</code> contains the <em>create_effnetb2_model</em> function that we created
             earlier.</li>
-          <li><code>requirements.txt</code> contains the dependencies to run our app such as <em>torch<em>,
-                <em>torchvision</em> and <em>gradio</em>.
+          <li><code>requirements.txt</code> contains the dependencies to run our app such as <em>torch</em>,
+            <em>torchvision</em> and <em>gradio</em>.
           </li>
         </ul>
         <p>To create the main file (app.py) of the Gradio demo, we can use the following code:</p>
         <script type="application/javascript"
           src="https://gist.github.com/AlaGrine/8e973f87f55a2d17a9bd1802c6f2f066.js"></script>
-
+        <br>
         <h2 id="deploy-the-gradio-app-to-huggingface-spaces">Deploy the Gradio app to HuggingFace Spaces</h2>
         <p>To deploy the Gradio app to HuggingFace Spaces, we will follow the following steps:</p>
         <ol>
@@ -553,11 +644,14 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
           <li>
             <p>Select Gradio as the Space SDK and CPU basic (free) as Space hardware.</p>
           </li>
+        </ol>
+        Then, we follow the standard git workflow:
+        <ol start="3">
           <li>
             <p>Clone the repo locally: <code>git clone https://huggingface.co/spaces/[USERNAME]/[SPACE_NAME]</code></p>
           </li>
           <li>
-            <p>Copy the contents of ArtClassifier_demo folder to the clonded repo folder.</p>
+            <p>Copy the contents of <strong>grafio_demo</strong> folder to the <strong>clonded repo</strong> folder.</p>
           </li>
           <li>
             <p>Passwords are no longer accepted as a way to authenticate command-line Git operations. We will use a
@@ -578,14 +672,14 @@ model_EfficientNet_B2.<span style="color:cyan;">load_state_dict</span>load_state
             <p><code>git push</code></p>
           </li>
         </ol>
-        <p>The Gradio demo can be embedded in a notebook as an <a
-            href="https://gradio.app/sharing_your_app/#embedding-with-iframes">iframe</a> using <a
+        <p>
+          To embed the Gradio demo in a notebook as an
+          <a href="https://gradio.app/sharing_your_app/#embedding-with-iframes">iframe</a>, we can use <a
             href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.IFrame">IPython.display.IFrame</a>
-          and a link to our space in the format
-          <em>https://hf.space/embed/[USERNAME]/[SPACE_NAME]</em>
+          and a link to our space, as demonstrated below:
         </p>
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>from IPython.display import IFrame
-IFrame(src=&#34;https://hf.space/embed/AlaGrine/Artwork_classifier&#34;, width=900, height=750)
+<span style="color:cyan;">IFrame</span>(src=&#34;<span style="color:greenyellow;">https://hf.space/embed/AlaGrine/Artwork_classifier</span>&#34;, width=900, height=750)
 </code></pre>
         <p>You can find the app <a href="https://huggingface.co/spaces/AlaGrine/Artwork_classifier">here</a>.</p>
         <figure><img src="https://alagrine.github.io/images/P8/fig_gradio_demo.png" />
