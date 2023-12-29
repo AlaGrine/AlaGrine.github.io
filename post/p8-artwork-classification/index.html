@@ -681,9 +681,17 @@ results_EfficientNet_B2_FT = train_and_evaluate(model=model_EfficientNet_B2,
         <pre tabindex="0" style="overflow-y: auto;overflow-x: auto;"><code>from IPython.display import IFrame
 <span style="color:cyan;">IFrame</span>(src=&#34;<span style="color:greenyellow;">https://hf.space/embed/AlaGrine/Artwork_classifier</span>&#34;, width=900, height=750)
 </code></pre>
-        <p>You can find the app <a href="https://huggingface.co/spaces/AlaGrine/Artwork_classifier">here</a>.</p>
-        <figure><img src="https://alagrine.github.io/images/P8/fig_gradio_demo.png" />
-        </figure>
+
+        <!-- <figure><img src="https://alagrine.github.io/images/P8/fig_gradio_demo.png" />
+        </figure> -->
+        <br>
+        <p>The app can also be embedded with WEB components as explained <a
+            href="https://www.gradio.app/guides/sharing-your-app#embedding-with-web-components">here</a> and as shown
+          below:</p>
+
+        <div class="mb-4">
+          <gradio-app src="https://alagrine-artwork-classifier.hf.space"></gradio-app>
+        </div>
 
         <div class="mb-4">
           <hr class="rounded">
@@ -722,6 +730,8 @@ results_EfficientNet_B2_FT = train_and_evaluate(model=model_EfficientNet_B2,
       </aside>
 
     </article>
+
+
 
   </main>
   <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
@@ -845,7 +855,7 @@ results_EfficientNet_B2_FT = train_and_evaluate(model=model_EfficientNet_B2,
     document.addEventListener("scroll", handleScroll);
   </script>
 
-
+  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.10.0/gradio.js"></script>
 </body>
 
 </html>
