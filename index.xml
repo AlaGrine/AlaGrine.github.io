@@ -6,7 +6,17 @@
     <description>Recent content in Data Science Portfolio on Ala Eddine GRINE</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 19 Dec 2023 01:14:48 -0400</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 13 Feb 2024 01:23:48 -0400</lastBuildDate><atom:link href="https://alagrine.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Artwork Classification in PyTorch</title>
+      <link>https://alagrine.github.io/post/p9-rag-chtbot-with-langchain/</link>
+      <pubDate>Tue, 13 Feb 2024 01:23:48 -0400</pubDate>
+      
+      <guid>https://alagrine.github.io/post/p9-rag-chtbot-with-langchain/</guid>
+      <description>Project Overview: Although Large Language Models (LLMs) are powerful and capable of generating creative content, they can produce outdated or incorrect information as they are trained on static data. To overcome this limitation, Retrieval Augmented Generation (RAG) systems can be used to connect the LLM to external data and obtain more reliable answers.
+Here is an example: In their recent paper, the authors introduce “Diffuse to Choose”, a novel image-conditioned inpainting model based on diffusion.</description>
+    </item>
+    
     <item>
       <title>Artwork Classification in PyTorch</title>
       <link>https://alagrine.github.io/post/p8-artwork-classification/</link>
